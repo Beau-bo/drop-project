@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .step-active { color: #0f172a; border-color: #0f172a; background-color: #0f172a; color: white; }
+        .step-active { color: #0f172a; border-color: #0f172a; }
         .step-inactive { color: #94a3b8; border-color: #e2e8f0; }
         .step-line-active { background-color: #0f172a; }
         .step-line-inactive { background-color: #e2e8f0; }
@@ -47,10 +47,7 @@
             <a href="market.html" class="hover:text-slate-900">残骸市场</a>
             <a href="publish.html" class="text-slate-900">登记残骸</a>
         </div>
-        <div id="user-section" class="flex items-center">
-            <span class="text-sm text-slate-700 mr-2">👤 123456</span>
-            <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
-        </div>
+        <div id="user-section" class="flex items-center"></div>
     </div>
 </nav>
 
@@ -189,7 +186,7 @@
                 </label>
                 <label class="flex items-start gap-3 cursor-pointer">
                     <input type="checkbox" id="agreement" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900" required>
-                    <span class="text-sm text-slate-600">我确认这是未完成/已放弃的项目，不侵犯第三方权益，同意平台审核规则</span>
+                    <span class="text-sm text-slate-600">我确认这是未完成/已放弃的项目，不侵犯第三方权益，同意<a href="#" class="text-sky-600 hover:underline">平台审核规则</a></span>
                 </label>
             </div>
             <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-4">
@@ -206,7 +203,7 @@
 </main>
 
 <script>
-    const API_BASE = "https://drop-project.vercel.app/api";
+    const API_BASE = "https://drop-project.onrender.com/api";
     let currentStep = 1;
     let selectedFiles = [];
 
@@ -225,7 +222,7 @@
             const userData = JSON.parse(userStr);
             userSection.innerHTML = `
             <div class="flex items-center gap-3">
-                <span class="text-sm text-slate-700 mr-2">👤 ${userData.username}</span>
+                <a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600 text-sm">👤 ${userData.username}</a>
                 <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
             </div>`;
         } else {
@@ -350,7 +347,7 @@
 
         const typeMap = {code:'💀代码',prototype:'👻原型',design:'🎨设计',operation:'🚧运营',concept:'🫧概念'};
         const diffMap = {easy:'🟢极易',medium:'🟡中等',hard:'🔴困难',expert:'⚫专家'};
-        const priceMap = {free:'免费赠送',negotiable:'价格面议',fixed:'¥'+document.getElementById('price-value').value};
+        const priceMap = {free:'免费',negotiable:'面议',fixed:'¥'+document.getElementById('price-value').value};
 
         document.getElementById('preview-type').textContent = typeMap[document.getElementById('project-type').value] || '--';
         document.getElementById('preview-difficulty').textContent = diffMap[document.getElementById('project-difficulty').value] || '--';
@@ -375,11 +372,6 @@
             anonymous: document.getElementById('anonymous').checked,
             status: 'pending'
         };
-
-        // 保存到本地存储，让个人中心能看到
-        const demoProjects = JSON.parse(localStorage.getItem('myProjects') || '[]');
-        demoProjects.push(projectData);
-        localStorage.setItem('myProjects', JSON.stringify(demoProjects));
 
         try {
             const token = localStorage.getItem('token');

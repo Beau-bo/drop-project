@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审核后台 - 废项局</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body{font-family:'Inter',sans-serif}</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <nav class="fixed top-0 w-full bg-slate-900 text-white z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-slate-900 font-bold">审</div>
+                <span class="font-bold text-lg">审核后台</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="admin-name" class="text-sm text-slate-300">管理员</span>
+                <button onclick="logout()" class="text-sm text-slate-300 hover:text-white">退出</button>
+            </div>
+        </div>
+    </nav>
+    <main class="pt-24 pb-12 px-4 max-w-6xl mx-auto">
+        <div class="grid grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl p-4 border border-slate-200">
+                <div class="text-2xl font-bold text-amber-600" id="pending-count">0</div>
+                <div class="text-sm text-slate-500">待审核</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 border border-slate-200">
+                <div class="text-2xl font-bold text-emerald-600" id="approved-count">0</div>
+                <div class="text-sm text-slate-500">已通过</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 border border-slate-200">
+                <div class="text-2xl font-bold text-rose-600" id="rejected-count">0</div>
+                <div class="text-sm text-slate-500">已拒绝</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 border border-slate-200">
+                <div class="text-2xl font-bold text-slate-900" id="total-count">0</div>
+                <div class="text-sm text-slate-500">总计</div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 mb-6">
+            <div class="flex border-b border-slate-200">
+                <button onclick="filterStatus('pending')" id="tab-pending" class="px-6 py-3 text-sm font-medium border-b-2 border-slate-900 text-slate-900">待审核</button>
+                <button onclick="filterStatus('approved')" id="tab-approved" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700">已通过</button>
+                <button onclick="filterStatus('rejected')" id="tab-rejected" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700">已拒绝</button>
+            </div>
+        </div>
+        <div id="project-list" class="space-y-4"></div>
+        <div id="empty-state" class="hidden text-center py-12 text-slate-500">暂无项目</div>
+    </main>
+    <div id="review-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-lg">
+            <h3 class="text-xl font-bold text-slate-900 mb-4">审核项目</h3>
+            <div id="review-project-info" class="mb-4 p-4 bg-slate-50 rounded-lg">
+                <h4 id="review-title" class="font-bold text-slate-900 mb-2"></h4>
+                <p id="review-desc" class="text-sm text-slate-600"></p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700 mb-2">审核意见</label>
+                <textarea id="review-comment" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" rows="3" placeholder="输入审核意见（可选）"></textarea>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeReviewModal()" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50">取消</button>
+                <button onclick="submitReview('rejected')" class="flex-1 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700">拒绝</button>
+                <button onclick="submitReview('approved')" class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">通过</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const API_BASE="https://drop-project.onrender.com/api";
+        let currentUser=null;
+        let currentFilter='pending';
+        let currentReviewId=null;
+        
+        // 项目数据
+        let projects=[
+            {id:1,title:"AI 客服 SaaS 半成品",type:"代码尸骸",author:"匿名",date:"2024-03-11",status:"pending",description:"基于 GPT-4 的智能客服系统，已完成核心对话引擎...",views:234},
+            {id:2,title:"跨境电商数据仪表盘",type:"原型幽灵",author:"张三",date:"2024-03-10",status:"pending",description:"Figma 高保真原型，包含 40+ 页面...",views:189}
+        ];
+        
+        window.onload=function(){checkAdminAccess()};
+        
+        function checkAdminAccess(){
+            const userStr=localStorage.getItem('user');
+            const token=localStorage.getItem('token');
+            if(!userStr||!token){alert('请先登录');window.location.href='index.html';return}
+            currentUser=JSON.parse(userStr);
+            const adminUsers=['beau-bo'];
+            if(!adminUsers.includes(currentUser.username)){alert('您没有权限访问审核后台');window.location.href='index.html';return}
+            document.getElementById('admin-name').textContent='管理员: '+currentUser.username;
+            loadProjects();
+        }
+        
+        function loadProjects(){
+            const container=document.getElementById('project-list');
+            const emptyState=document.getElementById('empty-state');
+            const filtered=projects.filter(p=>p.status===currentFilter);
+            
+            // 更新统计
+            document.getElementById('pending-count').textContent=projects.filter(p=>p.status==='pending').length;
+            document.getElementById('approved-count').textContent=projects.filter(p=>p.status==='approved').length;
+            document.getElementById('rejected-count').textContent=projects.filter(p=>p.status==='rejected').length;
+            document.getElementById('total-count').textContent=projects.length;
+            
+            if(filtered.length===0){
+                container.innerHTML='';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            container.innerHTML=filtered.map(p=>{
+                const statusColors={pending:'bg-amber-100 text-amber-700',approved:'bg-emerald-100 text-emerald-700',rejected:'bg-rose-100 text-rose-700'};
+                const statusLabels={pending:'待审核',approved:'已通过',rejected:'已拒绝'};
+                const btnHtml=p.status==='pending'?`<button onclick="openReviewModal(${p.id})" class="px-4 py-2 bg-slate-900 text-white text-sm rounded-lg hover:bg-slate-800">去审核</button>`:'<span class="text-sm text-slate-400">已处理</span>';
+                
+                return`<div class="bg-white rounded-xl border border-slate-200 p-6 hover:shadow-md transition-all">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="flex gap-2 mb-2">
+                                <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-md">${p.type}</span>
+                                <span class="px-2 py-1 ${statusColors[p.status]} text-xs rounded-md">${statusLabels[p.status]}</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900">${p.title}</h3>
+                        </div>
+                        <span class="text-sm text-slate-400">${p.date}</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-4">${p.description}</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                        <div class="flex items-center gap-4 text-sm text-slate-500">
+                            <span>👤 ${p.author}</span>
+                            <span>👁 ${p.views}</span>
+                        </div>
+                        ${btnHtml}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        
+        function filterStatus(status){
+            currentFilter=status;
+            ['pending','approved','rejected'].forEach(s=>{
+                const tab=document.getElementById('tab-'+s);
+                if(s===status){tab.classList.remove('border-transparent','text-slate-500');tab.classList.add('border-slate-900','text-slate-900')}
+                else{tab.classList.add('border-transparent','text-slate-500');tab.classList.remove('border-slate-900','text-slate-900')}
+            });
+            loadProjects();
+        }
+        
+        function openReviewModal(id){
+            currentReviewId=id;
+            const project=projects.find(p=>p.id===id);
+            document.getElementById('review-title').textContent=project.title;
+            document.getElementById('review-desc').textContent=project.description;
+            document.getElementById('review-modal').classList.remove('hidden');
+            document.getElementById('review-modal').classList.add('flex');
+            document.getElementById('review-comment').value='';
+        }
+        
+        function closeReviewModal(){
+            document.getElementById('review-modal').classList.add('hidden');
+            document.getElementById('review-modal').classList.remove('flex');
+            currentReviewId=null;
+        }
+        
+        function submitReview(result){
+            const comment=document.getElementById('review-comment').value;
+            const project=projects.find(p=>p.id===currentReviewId);
+            
+            if(project){
+                project.status=result;
+                project.reviewComment=comment;
+                project.reviewDate=new Date().toLocaleDateString('zh-CN');
+                project.reviewBy=currentUser.username;
+            }
+            
+            alert(result==='approved'?'审核通过！':'已拒绝');
+            closeReviewModal();
+            loadProjects(); // 刷新列表
+        }
+        
+        function logout(){
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href='index.html';
+        }
+        
+        document.getElementById('review-modal').addEventListener('click',function(e){if(e.target===this)closeReviewModal()});
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>残骸市场 - 废项局</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .filter-btn {
+            @apply px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:border-slate-300 hover:bg-slate-50 transition-all cursor-pointer;
+        }
+        .filter-btn.active {
+            @apply bg-slate-900 text-white border-slate-900;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- 导航栏 -->
+    <nav class="sticky top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
+                <span class="font-bold text-lg">废项局</span>
+            </a>
+            <a href="publish.html" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">
+                登记残骸
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold text-slate-900 mb-2">残骸市场</h1>
+        <p class="text-slate-500 mb-6">发现值得拯救的搁浅项目</p>
+
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 mb-6 shadow-sm">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+                <span class="text-sm font-medium text-slate-700">类型：</span>
+                <button class="filter-btn active" onclick="filterProjects('all')">全部</button>
+                <button class="filter-btn" onclick="filterProjects('CODE_CORPSE')">💀 代码尸骸</button>
+                <button class="filter-btn" onclick="filterProjects('PROTOTYPE_GHOST')">👻 原型幽灵</button>
+                <button class="filter-btn" onclick="filterProjects('DESIGN_DRAFT')">🎨 设计遗稿</button>
+                <button class="filter-btn" onclick="filterProjects('OPERATION_RUINS')">🏚️ 运营废墟</button>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100">
+                <span class="text-sm font-medium text-slate-700">难度：</span>
+                <button class="filter-btn" onclick="filterByDifficulty('hot')">🔥 热启动</button>
+                <button class="filter-btn" onclick="filterByDifficulty('debt')">⚙️ 技术债</button>
+                <button class="filter-btn" onclick="filterByDifficulty('rebuild')">🏗️ 架构重建</button>
+            </div>
+        </div>
+
+        <!-- 结果列表 -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="project-list">
+            <!-- 动态渲染 -->
+        </div>
+
+        <!-- 加载更多 -->
+        <div class="text-center mt-8">
+            <button onclick="loadMore()" class="px-6 py-3 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                加载更多
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // 正确的 API 地址
+        const API_BASE = "https://drop-project.onrender.com/api";
+            ? 'http://localhost:3000/api' 
+            : 'https://your-render-api.onrender.com/api';
+
+        // 更多项目数据
+        const allProjects = [
+            {
+                id: 1,
+                title: "AI 客服 SaaS 半成品",
+                hook: "基于 GPT-4 的智能客服系统，已完成核心对话引擎...",
+                type: "CODE_CORPSE",
+                typeLabel: "代码尸骸",
+                typeColor: "rose",
+                difficulty: "技术债",
+                status: "已评估",
+                views: 234,
+                intentions: 12
+            },
+            {
+                id: 2,
+                title: "跨境电商数据仪表盘",
+                hook: "Figma 高保真原型，包含 40+ 页面...",
+                type: "PROTOTYPE_GHOST",
+                typeLabel: "原型幽灵",
+                typeColor: "violet",
+                difficulty: "热启动",
+                status: "已评估",
+                views: 189,
+                intentions: 8
+            },
+            {
+                id: 4,
+                title: "在线教育平台源码",
+                hook: "完整的直播+录播系统，支持万人并发...",
+                type: "CODE_CORPSE",
+                typeLabel: "代码尸骸",
+                typeColor: "rose",
+                difficulty: "架构重建",
+                status: "待诊断",
+                views: 89,
+                intentions: 3
+            },
+            {
+                id: 5,
+                title: "社交 App UI 设计稿",
+                hook: "完整的 Design System，150+ 组件...",
+                type: "DESIGN_DRAFT",
+                typeLabel: "设计遗稿",
+                typeColor: "cyan",
+                difficulty: "热启动",
+                status: "已评估",
+                views: 156,
+                intentions: 6
+            },
+            {
+                id: 6,
+                title: "区块链钱包项目",
+                hook: "已完成多链支持，因监管原因暂停...",
+                type: "CODE_CORPSE",
+                typeLabel: "代码尸骸",
+                typeColor: "rose",
+                difficulty: "仅供解剖",
+                status: "待诊断",
+                views: 423,
+                intentions: 15
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderProjectList(projects) {
+            const container = document.getElementById('project-list');
+            container.innerHTML = projects.map(p => `
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer" onclick="location.href='detail.html?id=${p.id}'">
+                    <div class="p-5">
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-${p.typeColor}-50 text-${p.typeColor}-600 text-xs font-semibold border border-${p.typeColor}-100">${p.typeLabel}</span>
+                            <span class="px-2.5 py-1 rounded-md bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">${p.difficulty}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2 hover:text-sky-600 transition-colors">${p.title}</h3>
+                        <p class="text-slate-600 text-sm mb-4 line-clamp-2">${p.hook}</p>
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="px-2 py-1 rounded text-xs font-medium ${p.status === '已评估' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}">
+                                ${p.status}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-100 text-xs text-slate-400">
+                            <span>👁 ${p.views} 浏览</span>
+                            <span>✉️ ${p.intentions} 意向</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProjects(type) {
+            currentFilter = type;
+            // 更新按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes('全部') && type === 'all') btn.classList.add('active');
+                if (type !== 'all' && btn.onclick && btn.onclick.toString().includes(type)) btn.classList.add('active');
+            });
+            
+            // 过滤数据
+            const filtered = type === 'all' ? allProjects : allProjects.filter(p => p.type === type);
+            renderProjectList(filtered);
+        }
+
+        function filterByDifficulty(diff) {
+            alert('筛选功能：' + diff);
+        }
+
+        function loadMore() {
+            alert('加载更多项目...');
+        }
+
+        // 初始化
+        renderProjectList(allProjects);
+    </script>
+
+</body>
+</html>
