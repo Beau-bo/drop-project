@@ -3,70 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登记残骸</title>
+    <title>登记残骸 - 废项局</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .success-toast {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+            background: #059669; color: white; padding: 12px 24px; border-radius: 8px;
+            font-size: 14px; font-weight: 500; z-index: 9999; opacity: 0; transition: opacity 0.3s;
+        }
+        .success-toast.show { opacity: 1; }
+    </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-slate-50 text-slate-800 min-h-screen">
 
-<!-- 导航栏 -->
-<nav class="fixed w-full bg-white shadow p-4 flex justify-between items-center">
-    <div>废项局</div>
-    <div id="user-status"></div>
+<nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
+            <span class="font-bold text-lg">废项局</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+            <a href="index.html" class="hover:text-slate-900">首页</a>
+            <a href="market.html" class="hover:text-slate-900">残骸市场</a>
+            <a href="publish.html" class="text-slate-900">登记残骸</a>
+        </div>
+        <div id="user-section"></div>
+    </div>
 </nav>
 
-<!-- 登录弹窗 -->
-<div id="loginModal" class="fixed w-full h-full bg-black/50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg">
-        <h2 class="text-xl mb-4">登录</h2>
-        <input id="username" class="border p-2 w-full mb-2" placeholder="用户名">
-        <input id="password" type="password" class="border p-2 w-full mb-4" placeholder="密码">
-        <button onclick="doLogin()" class="bg-blue-500 text-white p-2 w-full">登录</button>
+<div id="login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">登录 / 注册</h3>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">用户名</label>
+                <input type="text" id="username" class="w-full p-3 rounded-lg border border-slate-300">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">密码</label>
+                <input type="password" id="password" class="w-full p-3 rounded-lg border border-slate-300">
+            </div>
+        </div>
+        <div class="flex gap-3 mt-6">
+            <button onclick="closeLoginModal()" class="flex-1 px-4 py-2 border border-slate-300">取消</button>
+            <button onclick="handleLogin()" class="flex-1 px-4 py-2 bg-sky-600 text-white">登录</button>
+            <button onclick="handleRegister()" class="flex-1 px-4 py-2 bg-slate-900 text-white">注册</button>
+        </div>
     </div>
 </div>
 
-<div class="pt-24 p-4">
-    <h1 class="text-2xl font-bold">发布项目</h1>
-    <button onclick="document.getElementById('loginModal').classList.remove('hidden')" class="mt-4 bg-gray-800 text-white p-2">登录/注册</button>
-</div>
+<div id="successToast" class="success-toast">✅ 提交成功，等待审核中</div>
+
+<main class="pt-24 pb-12 px-4 max-w-2xl mx-auto">
+    <div class="mb-6 text-center">
+        <h1 class="text-2xl font-bold text-slate-900">登记残骸</h1>
+        <p class="text-slate-500 mt-1">60秒完成发布，让有价值的残骸被看见</p>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div id="step1" class="step-content">
+            <form id="form-step1" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">残骸标题 <span class="text-red-500">*</span></label>
+                    <input type="text" id="project-title" class="w-full p-3 rounded-lg border border-slate-300" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">一句话介绍 <span class="text-red-500">*</span></label>
+                    <textarea id="project-hook" rows="2" class="w-full p-3 rounded-lg border border-slate-300" required></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">类型</label>
+                        <select id="project-type" class="w-full p-3 border rounded-lg">
+                            <option value="code">💀 代码尸体</option>
+                            <option value="prototype">👻 原型幽灵</option>
+                            <option value="design">🎨 设计草稿</option>
+                            <option value="operation">🚧 运营废墟</option>
+                            <option value="concept">🫧 概念泡沫</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">难度</label>
+                        <select id="project-difficulty" class="w-full p-3 border rounded-lg">
+                            <option value="easy">🟢 极易</option>
+                            <option value="medium">🟡 中等</option>
+                            <option value="hard">🔴 困难</option>
+                            <option value="expert">⚫ 专家</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">技术栈</label>
+                    <input type="text" id="project-tech" class="w-full p-3 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">项目详情</label>
+                    <textarea id="project-detail" rows="4" class="w-full p-3 border rounded-lg"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">相关文件（可选）</label>
+                    <div class="upload-area rounded-lg p-4 text-center cursor-pointer" onclick="document.getElementById('file-input').click()">
+                        <p class="text-sm text-slate-600">点击上传源码包、设计稿等（最大500MB）</p>
+                    </div>
+                    <input type="file" id="file-input" class="hidden" multiple>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">期望价格</label>
+                    <div class="flex gap-2">
+                        <select id="price-type" class="p-2 rounded-lg border border-slate-300 text-sm bg-white">
+                            <option value="free">免费赠送</option>
+                            <option value="negotiable">价格面议</option>
+                            <option value="fixed">固定价格</option>
+                        </select>
+                        <input type="number" id="price-value" class="flex-1 p-2 rounded-lg border border-slate-300 text-sm hidden" placeholder="金额（元）">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div id="step2" class="hidden">
+            <h2 class="text-lg font-bold mb-4">确认提交</h2>
+            <div class="border p-4 rounded-lg mb-4">
+                <h3 id="preview-title" class="font-bold"></h3>
+                <p id="preview-hook" class="text-sm text-slate-500"></p>
+            </div>
+            <label class="flex items-start gap-3">
+                <input type="checkbox" id="agreement" required>
+                <span class="text-sm">我同意平台审核规则</span>
+            </label>
+        </div>
+
+        <div class="flex gap-3 mt-6 pt-4 border-t">
+            <button id="btn-prev" class="hidden flex-1 px-4 py-2 border">上一步</button>
+            <button id="btn-next" class="flex-1 px-4 py-2 bg-slate-900 text-white">下一步</button>
+            <button id="btn-submit" onclick="submitProject()" class="hidden flex-1 px-4 py-2 bg-slate-900 text-white">提交审核</button>
+        </div>
+    </div>
+</main>
 
 <script>
-// =============================================
-// 最强刷新：每 1 秒检查一次登录状态（电脑端必生效）
-// =============================================
-function updateUI() {
-    let userSection = document.getElementById('user-status');
-    let token = localStorage.getItem('token');
-    let user = localStorage.getItem('user');
+const API_BASE = "https://drop-project.onrender.com/api";
 
+window.onload = function() {
+    refreshUserUI();
+    autoLoginCheck();
+};
+
+function refreshUserUI() {
+    const userSection = document.getElementById('user-section');
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    
     if (token && user) {
-        let u = JSON.parse(user);
-        userSection.innerHTML = `<span>👤 ${u.username} | <button onclick="logout()">退出</button></span>`;
+        const u = JSON.parse(user);
+        userSection.innerHTML = `
+        <div class="flex items-center gap-3">
+            <a href="profile.html" class="text-sm font-medium">👤 ${u.username}</a>
+            <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
+        </div>`;
     } else {
-        userSection.innerHTML = `<button onclick="document.getElementById('loginModal').classList.remove('hidden')">登录/注册</button>`;
+        userSection.innerHTML = `<button onclick="showLoginModal()" class="px-4 py-2 bg-slate-900 text-white rounded-lg">登录/注册</button>`;
     }
 }
 
-// 每秒强制刷新
-setInterval(updateUI, 500);
-updateUI();
-
-// 登录
-async function doLogin() {
-    let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
-
-    localStorage.setItem('token', 'fake-token');
-    localStorage.setItem('user', JSON.stringify({ username: username }));
-
-    alert("登录成功");
-    updateUI();
-    document.getElementById('loginModal').classList.add('hidden');
+function autoLoginCheck() {
+    if (!localStorage.getItem('token')) {
+        alert("请先登录");
+        window.location.href = "index.html";
+    }
 }
 
-// 退出
+async function handleLogin() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    try {
+        const res = await fetch(API_BASE + "/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        alert("登录成功");
+        window.location.reload();
+    } catch (e) {
+        alert("登录失败");
+    }
+}
+
 function logout() {
     localStorage.clear();
-    updateUI();
+    window.location.href = "index.html";
+}
+
+function showLoginModal() {
+    document.getElementById('login-modal').classList.remove('hidden');
+}
+
+function closeLoginModal() {
+    document.getElementById('login-modal').classList.add('hidden');
+}
+
+async function submitProject() {
+    const token = localStorage.getItem('token');
+    const projectData = {
+        title: document.getElementById('project-title').value,
+        hook: document.getElementById('project-hook').value,
+        type: document.getElementById('project-type').value,
+        difficulty: document.getElementById('project-difficulty').value,
+        tech: document.getElementById('project-tech').value,
+        detail: document.getElementById('project-detail').value,
+        priceType: document.getElementById('price-type').value,
+        priceValue: document.getElementById('price-value').value,
+        status: "pending"
+    };
+    
+    try {
+        await fetch(API_BASE + "/projects", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify(projectData)
+        });
+        
+        const toast = document.getElementById('successToast');
+        toast.classList.add('show');
+        setTimeout(() => {
+            window.location.href = "profile.html";
+        }, 1500);
+    } catch (e) {
+        alert("提交失败");
+    }
 }
 </script>
 </body>
