@@ -48,7 +48,7 @@
             <a href="publish.html" class="text-slate-900">登记残骸</a>
         </div>
         <div id="user-section" class="flex items-center">
-            <span class="text-sm text-slate-700 mr-2">👤 123456</span>
+            <span class="text-sm text-slate-700 mr-2" id="publish-username">👤 加载中...</span>
             <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
         </div>
     </div>
@@ -209,52 +209,51 @@
     const API_BASE = "https://drop-project.vercel.app/api";
     let currentStep = 1;
     let selectedFiles = [];
+    let currentUser = null; // 当前登录用户
 
     window.onload = function() {
-        checkLoginStatus();
+        // 检查登录状态
+        if (!checkLogin()) return;
+        // 初始化页面
         initHookCounter();
         initPriceType();
+        refreshUserUI();
     };
 
-    function refreshUserUI() {
-        const userSection = document.getElementById('user-section');
+    // 检查登录状态
+    function checkLogin() {
         const userStr = localStorage.getItem('user');
         const token = localStorage.getItem('token');
-
-        if (userStr && token) {
-            const userData = JSON.parse(userStr);
-            userSection.innerHTML = `
-            <div class="flex items-center gap-3">
-                <span class="text-sm text-slate-700 mr-2">👤 ${userData.username}</span>
-                <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
-            </div>`;
-        } else {
-            userSection.innerHTML = `<button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">登录 / 注册</button>`;
+        if (!userStr || !token) {
+            alert('请先登录！');
+            showLoginModal();
+            return false;
         }
+        currentUser = JSON.parse(userStr);
+        return true;
     }
 
-    function checkLoginStatus() {
-        refreshUserUI();
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('请先登录');
-            window.location.href = 'index.html';
-        }
+    // 刷新用户信息显示
+    function refreshUserUI() {
+        if (!currentUser) return;
+        document.getElementById('publish-username').innerText = `👤 ${currentUser.username}`;
     }
 
+    // 退出登录
     function logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        refreshUserUI();
         window.location.href = 'index.html';
     }
 
+    // 显示成功提示
     function showSuccessToast() {
         const toast = document.getElementById('successToast');
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
+    // 初始化字数统计
     function initHookCounter() {
         const hook = document.getElementById('project-hook');
         const count = document.getElementById('hook-count');
@@ -263,6 +262,7 @@
         });
     }
 
+    // 初始化价格类型
     function initPriceType() {
         const type = document.getElementById('price-type');
         const value = document.getElementById('price-value');
@@ -271,6 +271,7 @@
         });
     }
 
+    // 处理文件选择
     function handleFileSelect(e) {
         const list = document.getElementById('file-list');
         Array.from(e.target.files).forEach(file => {
@@ -283,6 +284,7 @@
         });
     }
 
+    // 下一步
     function nextStep() {
         if (currentStep === 1) {
             if (!validateStep1()) return;
@@ -291,10 +293,12 @@
         }
     }
 
+    // 上一步
     function prevStep() {
         if (currentStep === 2) showStep(1);
     }
 
+    // 显示指定步骤
     function showStep(step) {
         document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
         document.getElementById('step' + step).classList.remove('hidden');
@@ -325,6 +329,7 @@
         window.scrollTo(0, 0);
     }
 
+    // 验证第一步表单
     function validateStep1() {
         const checks = [
             ['project-title', '请填写标题'],
@@ -344,6 +349,7 @@
         return true;
     }
 
+    // 更新预览信息
     function updatePreview() {
         document.getElementById('preview-title').textContent = document.getElementById('project-title').value;
         document.getElementById('preview-hook').textContent = document.getElementById('project-hook').value;
@@ -357,13 +363,17 @@
         document.getElementById('preview-price').textContent = priceMap[document.getElementById('price-type').value] || '--';
     }
 
+    // 提交项目（绑定当前用户）
     async function submitProject() {
         if (!document.getElementById('agreement').checked) {
             alert('请同意平台审核规则');
             return;
         }
 
+        // 构建项目数据，绑定当前用户
         const projectData = {
+            id: Date.now().toString(), // 唯一ID
+            username: currentUser.username, // 绑定发布者用户名
             title: document.getElementById('project-title').value,
             hook: document.getElementById('project-hook').value,
             type: document.getElementById('project-type').value,
@@ -373,13 +383,15 @@
             priceType: document.getElementById('price-type').value,
             priceValue: document.getElementById('price-value').value,
             anonymous: document.getElementById('anonymous').checked,
-            status: 'pending'
+            status: 'pending', // 审核中
+            createTime: new Date().toLocaleDateString(),
+            viewCount: 0
         };
 
-        // 保存到本地存储，让个人中心能看到
-        const demoProjects = JSON.parse(localStorage.getItem('myProjects') || '[]');
-        demoProjects.push(projectData);
-        localStorage.setItem('myProjects', JSON.stringify(demoProjects));
+        // 保存到全局项目列表（按用户隔离）
+        const allProjects = JSON.parse(localStorage.getItem('allProjects') || '[]');
+        allProjects.push(projectData);
+        localStorage.setItem('allProjects', JSON.stringify(allProjects));
 
         try {
             const token = localStorage.getItem('token');
@@ -396,6 +408,7 @@
         }
     }
 
+    // 登录/注册相关
     function showLoginModal() {
         document.getElementById('login-modal').classList.remove('hidden');
         document.getElementById('login-modal').classList.add('flex');
@@ -423,8 +436,8 @@
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             closeLoginModal();
+            currentUser = data.user;
             refreshUserUI();
-            location.reload();
         } catch (e) {
             alert(e.message);
         }
