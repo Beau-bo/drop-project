@@ -35,6 +35,7 @@
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen">
+
     <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -139,7 +140,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">项目详情 <span class="text-red-500">*</span></label>
-                        <textarea id="project-detail" rows="4" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none resize-none" placeholder="1. 项目背景和目标&#10;2. 已完成的功能&#10;3. 放弃原因&#10;4. 对接手者的建议" required></textarea>
+                        <textarea id="project-detail" rows="4" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none resize-none" placeholder="1. 项目背景和目标\n2. 已完成的功能\n3. 放弃原因\n4. 对接手者的建议" required></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">相关文件（可选）</label>
@@ -214,41 +215,63 @@
             initPriceType();
         };
 
+        // 刷新用户状态（登录/退出后调用）
+        function refreshUserUI() {
+            const userSection = document.getElementById('user-section');
+            const userStr = localStorage.getItem('user');
+            const token = localStorage.getItem('token');
+
+            if (userStr && token) {
+                const userData = JSON.parse(userStr);
+                userSection.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600 text-sm">👤 ${userData.username}</a>
+                    <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
+                </div>`;
+            } else {
+                userSection.innerHTML = `<button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">登录 / 注册</button>`;
+            }
+        }
+
+        // 检查登录
+        function checkLoginStatus() {
+            refreshUserUI();
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('请先登录');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            refreshUserUI();
+            window.location.href = 'index.html';
+        }
+
+        // 显示成功提示
         function showSuccessToast() {
             const toast = document.getElementById('successToast');
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        function checkLoginStatus() {
-            const userStr = localStorage.getItem('user');
-            const token = localStorage.getItem('token');
-            const userSection = document.getElementById('user-section');
-            if (userStr && token && userSection) {
-                const userData = JSON.parse(userStr);
-                userSection.innerHTML = `<div class="flex items-center gap-3"><a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600 text-sm">👤 ${userData.username}</a><button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button></div>`;
-            } else {
-                alert('请先登录');
-                window.location.href = 'index.html';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = 'index.html';
-        }
-
         function initHookCounter() {
             const hook = document.getElementById('project-hook');
             const count = document.getElementById('hook-count');
-            hook.addEventListener('input', () => count.textContent = hook.value.length + '/100');
+            hook.addEventListener('input', () => {
+                count.textContent = hook.value.length + '/100';
+            });
         }
 
         function initPriceType() {
             const type = document.getElementById('price-type');
             const value = document.getElementById('price-value');
-            type.addEventListener('change', () => value.classList.toggle('hidden', type.value !== 'fixed'));
+            type.addEventListener('change', () => {
+                value.classList.toggle('hidden', type.value !== 'fixed');
+            });
         }
 
         function handleFileSelect(e) {
@@ -264,7 +287,11 @@
         }
 
         function nextStep() {
-            if (currentStep === 1 && validateStep1()) { showStep(2); updatePreview(); }
+            if (currentStep === 1) {
+                if (!validateStep1()) return;
+                showStep(2);
+                updatePreview();
+            }
         }
 
         function prevStep() {
@@ -273,49 +300,72 @@
 
         function showStep(step) {
             document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('step'+step).classList.remove('hidden');
+            document.getElementById('step' + step).classList.remove('hidden');
+
             const s1 = document.getElementById('step1-indicator');
             const s2 = document.getElementById('step2-indicator');
             const line = document.getElementById('line1');
-            
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnSubmit = document.getElementById('btn-submit');
+
             if (step === 1) {
                 s1.className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
                 s2.className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-inactive';
                 line.className = 'flex-1 h-0.5 mx-2 step-line-inactive';
-                btn-prev.classList.add('hidden');
-                btn-next.classList.remove('hidden');
-                btn-submit.classList.add('hidden');
+                btnPrev.classList.add('hidden');
+                btnNext.classList.remove('hidden');
+                btnSubmit.classList.add('hidden');
             } else {
                 s1.innerHTML = '✓';
                 s2.className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
                 line.className = 'flex-1 h-0.5 mx-2 step-line-active';
-                btn-prev.classList.remove('hidden');
-                btn-next.classList.add('hidden');
-                btn-submit.classList.remove('hidden');
+                btnPrev.classList.remove('hidden');
+                btnNext.classList.add('hidden');
+                btnSubmit.classList.remove('hidden');
             }
             currentStep = step;
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         }
 
         function validateStep1() {
-            const checks = [['project-title','标题'],['project-hook','介绍'],['project-type','类型'],['project-difficulty','难度'],['project-tech','技术栈'],['project-detail','详情']];
-            for (const [id,msg] of checks) if(!document.getElementById(id).value.trim()) {alert('请填写'+msg);document.getElementById(id).focus();return false;}
+            const checks = [
+                ['project-title', '请填写标题'],
+                ['project-hook', '请填写介绍'],
+                ['project-type', '请选择类型'],
+                ['project-difficulty', '请选择难度'],
+                ['project-tech', '请填写技术栈'],
+                ['project-detail', '请填写项目详情']
+            ];
+            for (const [id, msg] of checks) {
+                if (!document.getElementById(id).value.trim()) {
+                    alert(msg);
+                    document.getElementById(id).focus();
+                    return false;
+                }
+            }
             return true;
         }
 
         function updatePreview() {
             document.getElementById('preview-title').textContent = document.getElementById('project-title').value;
             document.getElementById('preview-hook').textContent = document.getElementById('project-hook').value;
+
             const typeMap = {code:'💀代码',prototype:'👻原型',design:'🎨设计',operation:'🚧运营',concept:'🫧概念'};
             const diffMap = {easy:'🟢极易',medium:'🟡中等',hard:'🔴困难',expert:'⚫专家'};
             const priceMap = {free:'免费',negotiable:'面议',fixed:'¥'+document.getElementById('price-value').value};
-            document.getElementById('preview-type').textContent = typeMap[document.getElementById('project-type').value]||'--';
-            document.getElementById('preview-difficulty').textContent = diffMap[document.getElementById('project-difficulty').value]||'--';
-            document.getElementById('preview-price').textContent = priceMap[document.getElementById('price-type').value]||'--';
+
+            document.getElementById('preview-type').textContent = typeMap[document.getElementById('project-type').value] || '--';
+            document.getElementById('preview-difficulty').textContent = diffMap[document.getElementById('project-difficulty').value] || '--';
+            document.getElementById('preview-price').textContent = priceMap[document.getElementById('price-type').value] || '--';
         }
 
         async function submitProject() {
-            if (!document.getElementById('agreement').checked) return alert('请同意平台审核规则');
+            if (!document.getElementById('agreement').checked) {
+                alert('请同意平台审核规则');
+                return;
+            }
+
             const projectData = {
                 title: document.getElementById('project-title').value,
                 hook: document.getElementById('project-hook').value,
@@ -328,16 +378,19 @@
                 anonymous: document.getElementById('anonymous').checked,
                 status: 'pending'
             };
+
             try {
                 const token = localStorage.getItem('token');
-                await fetch(API_BASE+'/projects', {
+                await fetch(API_BASE + '/projects', {
                     method: 'POST',
-                    headers: {'Content-Type':'application/json','Authorization':'Bearer '+token},
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
                     body: JSON.stringify(projectData)
                 });
-            } catch(e){console.log('demo')} finally {
+            } catch (e) {
+                console.log('演示模式提交', projectData);
+            } finally {
                 showSuccessToast();
-                setTimeout(()=>window.location.href='profile.html',1500);
+                setTimeout(() => window.location.href = 'profile.html', 1500);
             }
         }
 
@@ -355,27 +408,44 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             if (!username || !password) return alert('请填写完整');
+
             try {
-                const res = await fetch(API_BASE+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+                const res = await fetch(API_BASE + '/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                });
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
-                localStorage.setItem('token',data.token);
-                localStorage.setItem('user',JSON.stringify(data.user));
+                if (!res.ok) throw new Error(data.error || '登录失败');
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                closeLoginModal();
+                refreshUserUI(); // 登录后立即刷新
                 location.reload();
-            } catch(e){alert(e.message)}
+            } catch (e) {
+                alert(e.message);
+            }
         }
 
         async function handleRegister() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             if (!username || !password) return alert('请填写完整');
+
             try {
-                const res = await fetch(API_BASE+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+                const res = await fetch(API_BASE + '/auth/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                });
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
+                if (!res.ok) throw new Error(data.error || '注册失败');
                 alert('注册成功，请登录');
-                document.getElementById('password').value='';
-            } catch(e){alert(e.message)}
+                document.getElementById('password').value = '';
+            } catch (e) {
+                alert(e.message);
+            }
         }
     </script>
 </body>
