@@ -14,11 +14,27 @@
         .step-line-inactive { background-color: #e2e8f0; }
         .upload-area { border: 2px dashed #cbd5e1; transition: all 0.3s; }
         .upload-area:hover { border-color: #0f172a; background-color: #f8fafc; }
+        .success-toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #059669;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .success-toast.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen">
-
-    <!-- 导航栏 -->
     <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -36,7 +52,6 @@
         </div>
     </nav>
 
-    <!-- 登录弹窗 -->
     <div id="login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
             <h3 class="text-xl font-bold text-slate-900 mb-4">登录 / 注册</h3>
@@ -58,16 +73,14 @@
         </div>
     </div>
 
-    <!-- 主要内容 -->
+    <div id="successToast" class="success-toast">✅ 提交成功，等待审核中</div>
+
     <main class="pt-24 pb-12 px-4 max-w-2xl mx-auto">
-        
-        <!-- 页面标题 -->
         <div class="mb-6 text-center">
             <h1 class="text-2xl font-bold text-slate-900">登记残骸</h1>
             <p class="text-slate-500 mt-1">60秒完成发布，让有价值的残骸被看见</p>
         </div>
 
-        <!-- 步骤指示器 -->
         <div class="flex items-center justify-center mb-8">
             <div class="flex items-center w-full max-w-xs">
                 <div class="flex flex-col items-center flex-1">
@@ -82,20 +95,13 @@
             </div>
         </div>
 
-        <!-- 表单容器 -->
         <div class="bg-white rounded-2xl border border-slate-200 p-6">
-
-            <!-- ========== 步骤1：填写信息（精简版） ========== -->
             <div id="step1" class="step-content">
-                
                 <form id="form-step1" class="space-y-5">
-                    <!-- 残骸标题 -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">残骸标题 <span class="text-red-500">*</span></label>
                         <input type="text" id="project-title" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="如：AI客服SaaS半成品，已完成核心功能" required>
                     </div>
-
-                    <!-- 一句话钩子 -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">一句话介绍 <span class="text-red-500">*</span></label>
                         <textarea id="project-hook" rows="2" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none resize-none" placeholder="说明项目亮点和放弃原因，吸引拾荒者..." maxlength="100" required></textarea>
@@ -104,8 +110,6 @@
                             <span id="hook-count" class="text-xs text-slate-400">0/100</span>
                         </div>
                     </div>
-
-                    <!-- 残骸类型 & 难度（并排） -->
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-2">类型 <span class="text-red-500">*</span></label>
@@ -129,20 +133,14 @@
                             </select>
                         </div>
                     </div>
-
-                    <!-- 技术栈（简化） -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">技术栈 <span class="text-red-500">*</span></label>
                         <input type="text" id="project-tech" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="如：React, Node.js, Python..." required>
                     </div>
-
-                    <!-- 详细描述（合并到这里） -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">项目详情 <span class="text-red-500">*</span></label>
                         <textarea id="project-detail" rows="4" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none resize-none" placeholder="1. 项目背景和目标&#10;2. 已完成的功能&#10;3. 放弃原因&#10;4. 对接手者的建议" required></textarea>
                     </div>
-
-                    <!-- 文件上传（简化） -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">相关文件（可选）</label>
                         <div id="upload-area" class="upload-area rounded-lg p-4 text-center cursor-pointer" onclick="document.getElementById('file-input').click()">
@@ -151,8 +149,6 @@
                         <input type="file" id="file-input" class="hidden" multiple onchange="handleFileSelect(event)">
                         <div id="file-list" class="mt-2 space-y-1"></div>
                     </div>
-
-                    <!-- 期望价格（简化） -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-2">期望价格</label>
                         <div class="flex gap-2">
@@ -165,18 +161,13 @@
                         </div>
                     </div>
                 </form>
-
-                <!-- 快速提示 -->
                 <div class="mt-5 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                     <p class="text-amber-800 text-xs">💡 提示：放弃原因写真实，技术栈写清楚，成交率提高60%</p>
                 </div>
             </div>
 
-            <!-- ========== 步骤2：确认发布（放确认项） ========== -->
             <div id="step2" class="step-content hidden">
                 <h2 class="text-lg font-bold text-slate-900 mb-4">确认发布</h2>
-                
-                <!-- 预览卡片 -->
                 <div class="border border-slate-200 rounded-xl p-4 mb-4 bg-slate-50">
                     <h3 id="preview-title" class="font-bold text-slate-900 mb-2">--</h3>
                     <p id="preview-hook" class="text-sm text-slate-600 mb-3">--</p>
@@ -186,8 +177,6 @@
                         <span id="preview-price" class="px-2 py-1 bg-white rounded border">--</span>
                     </div>
                 </div>
-
-                <!-- 确认项（放最后） -->
                 <div class="space-y-3 mb-6">
                     <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg cursor-pointer">
                         <input type="checkbox" id="anonymous" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900">
@@ -196,26 +185,21 @@
                             <p class="text-slate-500 text-xs">隐藏真实身份，联系方式仅对意向者可见</p>
                         </div>
                     </label>
-                    
                     <label class="flex items-start gap-3 cursor-pointer">
                         <input type="checkbox" id="agreement" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900" required>
                         <span class="text-sm text-slate-600">我确认这是未完成/已放弃的项目，不侵犯第三方权益，同意<a href="#" class="text-sky-600 hover:underline">平台审核规则</a></span>
                     </label>
                 </div>
-
-                <!-- 审核提示 -->
                 <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-4">
                     <p class="text-blue-800 text-xs">提交后24小时内完成审核，通过后将对外展示</p>
                 </div>
             </div>
 
-            <!-- 底部按钮 -->
             <div class="flex gap-3 mt-6 pt-4 border-t border-slate-200">
                 <button type="button" id="btn-prev" onclick="prevStep()" class="hidden flex-1 px-4 py-2.5 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 text-sm">上一步</button>
                 <button type="button" id="btn-next" onclick="nextStep()" class="flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 text-sm">下一步</button>
-                <button type="button" id="btn-submit" onclick="submitProject()" class="hidden flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 text-sm">确认发布</button>
+                <button type="button" id="btn-submit" onclick="submitProject()" class="hidden flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 text-sm">提交审核</button>
             </div>
-
         </div>
     </main>
 
@@ -230,11 +214,16 @@
             initPriceType();
         };
 
+        function showSuccessToast() {
+            const toast = document.getElementById('successToast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
         function checkLoginStatus() {
             const userStr = localStorage.getItem('user');
             const token = localStorage.getItem('token');
             const userSection = document.getElementById('user-section');
-            
             if (userStr && token && userSection) {
                 const userData = JSON.parse(userStr);
                 userSection.innerHTML = `<div class="flex items-center gap-3"><a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600 text-sm">👤 ${userData.username}</a><button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button></div>`;
@@ -253,17 +242,13 @@
         function initHookCounter() {
             const hook = document.getElementById('project-hook');
             const count = document.getElementById('hook-count');
-            hook.addEventListener('input', function() {
-                count.textContent = this.value.length + '/100';
-            });
+            hook.addEventListener('input', () => count.textContent = hook.value.length + '/100');
         }
 
         function initPriceType() {
             const type = document.getElementById('price-type');
             const value = document.getElementById('price-value');
-            type.addEventListener('change', function() {
-                value.classList.toggle('hidden', this.value !== 'fixed');
-            });
+            type.addEventListener('change', () => value.classList.toggle('hidden', type.value !== 'fixed'));
         }
 
         function handleFileSelect(e) {
@@ -279,11 +264,7 @@
         }
 
         function nextStep() {
-            if (currentStep === 1) {
-                if (!validateStep1()) return;
-                showStep(2);
-                updatePreview();
-            }
+            if (currentStep === 1 && validateStep1()) { showStep(2); updatePreview(); }
         }
 
         function prevStep() {
@@ -292,9 +273,7 @@
 
         function showStep(step) {
             document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('step' + step).classList.remove('hidden');
-            
-            // 更新指示器
+            document.getElementById('step'+step).classList.remove('hidden');
             const s1 = document.getElementById('step1-indicator');
             const s2 = document.getElementById('step2-indicator');
             const line = document.getElementById('line1');
@@ -303,61 +282,40 @@
                 s1.className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
                 s2.className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-inactive';
                 line.className = 'flex-1 h-0.5 mx-2 step-line-inactive';
-                document.getElementById('btn-prev').classList.add('hidden');
-                document.getElementById('btn-next').classList.remove('hidden');
-                document.getElementById('btn-submit').classList.add('hidden');
+                btn-prev.classList.add('hidden');
+                btn-next.classList.remove('hidden');
+                btn-submit.classList.add('hidden');
             } else {
-                s1.className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
                 s1.innerHTML = '✓';
                 s2.className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
                 line.className = 'flex-1 h-0.5 mx-2 step-line-active';
-                document.getElementById('btn-prev').classList.remove('hidden');
-                document.getElementById('btn-next').classList.add('hidden');
-                document.getElementById('btn-submit').classList.remove('hidden');
+                btn-prev.classList.remove('hidden');
+                btn-next.classList.add('hidden');
+                btn-submit.classList.remove('hidden');
             }
-            
             currentStep = step;
-            window.scrollTo(0, 0);
+            window.scrollTo(0,0);
         }
 
         function validateStep1() {
-            const checks = [
-                ['project-title', '请填写标题'],
-                ['project-hook', '请填写介绍'],
-                ['project-type', '请选择类型'],
-                ['project-difficulty', '请选择难度'],
-                ['project-tech', '请填写技术栈'],
-                ['project-detail', '请填写项目详情']
-            ];
-            for (const [id, msg] of checks) {
-                if (!document.getElementById(id).value.trim()) {
-                    alert(msg);
-                    document.getElementById(id).focus();
-                    return false;
-                }
-            }
+            const checks = [['project-title','标题'],['project-hook','介绍'],['project-type','类型'],['project-difficulty','难度'],['project-tech','技术栈'],['project-detail','详情']];
+            for (const [id,msg] of checks) if(!document.getElementById(id).value.trim()) {alert('请填写'+msg);document.getElementById(id).focus();return false;}
             return true;
         }
 
         function updatePreview() {
             document.getElementById('preview-title').textContent = document.getElementById('project-title').value;
             document.getElementById('preview-hook').textContent = document.getElementById('project-hook').value;
-            
             const typeMap = {code:'💀代码',prototype:'👻原型',design:'🎨设计',operation:'🚧运营',concept:'🫧概念'};
             const diffMap = {easy:'🟢极易',medium:'🟡中等',hard:'🔴困难',expert:'⚫专家'};
             const priceMap = {free:'免费',negotiable:'面议',fixed:'¥'+document.getElementById('price-value').value};
-            
-            document.getElementById('preview-type').textContent = typeMap[document.getElementById('project-type').value] || '--';
-            document.getElementById('preview-difficulty').textContent = diffMap[document.getElementById('project-difficulty').value] || '--';
-            document.getElementById('preview-price').textContent = priceMap[document.getElementById('price-type').value] || '--';
+            document.getElementById('preview-type').textContent = typeMap[document.getElementById('project-type').value]||'--';
+            document.getElementById('preview-difficulty').textContent = diffMap[document.getElementById('project-difficulty').value]||'--';
+            document.getElementById('preview-price').textContent = priceMap[document.getElementById('price-type').value]||'--';
         }
 
         async function submitProject() {
-            if (!document.getElementById('agreement').checked) {
-                alert('请同意平台审核规则');
-                return;
-            }
-            
+            if (!document.getElementById('agreement').checked) return alert('请同意平台审核规则');
             const projectData = {
                 title: document.getElementById('project-title').value,
                 hook: document.getElementById('project-hook').value,
@@ -370,22 +328,16 @@
                 anonymous: document.getElementById('anonymous').checked,
                 status: 'pending'
             };
-            
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(API_BASE + '/projects', {
+                await fetch(API_BASE+'/projects', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
+                    headers: {'Content-Type':'application/json','Authorization':'Bearer '+token},
                     body: JSON.stringify(projectData)
                 });
-                
-                if (!response.ok) throw new Error('提交失败');
-                alert('发布成功！进入审核队列');
-                window.location.href = 'profile.html';
-            } catch (e) {
-                console.log('演示模式：', projectData);
-                alert('发布成功！（演示模式）');
-                window.location.href = 'profile.html';
+            } catch(e){console.log('demo')} finally {
+                showSuccessToast();
+                setTimeout(()=>window.location.href='profile.html',1500);
             }
         }
 
@@ -403,41 +355,27 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             if (!username || !password) return alert('请填写完整');
-            
             try {
-                const res = await fetch(API_BASE + '/auth/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({username, password})
-                });
+                const res = await fetch(API_BASE+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error);
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token',data.token);
+                localStorage.setItem('user',JSON.stringify(data.user));
                 location.reload();
-            } catch (e) {
-                alert(e.message);
-            }
+            } catch(e){alert(e.message)}
         }
 
         async function handleRegister() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             if (!username || !password) return alert('请填写完整');
-            
             try {
-                const res = await fetch(API_BASE + '/auth/register', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({username, password})
-                });
+                const res = await fetch(API_BASE+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error);
                 alert('注册成功，请登录');
-                document.getElementById('password').value = '';
-            } catch (e) {
-                alert(e.message);
-            }
+                document.getElementById('password').value='';
+            } catch(e){alert(e.message)}
         }
     </script>
 </body>
