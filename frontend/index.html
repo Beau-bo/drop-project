@@ -112,7 +112,7 @@
                     
                     userSection.innerHTML = `
                         <div class="flex items-center gap-3">
-                            <span class="text-slate-700 font-medium">👤 ${userData.username}</span>
+                            <a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600">👤 ${userData.username}</a>
                             <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
                         </div>
                     `;
