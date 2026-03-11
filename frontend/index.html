@@ -123,7 +123,29 @@
             width: 90%;
             max-width: 400px;
         }
-        /* 新增：控制登录按钮显示/隐藏 */
+        /* 发布残骸弹窗 */
+        .publish-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .publish-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        /* 隐藏元素 */
         .hidden {
             display: none !important;
         }
@@ -143,14 +165,14 @@
         <div class="hidden md:flex items-center gap-6">
             <a href="#" class="text-gray-900 font-medium">首页</a>
             <a href="#market" class="text-gray-900 font-medium">残骸市场</a>
-            <a href="#" class="text-gray-500">登记残骸</a>
+            <a href="#" class="text-gray-500" onclick="openPublishModal()">登记残骸</a>
         </div>
         
         <!-- 登录/注册 + 头像：修复登录状态逻辑 -->
         <div class="flex items-center gap-4">
             <!-- 未登录时显示登录按钮，登录后隐藏 -->
             <button id="loginBtn" class="text-gray-500 hover:text-gray-900 text-sm" onclick="openLogin()">登录</button>
-            <button class="bg-black text-white px-4 py-1.5 rounded-md text-sm font-medium">开始登记</button>
+            <button class="bg-black text-white px-4 py-1.5 rounded-md text-sm font-medium" onclick="openPublishModal()">开始登记</button>
             
             <!-- 用户头像（保留之前的头像功能） -->
             <div class="user-menu" id="userMenu" onclick="toggleUserMenu()">
@@ -171,10 +193,10 @@
             让搁浅的项目，重新找到价值。我们专注收购与展示开发到一半的产品、创业失败的代码、放弃运营的平台。
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition">
+            <button class="bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition" onclick="openPublishModal()">
                 登记你的残骸 →
             </button>
-            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white/10 transition">
+            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white/10 transition" onclick="location.href='#market'">
                 浏览残骸市场
             </button>
         </div>
@@ -345,53 +367,6 @@
                         <span class="flex items-center gap-1"><i class="fa fa-comment-o"></i> 23</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 残骸分类 -->
-    <div class="px-4 md:px-16 py-12 bg-gray-50 rounded-t-3xl">
-        <h2 class="text-2xl font-bold text-center mb-10">残骸分类</h2>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-8 max-w-4xl mx-auto">
-            <!-- 分类1：代码尸骸 -->
-            <div class="text-center p-4 rounded-lg hover:bg-white card-shadow cursor-pointer transition">
-                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fa fa-code text-2xl text-red-600"></i>
-                </div>
-                <h3 class="font-medium mb-1">代码尸骸</h3>
-                <p class="text-xs text-gray-500">未完成的程序</p>
-            </div>
-            <!-- 分类2：原型幽灵 -->
-            <div class="text-center p-4 rounded-lg hover:bg-white card-shadow cursor-pointer transition">
-                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fa fa-mobile text-2xl text-purple-600"></i>
-                </div>
-                <h3 class="font-medium mb-1">原型幽灵</h3>
-                <p class="text-xs text-gray-500">产品原型</p>
-            </div>
-            <!-- 分类3：设计遗稿 -->
-            <div class="text-center p-4 rounded-lg hover:bg-white card-shadow cursor-pointer transition">
-                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fa fa-paint-brush text-2xl text-yellow-600"></i>
-                </div>
-                <h3 class="font-medium mb-1">设计遗稿</h3>
-                <p class="text-xs text-gray-500">设计稿/UI</p>
-            </div>
-            <!-- 分类4：运营废墟 -->
-            <div class="text-center p-4 rounded-lg hover:bg-white card-shadow cursor-pointer transition">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fa fa-home text-2xl text-blue-600"></i>
-                </div>
-                <h3 class="font-medium mb-1">运营废墟</h3>
-                <p class="text-xs text-gray-500">停运项目</p>
-            </div>
-            <!-- 分类5：概念泡沫 -->
-            <div class="text-center p-4 rounded-lg hover:bg-white card-shadow cursor-pointer transition">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fa fa-lightbulb-o text-2xl text-green-600"></i>
-                </div>
-                <h3 class="font-medium mb-1">概念泡沫</h3>
-                <p class="text-xs text-gray-500">未落地创意</p>
             </div>
         </div>
     </div>
@@ -624,6 +599,66 @@
         </div>
     </div>
 
+    <!-- 发布残骸弹窗（新增完整功能） -->
+    <div class="publish-modal" id="publish-modal">
+        <div class="publish-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">发布残骸项目</h2>
+                <span class="text-gray-500 cursor-pointer text-xl" onclick="closePublishModal()">×</span>
+            </div>
+            <form id="publish-form" onsubmit="submitPublish(event)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-700 mb-1">项目名称 <span class="text-red-500">*</span></label>
+                        <input type="text" id="publish-title" class="w-full p-2 border rounded" placeholder="请输入项目名称" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">残骸类型 <span class="text-red-500">*</span></label>
+                        <select id="publish-type" class="w-full p-2 border rounded" required>
+                            <option value="">请选择类型</option>
+                            <option value="代码尸骸">代码尸骸</option>
+                            <option value="原型幽灵">原型幽灵</option>
+                            <option value="设计遗稿">设计遗稿</option>
+                            <option value="运营废墟">运营废墟</option>
+                            <option value="概念泡沫">概念泡沫</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">复活难度 <span class="text-red-500">*</span></label>
+                        <select id="publish-difficulty" class="w-full p-2 border rounded" required>
+                            <option value="">请选择难度</option>
+                            <option value="热启动">热启动</option>
+                            <option value="技术债">技术债</option>
+                            <option value="架构重建">架构重建</option>
+                            <option value="仅供解剖">仅供解剖</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-700 mb-1">项目描述 <span class="text-red-500">*</span></label>
+                        <textarea id="publish-desc" rows="4" class="w-full p-2 border rounded" placeholder="请详细描述项目背景、完成度、搁浅原因等" required></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">是否匿名发布</label>
+                        <div class="flex items-center gap-2 mt-1">
+                            <input type="radio" id="publish-anon-yes" name="publish-anon" value="yes" checked>
+                            <label for="publish-anon-yes">是</label>
+                            <input type="radio" id="publish-anon-no" name="publish-anon" value="no">
+                            <label for="publish-anon-no">否</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">联系方式（选填）</label>
+                        <input type="text" id="publish-contact" class="w-full p-2 border rounded" placeholder="微信/邮箱/电话">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" class="px-4 py-2 border rounded text-gray-700" onclick="closePublishModal()">取消</button>
+                    <button type="submit" class="px-4 py-2 bg-black text-white rounded">提交发布</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 <script>
 let currentUser = null;
 
@@ -781,6 +816,56 @@ function logout() {
     document.getElementById('top-avatar').className = 'w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm font-bold cursor-pointer';
     document.getElementById('userMenuDropdown').classList.remove('show');
     alert('退出成功');
+}
+
+// 打开发布残骸弹窗
+function openPublishModal() {
+    // 未登录时先跳转到登录
+    if (!currentUser) {
+        alert('请先登录后再发布残骸');
+        openLogin();
+        return;
+    }
+    document.getElementById('publish-modal').style.display = 'flex';
+}
+
+// 关闭发布残骸弹窗
+function closePublishModal() {
+    document.getElementById('publish-modal').style.display = 'none';
+    // 重置表单
+    document.getElementById('publish-form').reset();
+}
+
+// 提交发布表单
+function submitPublish(e) {
+    e.preventDefault();
+    
+    // 获取表单数据
+    const publishData = {
+        title: document.getElementById('publish-title').value,
+        type: document.getElementById('publish-type').value,
+        difficulty: document.getElementById('publish-difficulty').value,
+        desc: document.getElementById('publish-desc').value,
+        anon: document.querySelector('input[name="publish-anon"]:checked').value,
+        contact: document.getElementById('publish-contact').value,
+        author: currentUser.username,
+        createTime: new Date().toLocaleString(),
+        views: 0,
+        comments: 0,
+        status: '待诊断'
+    };
+    
+    // 保存到本地存储
+    const projects = JSON.parse(localStorage.getItem('publish-projects') || '[]');
+    projects.unshift(publishData); // 新增项目放在最前面
+    localStorage.setItem('publish-projects', JSON.stringify(projects));
+    
+    // 提示并关闭弹窗
+    alert('残骸发布成功！等待诊断师评估');
+    closePublishModal();
+    
+    // 可选：刷新页面或更新市场列表
+    // location.reload();
 }
 </script>
 </body>
