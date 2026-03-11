@@ -6,13 +6,45 @@
     <title>个人中心 - 废项局</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .tab-active { border-bottom: 2px solid #000; font-weight: 600; color: #111; }
-        .filter-active { background-color: #1e293b; color: white; }
-        .status-tag { padding: 2px 8px; border-radius: 4px; font-size: 12px; }
-        .status-pending { background-color: #fef3c7; color: #d97706; }
-        .status-draft { background: #f3f4f6; color: #6b7280; }
-        .status-approved { background: #dcfce7; color: #16a34a; }
-        .status-rejected { background: #fee2e2; color: #dc2626; }
+        /* 基础样式修复 */
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        * {
+            box-sizing: inherit;
+        }
+        .tab-active { 
+            border-bottom: 2px solid #000; 
+            font-weight: 600; 
+            color: #111; 
+        }
+        .filter-active { 
+            background-color: #1e293b; 
+            color: white; 
+        }
+        .status-tag { 
+            padding: 2px 8px; 
+            border-radius: 4px; 
+            font-size: 12px; 
+        }
+        .status-pending { 
+            background-color: #fef3c7; 
+            color: #d97706; 
+        }
+        .status-draft { 
+            background: #f3f4f6; 
+            color: #6b7280; 
+        }
+        .status-approved { 
+            background: #dcfce7; 
+            color: #16a34a; 
+        }
+        .status-rejected { 
+            background: #fee2e2; 
+            color: #dc2626; 
+        }
         /* 头像弹窗样式 */
         .avatar-modal {
             position: fixed;
