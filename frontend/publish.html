@@ -8,284 +8,250 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .toast.show { opacity: 1; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen">
+<body class="bg-slate-50 text-slate-800">
 
-    <!-- 简单导航 -->
-    <nav class="bg-white border-b border-slate-200 px-4 py-4">
-        <div class="max-w-3xl mx-auto flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold text-sm">废</div>
-                <span class="font-bold">登记残骸</span>
-            </a>
-            <a href="index.html" class="text-sm text-slate-500 hover:text-slate-700">退出</a>
+    <!-- 提示消息 -->
+    <div id="toast" class="toast"></div>
+
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
+                <span class="font-bold text-lg">废项局</span>
+            </div>
+            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                <a href="index.html" class="hover:text-slate-900">首页</a>
+                <a href="market.html" class="hover:text-slate-900">残骸市场</a>
+                <a href="publish.html" class="text-slate-900">登记残骸</a>
+            </div>
+            <div id="user-section">
+                <span class="text-slate-700 font-medium">👤 <span id="current-username">--</span></span>
+            </div>
         </div>
     </nav>
 
-    <main class="max-w-3xl mx-auto px-4 py-8">
+    <!-- 主内容 -->
+    <main class="pt-24 pb-12 px-4 max-w-2xl mx-auto">
         
-        <!-- 进度条 -->
-        <div class="flex items-center justify-center mb-8">
-            <div class="flex items-center gap-2">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-sky-600 text-white flex items-center justify-center text-sm font-bold border-2 border-sky-600">1</div>
-                    <span class="text-sm font-medium text-sky-600">基础信息</span>
-                </div>
-                <div class="w-8 h-0.5 bg-slate-200"></div>
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-white text-slate-400 flex items-center justify-center text-sm font-bold border-2 border-slate-300">2</div>
-                    <span class="text-sm font-medium text-slate-400">详细描述</span>
-                </div>
-                <div class="w-8 h-0.5 bg-slate-200"></div>
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-white text-slate-400 flex items-center justify-center text-sm font-bold border-2 border-slate-300">3</div>
-                    <span class="text-sm font-medium text-slate-400">提交审核</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
-                <h1 class="text-lg font-bold text-slate-900">基础信息</h1>
-                <p class="text-sm text-slate-500 mt-1">让拾荒者快速了解你的残骸</p>
+        <div class="bg-white rounded-2xl border border-slate-200 p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-slate-900" id="page-title">登记残骸</h1>
+                <a href="profile.html" class="text-sm text-sky-600 hover:text-sky-700">← 返回个人中心</a>
             </div>
 
-            <form class="p-6 space-y-6" onsubmit="handleSubmit(event)">
+            <form id="publish-form" class="space-y-6">
+                <input type="hidden" id="project-id" value="">
+                <input type="hidden" id="edit-mode" value="false">
                 
-                <!-- 标题 -->
+                <!-- 项目名称 -->
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        残骸标题 <span class="text-rose-500">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        id="title"
-                        required
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all"
-                        placeholder="给你的残骸起个名字，如：AI 客服 SaaS 半成品"
-                    >
+                    <label class="block text-sm font-medium text-slate-700 mb-2">项目名称 *</label>
+                    <input type="text" id="project-title" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="给你的残骸起个名字" required>
                 </div>
 
-                <!-- 钩子 -->
+                <!-- 项目类型 -->
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        一句话钩子 <span class="text-rose-500">*</span>
-                        <span class="text-xs text-slate-400 font-normal ml-2">项目卡片展示的核心文案</span>
-                    </label>
-                    <textarea 
-                        id="hook"
-                        required
-                        maxlength="140"
-                        rows="3"
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all resize-none"
-                        placeholder="用140字内吸引拾荒者的注意，说明项目亮点和放弃原因..."
-                    ></textarea>
-                    <div class="flex justify-between text-xs text-slate-400 mt-1">
-                        <span>好的钩子能提升 3 倍浏览量</span>
-                        <span id="hook-count">0/140</span>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">残骸类型 *</label>
+                    <select id="project-type" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" required>
+                        <option value="">请选择类型</option>
+                        <option value="代码尸骸">💀 代码尸骸 - 未完成的程序</option>
+                        <option value="原型幽灵">👻 原型幽灵 - 产品原型</option>
+                        <option value="设计遗稿">🎨 设计遗稿 - 设计稿/UI</option>
+                        <option value="运营废墟">🚧 运营废墟 - 停运项目</option>
+                        <option value="概念泡沫">🫧 概念泡沫 - 未落地创意</option>
+                    </select>
+                </div>
+
+                <!-- 项目描述 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">项目描述 *</label>
+                    <textarea id="project-desc" rows="4" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="描述一下这个项目的背景、完成度、为什么放弃..." required></textarea>
+                    <p class="text-xs text-slate-500 mt-1">建议包含：技术栈、完成度、放弃原因、潜在价值</p>
+                </div>
+
+                <!-- 期望价格 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">期望价格（可选）</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3 text-slate-500">¥</span>
+                        <input type="number" id="project-price" class="w-full p-3 pl-8 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="留空表示面议">
                     </div>
                 </div>
 
-                <!-- 类型和难度 -->
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">
-                            残骸类型 <span class="text-rose-500">*</span>
-                        </label>
-                        <select id="type" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none bg-white">
-                            <option value="">选择类型</option>
-                            <option value="CODE_CORPSE">💀 代码尸骸 - 未完成的程序</option>
-                            <option value="PROTOTYPE_GHOST">👻 原型幽灵 - 产品原型</option>
-                            <option value="DESIGN_DRAFT">🎨 设计遗稿 - 设计稿/UI</option>
-                            <option value="OPERATION_RUINS">🏚️ 运营废墟 - 停运项目</option>
-                            <option value="CONCEPT_BUBBLE">🫧 概念泡沫 - 未落地创意</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">
-                            复活难度 <span class="text-rose-500">*</span>
-                        </label>
-                        <select id="difficulty" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none bg-white">
-                            <option value="">评估难度</option>
-                            <option value="HOT_RESTART">🔥 热启动 - 有用户基础，快速复活</option>
-                            <option value="TECH_DEBT">⚙️ 技术债清理 - 需要重构</option>
-                            <option value="ARCH_REBUILD">🏗️ 架构重建 - 大量改造</option>
-                            <option value="ANATOMY_ONLY">💀 仅供解剖 - 学习价值</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- 详细描述 -->
+                <!-- 联系方式 -->
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        详细描述 <span class="text-rose-500">*</span>
-                    </label>
-                    <textarea 
-                        id="description"
-                        required
-                        minlength="50"
-                        rows="6"
-                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all resize-none"
-                        placeholder="详细描述项目背景、已完成部分、技术栈、放弃原因等（至少50字）..."
-                    ></textarea>
-                    <div class="text-xs text-slate-400 mt-1">建议包含：技术栈、完成度、放弃原因、期望转让方式</div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">联系方式 *</label>
+                    <input type="text" id="project-contact" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="微信 / 邮箱 / 电话" required>
                 </div>
 
-                <!-- 文件上传 -->
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">相关文件</label>
-                    <div 
-                        class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-sky-500 hover:bg-sky-50 transition-all cursor-pointer"
-                        onclick="document.getElementById('file-input').click()"
-                    >
-                        <div class="text-4xl mb-3">📁</div>
-                        <p class="text-sm font-medium text-slate-700 mb-1">点击或拖拽文件到此处上传</p>
-                        <p class="text-xs text-slate-500">支持源码包、原型文件、设计稿等，单个不超过 500MB</p>
-                        <input type="file" id="file-input" multiple class="hidden" onchange="handleFileSelect(this)">
-                    </div>
-                    <div id="file-list" class="mt-3 space-y-2"></div>
-                </div>
-
-                <!-- 匿名选项 -->
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <label class="flex items-start gap-3 cursor-pointer">
-                        <input type="checkbox" id="anonymous" checked class="mt-1 w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
-                        <div>
-                            <div class="font-medium text-slate-900">匿名发布</div>
-                            <p class="text-sm text-slate-500 mt-1">隐藏你的真实身份，保护隐私。联系方式仅对表达意向的拾荒者可见。</p>
-                        </div>
-                    </label>
-                </div>
-
-                <!-- 协议 -->
-                <div class="flex items-start gap-3">
-                    <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
-                    <label for="terms" class="text-sm text-slate-600 cursor-pointer">
-                        我确认这是未完成/已放弃的项目，不侵犯第三方权益，同意平台审核规则
-                    </label>
-                </div>
-
-                <!-- 提交按钮 -->
-                <div class="flex gap-4 pt-4 border-t border-slate-200">
-                    <button type="button" onclick="saveDraft()" class="flex-1 px-6 py-3 border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors">
+                <!-- 按钮 -->
+                <div class="flex gap-4 pt-4">
+                    <button type="button" onclick="saveDraft()" class="flex-1 px-6 py-3 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50">
                         保存草稿
                     </button>
-                    <button type="submit" class="flex-1 px-6 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors">
+                    <button type="button" onclick="submitProject()" class="flex-1 px-6 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800">
                         提交审核
                     </button>
                 </div>
-
             </form>
-        </div>
-
-        <!-- 提示 -->
-        <div class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
-            <div class="text-amber-500 text-xl">💡</div>
-            <div class="text-sm text-amber-800">
-                <p class="font-medium mb-1">发布小贴士</p>
-                <p class="text-amber-700/80">详细的技术栈说明和放弃原因能提高 60% 的对接成功率。建议上传架构图或核心代码片段。</p>
-            </div>
         </div>
 
     </main>
 
     <script>
-        // 正确的 API 地址
         const API_BASE = "https://drop-project.onrender.com/api";
-            ? 'http://localhost:3000/api' 
-            : 'https://your-render-api.onrender.com/api';
+        let currentUser = null;
 
-        // 字符计数
-        document.getElementById('hook').addEventListener('input', function() {
-            document.getElementById('hook-count').textContent = `${this.value.length}/140`;
-        });
+        // 页面加载
+        window.onload = function() {
+            checkLogin();
+            loadDraftForEditing();
+        };
 
-        // 文件选择
-        let selectedFiles = [];
-        
-        function handleFileSelect(input) {
-            selectedFiles = Array.from(input.files);
-            renderFileList();
-        }
-
-        function renderFileList() {
-            const container = document.getElementById('file-list');
-            if (selectedFiles.length === 0) {
-                container.innerHTML = '';
+        function checkLogin() {
+            const userStr = localStorage.getItem('user');
+            const token = localStorage.getItem('token');
+            
+            if (!userStr || !token) {
+                alert('请先登录');
+                window.location.href = 'index.html';
                 return;
             }
             
-            container.innerHTML = selectedFiles.map((file, index) => `
-                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
-                    <div class="flex items-center gap-3">
-                        <span class="text-2xl">📄</span>
-                        <div>
-                            <div class="font-medium text-slate-900 text-sm">${file.name}</div>
-                            <div class="text-xs text-slate-500">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-                        </div>
-                    </div>
-                    <button type="button" onclick="removeFile(${index})" class="text-slate-400 hover:text-rose-500">
-                        ✕
-                    </button>
-                </div>
-            `).join('');
+            currentUser = JSON.parse(userStr);
+            document.getElementById('current-username').textContent = currentUser.username;
         }
 
-        function removeFile(index) {
-            selectedFiles.splice(index, 1);
-            renderFileList();
+        // 加载草稿数据（如果是编辑模式）
+        function loadDraftForEditing() {
+            const editingDraft = localStorage.getItem('editingDraft');
+            if (!editingDraft) return;
+            
+            const draft = JSON.parse(editingDraft);
+            document.getElementById('project-id').value = draft.id || '';
+            document.getElementById('edit-mode').value = 'true';
+            document.getElementById('project-title').value = draft.title || '';
+            document.getElementById('project-type').value = draft.type || '';
+            document.getElementById('project-desc').value = draft.description || '';
+            document.getElementById('project-price').value = draft.price || '';
+            document.getElementById('project-contact').value = draft.contact || '';
+            
+            document.getElementById('page-title').textContent = '编辑草稿';
+            
+            // 清除编辑标记
+            localStorage.removeItem('editingDraft');
+        }
+
+        // 显示提示
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.background = type === 'success' ? '#059669' : '#dc2626';
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 获取表单数据
+        function getFormData() {
+            return {
+                id: document.getElementById('project-id').value || Date.now(),
+                title: document.getElementById('project-title').value,
+                type: document.getElementById('project-type').value,
+                description: document.getElementById('project-desc').value,
+                price: document.getElementById('project-price').value,
+                contact: document.getElementById('project-contact').value,
+                author: currentUser.username,
+                date: new Date().toLocaleDateString('zh-CN'),
+                views: 0,
+                intentions: 0
+            };
+        }
+
+        // 验证表单
+        function validateForm() {
+            const title = document.getElementById('project-title').value;
+            const type = document.getElementById('project-type').value;
+            const desc = document.getElementById('project-desc').value;
+            const contact = document.getElementById('project-contact').value;
+            
+            if (!title || !type || !desc || !contact) {
+                showToast('请填写必填项', 'error');
+                return false;
+            }
+            return true;
         }
 
         // 保存草稿
         function saveDraft() {
-            const data = {
-                title: document.getElementById('title').value,
-                hook: document.getElementById('hook').value,
-                type: document.getElementById('type').value,
-                difficulty: document.getElementById('difficulty').value,
-                description: document.getElementById('description').value,
-                anonymous: document.getElementById('anonymous').checked
-            };
-            localStorage.setItem('project_draft', JSON.stringify(data));
-            alert('草稿已保存到本地！');
+            if (!validateForm()) return;
+            
+            const data = getFormData();
+            data.status = 'draft';
+            
+            // 从 localStorage 读取现有草稿
+            let drafts = JSON.parse(localStorage.getItem('myDrafts') || '[]');
+            
+            // 如果是编辑模式，替换原有草稿
+            const editMode = document.getElementById('edit-mode').value === 'true';
+            if (editMode) {
+                drafts = drafts.filter(d => d.id != data.id);
+            }
+            
+            // 添加新草稿
+            drafts.push(data);
+            localStorage.setItem('myDrafts', JSON.stringify(drafts));
+            
+            showToast('草稿已保存！');
+            
+            // 延迟跳转到个人中心
+            setTimeout(() => {
+                window.location.href = 'profile.html';
+            }, 1500);
         }
 
-        // 恢复草稿
-        window.addEventListener('load', function() {
-            const draft = localStorage.getItem('project_draft');
-            if (draft) {
-                const data = JSON.parse(draft);
-                document.getElementById('title').value = data.title || '';
-                document.getElementById('hook').value = data.hook || '';
-                document.getElementById('type').value = data.type || '';
-                document.getElementById('difficulty').value = data.difficulty || '';
-                document.getElementById('description').value = data.description || '';
-                document.getElementById('anonymous').checked = data.anonymous !== false;
-                document.getElementById('hook-count').textContent = `${(data.hook || '').length}/140`;
-            }
-        });
-
-        // 提交表单
-        function handleSubmit(e) {
-            e.preventDefault();
+        // 提交审核
+        async function submitProject() {
+            if (!validateForm()) return;
             
-            const description = document.getElementById('description').value;
-            if (description.length < 50) {
-                alert('详细描述至少需要50字');
-                return;
+            const data = getFormData();
+            data.status = 'pending';
+            
+            // 如果是编辑草稿，先删除草稿
+            const editMode = document.getElementById('edit-mode').value === 'true';
+            if (editMode) {
+                let drafts = JSON.parse(localStorage.getItem('myDrafts') || '[]');
+                drafts = drafts.filter(d => d.id != data.id);
+                localStorage.setItem('myDrafts', JSON.stringify(drafts));
             }
-
-            // 模拟提交
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.textContent;
-            btn.textContent = '提交中...';
-            btn.disabled = true;
-
+            
+            // 这里应该调用 API 提交到后端
+            // const response = await fetch(API_BASE + '/projects', {...});
+            
+            showToast('提交成功！请等待审核');
+            
+            // 延迟跳转到个人中心
             setTimeout(() => {
-                alert('提交成功！项目已进入审核队列，1-2个工作日内完成审核。');
-                localStorage.removeItem('project_draft');
-                location.href = 'market.html';
+                window.location.href = 'profile.html';
             }, 1500);
         }
     </script>

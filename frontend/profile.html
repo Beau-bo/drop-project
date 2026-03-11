@@ -10,6 +10,10 @@
         body { font-family: 'Inter', sans-serif; }
         .tab-active { border-bottom: 2px solid #0f172a; color: #0f172a; }
         .tab-inactive { border-bottom: 2px solid transparent; color: #64748b; }
+        .status-draft { background: #f1f5f9; color: #64748b; }
+        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-approved { background: #d1fae5; color: #059669; }
+        .status-rejected { background: #fee2e2; color: #dc2626; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -19,17 +23,15 @@
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
-                <span class="font-bold text-lg">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
+                <span class="font-bold text-lg">废项局</span>
             </div>
             <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
                 <a href="index.html" class="hover:text-slate-900">首页</a>
                 <a href="market.html" class="hover:text-slate-900">残骸市场</a>
-                <a href="publish.html" class="hover:text-slate-900">登记残骸</a>
+                <a href="#" onclick="checkLoginBeforePublish()" class="hover:text-slate-900">登记残骸</a>
             </div>
             <div id="user-section">
-                <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">
-                    登录 / 注册
-                </button>
+                <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">登录 / 注册</button>
             </div>
         </div>
     </nav>
@@ -57,15 +59,13 @@
         </div>
     </div>
 
-    <!-- 主要内容 -->
+    <!-- 主内容 -->
     <main class="pt-24 pb-12 px-4 max-w-4xl mx-auto">
         
         <!-- 用户信息卡片 -->
         <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
             <div class="flex items-center gap-4 mb-4">
-                <div class="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center text-white text-2xl font-bold" id="user-avatar">
-                    ?
-                </div>
+                <div class="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center text-white text-2xl font-bold" id="user-avatar">?</div>
                 <div>
                     <h1 class="text-2xl font-bold text-slate-900" id="profile-username">加载中...</h1>
                     <p class="text-slate-500 text-sm">加入时间：<span id="join-date">--</span></p>
@@ -91,28 +91,37 @@
         <!-- 标签页切换 -->
         <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
             <div class="flex border-b border-slate-200">
-                <button onclick="switchTab('projects')" id="tab-projects" class="flex-1 py-4 text-sm font-medium tab-active">
-                    我的发布
-                </button>
-                <button onclick="switchTab('intentions')" id="tab-intentions" class="flex-1 py-4 text-sm font-medium tab-inactive">
-                    我的意向
-                </button>
-                <button onclick="switchTab('settings')" id="tab-settings" class="flex-1 py-4 text-sm font-medium tab-inactive">
-                    账号设置
-                </button>
+                <button onclick="switchTab('projects')" id="tab-projects" class="flex-1 py-4 text-sm font-medium tab-active">我的发布</button>
+                <button onclick="switchTab('my-intentions')" id="tab-my-intentions" class="flex-1 py-4 text-sm font-medium tab-inactive">我的意向</button>
+                <button onclick="switchTab('received-intentions')" id="tab-received-intentions" class="flex-1 py-4 text-sm font-medium tab-inactive">收到的意向</button>
+                <button onclick="switchTab('settings')" id="tab-settings" class="flex-1 py-4 text-sm font-medium tab-inactive">账号设置</button>
             </div>
 
             <!-- 我的发布 -->
             <div id="content-projects" class="p-6">
+                <div class="flex gap-2 mb-4">
+                    <button onclick="filterProjects('all')" id="filter-all" class="px-3 py-1 text-sm rounded-full bg-slate-900 text-white">全部</button>
+                    <button onclick="filterProjects('draft')" id="filter-draft" class="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-600">草稿</button>
+                    <button onclick="filterProjects('pending')" id="filter-pending" class="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-600">审核中</button>
+                    <button onclick="filterProjects('approved')" id="filter-approved" class="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-600">已通过</button>
+                    <button onclick="filterProjects('rejected')" id="filter-rejected" class="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-600">已拒绝</button>
+                </div>
                 <div id="my-projects-list" class="space-y-4">
-                    <p class="text-slate-500 text-center py-8">暂无发布的项目</p>
+                    <p class="text-slate-500 text-center py-8">暂无项目</p>
                 </div>
             </div>
 
             <!-- 我的意向 -->
-            <div id="content-intentions" class="p-6 hidden">
+            <div id="content-my-intentions" class="p-6 hidden">
                 <div id="my-intentions-list" class="space-y-4">
                     <p class="text-slate-500 text-center py-8">暂无意向记录</p>
+                </div>
+            </div>
+
+            <!-- 收到的意向 -->
+            <div id="content-received-intentions" class="p-6 hidden">
+                <div id="received-intentions-list" class="space-y-4">
+                    <p class="text-slate-500 text-center py-8">暂未收到意向</p>
                 </div>
             </div>
 
@@ -150,19 +159,34 @@
 
     </main>
 
+    <!-- 删除确认弹窗 -->
+    <div id="delete-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center">
+            <div class="text-4xl mb-4">🗑️</div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">确认删除？</h3>
+            <p class="text-slate-500 text-sm mb-6">删除后无法恢复</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50">取消</button>
+                <button onclick="confirmDelete()" class="flex-1 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700">删除</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE = "https://drop-project.onrender.com/api";
         let currentUser = null;
         let currentTab = 'projects';
+        let currentFilter = 'all';
+        let deleteProjectId = null;
+        let myProjects = [];
+        let myIntentions = [];
+        let receivedIntentions = [];
 
         // 页面加载
         window.onload = function() {
             checkLoginStatus();
-            loadUserProfile();
-            loadMyProjects();
         };
 
-        // 检查登录状态
         function checkLoginStatus() {
             const userStr = localStorage.getItem('user');
             const token = localStorage.getItem('token');
@@ -175,22 +199,22 @@
             
             currentUser = JSON.parse(userStr);
             updateUserUI();
+            loadUserProfile();
+            loadMyProjects();
         }
 
-        // 更新导航栏UI
         function updateUserUI() {
             const userSection = document.getElementById('user-section');
             if (currentUser && userSection) {
                 userSection.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600">👤 ${currentUser.username}</a>
+                        <span class="text-slate-700 font-medium">👤 ${currentUser.username}</span>
                         <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
                     </div>
                 `;
             }
         }
 
-        // 加载用户信息
         function loadUserProfile() {
             if (!currentUser) return;
             
@@ -198,23 +222,255 @@
             document.getElementById('user-avatar').textContent = currentUser.username.charAt(0).toUpperCase();
             document.getElementById('edit-username').value = currentUser.username;
             
-            // 模拟加入时间（实际应该从后端获取）
             const date = new Date();
             date.setDate(date.getDate() - Math.floor(Math.random() * 100));
             document.getElementById('join-date').textContent = date.toLocaleDateString('zh-CN');
-            
-            // 模拟统计数据
-            document.getElementById('stats-projects').textContent = Math.floor(Math.random() * 5);
-            document.getElementById('stats-intentions').textContent = Math.floor(Math.random() * 10);
-            document.getElementById('stats-views').textContent = Math.floor(Math.random() * 500);
         }
 
-        // 切换标签页
+        // 加载我的项目
+        function loadMyProjects() {
+            // 从 localStorage 读取草稿
+            const drafts = JSON.parse(localStorage.getItem('myDrafts') || '[]');
+            drafts.forEach(d => d.status = 'draft');
+            
+            // 模拟已提交的项目
+            const submitted = [
+                {id: 101, title: "AI 客服 SaaS 半成品", type: "代码尸骸", status: "pending", date: "2024-03-11", views: 234, intentions: 3, description: "基于 GPT-4 的智能客服系统..."},
+                {id: 102, title: "跨境电商数据仪表盘", type: "原型幽灵", status: "approved", date: "2024-03-10", views: 189, intentions: 5, description: "Figma 高保真原型..."}
+            ];
+            
+            myProjects = [...drafts, ...submitted];
+            renderProjects();
+            updateStats();
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('my-projects-list');
+            let filtered = myProjects;
+            
+            if (currentFilter !== 'all') {
+                filtered = myProjects.filter(p => p.status === currentFilter);
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="text-slate-500 text-center py-8">暂无项目<br><a href="publish.html" class="text-sky-600 hover:underline">去发布 →</a></p>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(p => {
+                const statusConfig = {
+                    draft: { label: '草稿', class: 'status-draft', canEdit: true, canDelete: true },
+                    pending: { label: '审核中', class: 'status-pending', canEdit: true, canDelete: false },
+                    approved: { label: '已通过', class: 'status-approved', canEdit: false, canDelete: false },
+                    rejected: { label: '已拒绝', class: 'status-rejected', canEdit: false, canDelete: false }
+                };
+                const cfg = statusConfig[p.status];
+                
+                let actions = '';
+                if (cfg.canEdit) {
+                    actions += `<button onclick="editProject(${p.id})" class="text-sm text-sky-600 hover:text-sky-700 font-medium mr-3">编辑</button>`;
+                }
+                if (cfg.canDelete) {
+                    actions += `<button onclick="deleteProject(${p.id})" class="text-sm text-rose-600 hover:text-rose-700 font-medium">删除</button>`;
+                }
+                if (p.status === 'approved') {
+                    actions += `<button onclick="viewProject(${p.id})" class="text-sm text-sky-600 hover:text-sky-700 font-medium">查看</button>`;
+                }
+                
+                return `
+                    <div class="border border-slate-200 rounded-xl p-4 hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="flex gap-2 mb-2">
+                                    <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-md">${p.type}</span>
+                                    <span class="px-2 py-1 ${cfg.class} text-xs rounded-md">${cfg.label}</span>
+                                </div>
+                                <h3 class="font-bold text-slate-900">${p.title}</h3>
+                            </div>
+                            <span class="text-sm text-slate-400">${p.date}</span>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-3 line-clamp-2">${p.description}</p>
+                        <div class="flex justify-between items-center pt-3 border-t border-slate-100">
+                            <div class="flex gap-4 text-sm text-slate-500">
+                                <span>👁 ${p.views || 0}</span>
+                                <span>✉️ ${p.intentions || 0}</span>
+                            </div>
+                            <div>${actions}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterProjects(status) {
+            currentFilter = status;
+            
+            // 更新按钮样式
+            ['all', 'draft', 'pending', 'approved', 'rejected'].forEach(s => {
+                const btn = document.getElementById('filter-' + s);
+                if (s === status) {
+                    btn.classList.remove('bg-slate-100', 'text-slate-600');
+                    btn.classList.add('bg-slate-900', 'text-white');
+                } else {
+                    btn.classList.add('bg-slate-100', 'text-slate-600');
+                    btn.classList.remove('bg-slate-900', 'text-white');
+                }
+            });
+            
+            renderProjects();
+        }
+
+        function editProject(id) {
+            const project = myProjects.find(p => p.id === id);
+            if (!project) return;
+            
+            if (project.status === 'draft') {
+                // 草稿跳转到发布页并携带数据
+                localStorage.setItem('editingDraft', JSON.stringify(project));
+                window.location.href = 'publish.html?mode=edit&source=draft';
+            } else if (project.status === 'pending') {
+                // 审核中只能查看，不能修改
+                alert('项目正在审核中，暂不能编辑');
+            }
+        }
+
+        function deleteProject(id) {
+            deleteProjectId = id;
+            document.getElementById('delete-modal').classList.remove('hidden');
+            document.getElementById('delete-modal').classList.add('flex');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.add('hidden');
+            document.getElementById('delete-modal').classList.remove('flex');
+            deleteProjectId = null;
+        }
+
+        function confirmDelete() {
+            if (!deleteProjectId) return;
+            
+            // 从 localStorage 删除草稿
+            let drafts = JSON.parse(localStorage.getItem('myDrafts') || '[]');
+            drafts = drafts.filter(d => d.id !== deleteProjectId);
+            localStorage.setItem('myDrafts', JSON.stringify(drafts));
+            
+            // 重新加载
+            loadMyProjects();
+            closeDeleteModal();
+            alert('已删除');
+        }
+
+        function viewProject(id) {
+            window.location.href = `detail.html?id=${id}`;
+        }
+
+        function updateStats() {
+            document.getElementById('stats-projects').textContent = myProjects.length;
+            document.getElementById('stats-intentions').textContent = receivedIntentions.length;
+            document.getElementById('stats-views').textContent = myProjects.reduce((sum, p) => sum + (p.views || 0), 0);
+        }
+
+        // 加载我的意向
+        function loadMyIntentions() {
+            myIntentions = [
+                {id: 1, projectTitle: "垂类社区 App 完整数据", targetUser: "李四", date: "2024-03-10", status: "pending", message: "对这个项目很感兴趣，希望能详细聊聊"},
+                {id: 2, projectTitle: "AI 绘画工具原型", targetUser: "王五", date: "2024-03-09", status: "accepted", message: "想了解一下技术架构"}
+            ];
+            renderMyIntentions();
+        }
+
+        function renderMyIntentions() {
+            const container = document.getElementById('my-intentions-list');
+            
+            if (myIntentions.length === 0) {
+                container.innerHTML = '<p class="text-slate-500 text-center py-8">暂无意向记录</p>';
+                return;
+            }
+            
+            container.innerHTML = myIntentions.map(i => {
+                const statusText = {pending: '等待回复', accepted: '对方已接受', rejected: '对方已拒绝'};
+                const statusColor = {pending: 'text-amber-600', accepted: 'text-emerald-600', rejected: 'text-rose-600'};
+                
+                return `
+                    <div class="border border-slate-200 rounded-xl p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-slate-900">${i.projectTitle}</h3>
+                            <span class="text-sm ${statusColor[i.status]}">${statusText[i.status]}</span>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-2">${i.message}</p>
+                        <div class="flex justify-between items-center text-sm text-slate-500">
+                            <span>发给：${i.targetUser}</span>
+                            <span>${i.date}</span>
+                        </div>
+                        ${i.status === 'pending' ? `
+                            <div class="mt-3 pt-3 border-t border-slate-100">
+                                <button onclick="cancelIntention(${i.id})" class="text-sm text-rose-600 hover:text-rose-700">取消意向</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function cancelIntention(id) {
+            if (!confirm('确定取消这个意向吗？')) return;
+            myIntentions = myIntentions.filter(i => i.id !== id);
+            renderMyIntentions();
+            alert('已取消');
+        }
+
+        // 加载收到的意向
+        function loadReceivedIntentions() {
+            receivedIntentions = [
+                {id: 1, projectTitle: "AI 客服 SaaS 半成品", fromUser: "张三", date: "2024-03-11", message: "很感兴趣，方便聊聊吗？", contact: "zhangsan@email.com"},
+                {id: 2, projectTitle: "AI 客服 SaaS 半成品", fromUser: "李四", date: "2024-03-10", message: "想了解一下价格", contact: "lisi@wechat"}
+            ];
+            renderReceivedIntentions();
+        }
+
+        function renderReceivedIntentions() {
+            const container = document.getElementById('received-intentions-list');
+            
+            if (receivedIntentions.length === 0) {
+                container.innerHTML = '<p class="text-slate-500 text-center py-8">暂未收到意向</p>';
+                return;
+            }
+            
+            container.innerHTML = receivedIntentions.map(i => `
+                <div class="border border-slate-200 rounded-xl p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="font-bold text-slate-900">${i.projectTitle}</h3>
+                            <p class="text-sm text-slate-500">来自：${i.fromUser}</p>
+                        </div>
+                        <span class="text-sm text-slate-400">${i.date}</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-3 bg-slate-50 p-3 rounded-lg">${i.message}</p>
+                    <div class="flex gap-3">
+                        <button onclick="contactUser('${i.contact}')" class="px-4 py-2 bg-sky-600 text-white text-sm rounded-lg hover:bg-sky-700">联系对方</button>
+                        <button onclick="rejectIntention(${i.id})" class="px-4 py-2 border border-slate-300 text-slate-700 text-sm rounded-lg hover:bg-slate-50">拒绝</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function contactUser(contact) {
+            alert('联系方式：' + contact);
+        }
+
+        function rejectIntention(id) {
+            if (!confirm('确定拒绝这个意向吗？')) return;
+            receivedIntentions = receivedIntentions.filter(i => i.id !== id);
+            renderReceivedIntentions();
+            updateStats();
+            alert('已拒绝');
+        }
+
+        // 标签页切换
         function switchTab(tab) {
             currentTab = tab;
             
-            // 更新按钮样式
-            ['projects', 'intentions', 'settings'].forEach(t => {
+            ['projects', 'my-intentions', 'received-intentions', 'settings'].forEach(t => {
                 const btn = document.getElementById('tab-' + t);
                 const content = document.getElementById('content-' + t);
                 
@@ -229,68 +485,11 @@
                 }
             });
             
-            if (tab === 'intentions') loadMyIntentions();
+            if (tab === 'my-intentions' && myIntentions.length === 0) loadMyIntentions();
+            if (tab === 'received-intentions' && receivedIntentions.length === 0) loadReceivedIntentions();
         }
 
-        // 加载我的项目
-        async function loadMyProjects() {
-            const token = localStorage.getItem('token');
-            const container = document.getElementById('my-projects-list');
-            
-            try {
-                // 这里调用后端API获取我的项目
-                // const response = await fetch(API_BASE + '/projects/my', {
-                //     headers: { 'Authorization': 'Bearer ' + token }
-                // });
-                
-                // 模拟数据展示
-                const mockProjects = [
-                    {
-                        title: "AI 客服 SaaS 半成品",
-                        type: "代码尸骸",
-                        status: "出售中",
-                        views: 234,
-                        intentions: 12,
-                        date: "2024-01-15"
-                    }
-                ];
-                
-                if (mockProjects.length === 0) {
-                    container.innerHTML = '<p class="text-slate-500 text-center py-8">暂无发布的项目<br><a href="publish.html" class="text-sky-600 hover:underline">去发布第一个项目 →</a></p>';
-                    return;
-                }
-                
-                container.innerHTML = mockProjects.map(p => `
-                    <div class="border border-slate-200 rounded-xl p-4 hover:shadow-md transition-all">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-slate-900">${p.title}</h3>
-                            <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-md">${p.status}</span>
-                        </div>
-                        <div class="flex gap-4 text-sm text-slate-500 mb-3">
-                            <span>${p.type}</span>
-                            <span>👁 ${p.views}</span>
-                            <span>✉️ ${p.intentions}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs text-slate-400">发布于 ${p.date}</span>
-                            <button class="text-sm text-sky-600 hover:text-sky-700 font-medium">编辑</button>
-                        </div>
-                    </div>
-                `).join('');
-                
-            } catch (error) {
-                container.innerHTML = '<p class="text-red-500 text-center py-8">加载失败</p>';
-            }
-        }
-
-        // 加载我的意向
-        async function loadMyIntentions() {
-            const container = document.getElementById('my-intentions-list');
-            container.innerHTML = '<p class="text-slate-500 text-center py-8">暂无意向记录</p>';
-        }
-
-        // 更新个人资料
-        async function updateProfile() {
+        function updateProfile() {
             const newPassword = document.getElementById('new-password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             
@@ -309,14 +508,25 @@
             document.getElementById('confirm-password').value = '';
         }
 
-        // 退出登录
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             window.location.href = 'index.html';
         }
 
-        // 登录相关函数（复用index.html的逻辑）
+        // 登录相关函数
+        function checkLoginBeforePublish() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (!token || !user) {
+                showLoginModal();
+                setTimeout(() => showError('请先登录后再发布项目'), 100);
+            } else {
+                window.location.href = 'publish.html';
+            }
+        }
+
         function showLoginModal() {
             document.getElementById('login-modal').classList.remove('hidden');
             document.getElementById('login-modal').classList.add('flex');
@@ -327,12 +537,18 @@
             document.getElementById('login-modal').classList.remove('flex');
         }
 
+        function showError(msg) {
+            const errorEl = document.getElementById('error-msg');
+            errorEl.textContent = msg;
+            errorEl.classList.remove('hidden');
+        }
+
         async function handleLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
             if (!username || !password) {
-                alert('请填写用户名和密码');
+                showError('请填写用户名和密码');
                 return;
             }
             
@@ -353,7 +569,7 @@
                 localStorage.setItem('user', JSON.stringify(data.user));
                 location.reload();
             } catch (error) {
-                alert(error.message);
+                showError(error.message);
             }
         }
 
@@ -362,7 +578,7 @@
             const password = document.getElementById('password').value;
             
             if (!username || !password) {
-                alert('请填写用户名和密码');
+                showError('请填写用户名和密码');
                 return;
             }
             
@@ -382,9 +598,18 @@
                 alert('注册成功，请登录');
                 document.getElementById('password').value = '';
             } catch (error) {
-                alert(error.message);
+                showError(error.message);
             }
         }
+
+        document.getElementById('login-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeLoginModal();
+        });
+        
+        document.getElementById('delete-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeDeleteModal();
+        });
     </script>
+
 </body>
 </html>
