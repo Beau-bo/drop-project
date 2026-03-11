@@ -6,10 +6,13 @@
     <title>个人中心 - 废项局</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .tab-active { border-bottom: 2px solid #000; font-weight: 600; }
+        .tab-active { border-bottom: 2px solid #000; font-weight: 600; color: #111; }
         .filter-active { background-color: #1e293b; color: white; }
         .status-tag { padding: 2px 8px; border-radius: 4px; font-size: 12px; }
         .status-pending { background-color: #fef3c7; color: #d97706; }
+        .status-draft { background: #f3f4f6; color: #6b7280; }
+        .status-approved { background: #dcfce7; color: #16a34a; }
+        .status-rejected { background: #fee2e2; color: #dc2626; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -17,10 +20,10 @@
     <div class="bg-white p-4 flex items-center justify-between shadow-sm sticky top-0 z-10">
         <div class="flex items-center gap-2">
             <button class="text-gray-500" onclick="history.back()">×</button>
-            <span class="text-xl font-bold">废项局</span>
+            <a href="index.html" class="text-xl font-bold cursor-pointer">废项局</a>
         </div>
         <div class="flex items-center gap-2">
-            <span class="text-gray-700">👤 test3</span>
+            <span class="text-gray-700">👤 游客</span>
             <button class="text-gray-500" onclick="logout()">退出</button>
         </div>
     </div>
@@ -28,23 +31,23 @@
     <!-- 用户信息卡片 -->
     <div class="bg-white m-4 p-4 rounded-lg shadow-sm">
         <div class="flex items-center gap-4 mb-4">
-            <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-white text-2xl font-bold">T</div>
+            <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-white text-2xl font-bold">U</div>
             <div>
-                <h2 class="text-2xl font-bold">test3</h2>
-                <p class="text-gray-500">加入时间：2026/2/26</p>
+                <h2 class="text-2xl font-bold" id="username">用户名</h2>
+                <p class="text-gray-500">加入时间：2026/03/11</p>
             </div>
         </div>
         <div class="flex justify-between text-center">
             <div>
-                <div class="text-2xl font-bold text-blue-600">2</div>
+                <div class="text-2xl font-bold text-blue-600" id="count-publish">0</div>
                 <div class="text-gray-500">发布的项目</div>
             </div>
             <div>
-                <div class="text-2xl font-bold text-blue-600">0</div>
+                <div class="text-2xl font-bold text-blue-600" id="count-intent">0</div>
                 <div class="text-gray-500">收到的意向</div>
             </div>
             <div>
-                <div class="text-2xl font-bold text-blue-600">423</div>
+                <div class="text-2xl font-bold text-blue-600" id="count-view">0</div>
                 <div class="text-gray-500">总浏览量</div>
             </div>
         </div>
@@ -63,68 +66,27 @@
         <!-- 我的发布 -->
         <div id="my-publish" class="tab-content">
             <div class="flex gap-2 mb-4 overflow-x-auto">
-                <div class="filter px-3 py-1 rounded-full text-sm text-gray-500 bg-gray-100" data-filter="all">全部</div>
-                <div class="filter px-3 py-1 rounded-full text-sm filter-active" data-filter="draft">草稿</div>
-                <div class="filter px-3 py-1 rounded-full text-sm text-gray-500 bg-gray-100" data-filter="pending">审核中</div>
-                <div class="filter px-3 py-1 rounded-full text-sm text-gray-500 bg-gray-100" data-filter="approved">已通过</div>
-                <div class="filter px-3 py-1 rounded-full text-sm text-gray-500 bg-gray-100" data-filter="rejected">已拒绝</div>
+                <div class="filter px-3 py-1 rounded-full text-sm filter-active" data-filter="all">全部</div>
+                <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="draft">草稿</div>
+                <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="pending">审核中</div>
+                <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="approved">已通过</div>
+                <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="rejected">已拒绝</div>
             </div>
-            <div class="text-center text-gray-500 py-8">
+            <div id="project-list" class="space-y-3"></div>
+            <div id="empty-hint" class="text-center text-gray-500 py-10">
                 <p>暂无项目</p>
-                <a href="publish.html" class="text-blue-600">去发布 →</a>
-            </div>
-            <!-- 示例项目卡片（和截图一致） -->
-            <div class="hidden border rounded-lg p-3 mb-3">
-                <div class="flex justify-between items-center mb-2">
-                    <div class="flex gap-2">
-                        <span class="text-sm bg-gray-100 px-2 py-0.5 rounded">代码尸骸</span>
-                        <span class="status-tag status-pending">审核中</span>
-                    </div>
-                    <span class="text-gray-500 text-sm">2024-03-11</span>
-                </div>
-                <h3 class="text-lg font-bold mb-1">AI客服 SaaS 半成品</h3>
-                <p class="text-gray-500 text-sm mb-2">基于 GPT-4 的智能客服系统...</p>
-                <div class="flex justify-between items-center">
-                    <div class="flex gap-4 text-sm text-gray-500">
-                        <span>👁️ 234</span>
-                        <span>✉️ 3</span>
-                    </div>
-                    <button class="text-blue-600 text-sm">编辑</button>
-                </div>
+                <a href="publish.html" class="text-blue-600 block mt-2">去发布 →</a>
             </div>
         </div>
 
         <!-- 我的意向 -->
         <div id="my-intent" class="tab-content hidden">
-            <div class="text-center text-gray-500 py-8">暂无内容</div>
+            <div class="text-center text-gray-500 py-10">暂无内容</div>
         </div>
 
         <!-- 收到的意向 -->
         <div id="received-intent" class="tab-content hidden">
-            <div class="border rounded-lg p-3 mb-3">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-lg font-bold">AI客服 SaaS 半成品</h3>
-                    <span class="text-gray-500 text-sm">2024-03-11</span>
-                </div>
-                <p class="text-gray-500 text-sm mb-1">来自：张三</p>
-                <p class="text-gray-700 mb-3">很感兴趣，方便聊聊吗？</p>
-                <div class="flex gap-2">
-                    <button class="bg-blue-600 text-white px-4 py-1 rounded">联系对方</button>
-                    <button class="border px-4 py-1 rounded">拒绝</button>
-                </div>
-            </div>
-            <div class="border rounded-lg p-3 mb-3">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-lg font-bold">AI客服 SaaS 半成品</h3>
-                    <span class="text-gray-500 text-sm">2024-03-10</span>
-                </div>
-                <p class="text-gray-500 text-sm mb-1">来自：李四</p>
-                <p class="text-gray-700 mb-3">想了解一下价格</p>
-                <div class="flex gap-2">
-                    <button class="bg-blue-600 text-white px-4 py-1 rounded">联系对方</button>
-                    <button class="border px-4 py-1 rounded">拒绝</button>
-                </div>
-            </div>
+            <div class="text-center text-gray-500 py-10">暂无收到的意向</div>
         </div>
 
         <!-- 账号设置 -->
@@ -132,49 +94,137 @@
             <div class="space-y-4">
                 <div>
                     <label class="text-gray-700 block mb-1">用户名</label>
-                    <input type="text" value="test3" disabled class="w-full p-2 border rounded bg-gray-50">
-                    <p class="text-gray-500 text-sm">用户名不可修改</p>
+                    <input type="text" id="set-username" disabled class="w-full p-2 border rounded bg-gray-50">
                 </div>
                 <div>
                     <label class="text-gray-700 block mb-1">新密码</label>
-                    <input type="password" placeholder="留空表示不修改" class="w-full p-2 border rounded">
+                    <input type="password" id="set-pwd1" placeholder="留空不修改" class="w-full p-2 border rounded">
                 </div>
                 <div>
                     <label class="text-gray-700 block mb-1">确认新密码</label>
-                    <input type="password" placeholder="再次输入新密码" class="w-full p-2 border rounded">
+                    <input type="password" id="set-pwd2" placeholder="再次输入" class="w-full p-2 border rounded">
                 </div>
-                <button class="w-full bg-gray-900 text-white py-2 rounded mt-4">保存修改</button>
+                <button onclick="saveProfile()" class="w-full bg-gray-900 text-white py-2 rounded mt-4">保存修改</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // 标签切换逻辑
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active', 'text-gray-900'));
-                document.querySelectorAll('.tab').forEach(t => t.classList.add('text-gray-500'));
-                tab.classList.add('tab-active', 'text-gray-900');
-                tab.classList.remove('text-gray-500');
-                
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-                document.getElementById(tab.dataset.tab).classList.remove('hidden');
-            });
-        });
+<script>
+let currentFilter = "all";
+window.onload = function () {
+    loadUserInfo();
+    renderProjects();
+    bindEvents();
+    refreshCount();
+};
 
-        // 筛选切换逻辑
-        document.querySelectorAll('.filter').forEach(filter => {
-            filter.addEventListener('click', () => {
-                document.querySelectorAll('.filter').forEach(f => f.classList.remove('filter-active'));
-                filter.classList.add('filter-active');
-            });
-        });
+function loadUserInfo() {
+    const user = JSON.parse(localStorage.getItem('user') || '{"username":"游客"}');
+    document.getElementById('username').innerText = user.username;
+    document.getElementById('set-username').value = user.username;
+}
 
-        // 退出登录
-        function logout() {
-            localStorage.clear();
-            location.href = 'index.html';
-        }
-    </script>
+function bindEvents() {
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
+            tab.classList.add('tab-active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(tab.dataset.tab).classList.remove('hidden');
+        });
+    });
+
+    document.querySelectorAll('.filter').forEach(f => {
+        f.addEventListener('click', () => {
+            document.querySelectorAll('.filter').forEach(x => x.classList.remove('filter-active'));
+            f.classList.add('filter-active');
+            currentFilter = f.dataset.filter;
+            renderProjects();
+        });
+    });
+}
+
+function renderProjects() {
+    const list = document.getElementById('project-list');
+    const empty = document.getElementById('empty-hint');
+    list.innerHTML = '';
+    let projects = JSON.parse(localStorage.getItem('myProjects') || '[]');
+    
+    if (currentFilter !== 'all') {
+        projects = projects.filter(p => p.status === currentFilter);
+    }
+
+    if (projects.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+    }
+    empty.classList.add('hidden');
+
+    projects.forEach((p, idx) => {
+        const item = document.createElement('div');
+        item.className = 'border rounded-lg p-3';
+        const statusCls = {
+            draft: 'status-draft',
+            pending: 'status-pending',
+            approved: 'status-approved',
+            rejected: 'status-rejected'
+        }[p.status] || 'status-draft';
+
+        const statusText = {
+            draft: '草稿',
+            pending: '审核中',
+            approved: '已通过',
+            rejected: '已拒绝'
+        }[p.status] || '草稿';
+
+        item.innerHTML = `
+        <div class="flex justify-between items-center mb-2">
+            <div class="flex gap-2">
+                <span class="text-sm bg-gray-100 px-2 py-0.5 rounded">${p.type || '未知'}</span>
+                <span class="status-tag ${statusCls}">${statusText}</span>
+            </div>
+            <span class="text-gray-500 text-xs">${p.createTime || ''}</span>
+        </div>
+        <h3 class="text-lg font-bold mb-1">${p.title}</h3>
+        <p class="text-gray-500 text-sm mb-2 line-clamp-2">${p.hook || p.detail || ''}</p>
+        <div class="flex justify-between items-center text-xs text-gray-500">
+            <div>👁️ ${p.viewCount || 0}</div>
+            <div>
+                <button onclick="editProject(${idx})" class="text-blue-600 mr-3">编辑</button>
+                <button onclick="deleteProject(${idx})" class="text-red-500">删除</button>
+            </div>
+        </div>`;
+        list.appendChild(item);
+    });
+}
+
+function refreshCount() {
+    const projects = JSON.parse(localStorage.getItem('myProjects') || '[]');
+    document.getElementById('count-publish').innerText = projects.length;
+}
+
+function editProject(idx) {
+    localStorage.setItem('editIndex', idx);
+    location.href = 'publish.html';
+}
+
+function deleteProject(idx) {
+    if (!confirm('确定删除？')) return;
+    const list = JSON.parse(localStorage.getItem('myProjects') || '[]');
+    list.splice(idx, 1);
+    localStorage.setItem('myProjects', JSON.stringify(list));
+    renderProjects();
+    refreshCount();
+}
+
+function saveProfile() {
+    alert('保存成功');
+}
+
+function logout() {
+    localStorage.clear();
+    location.href = 'index.html';
+}
+</script>
 </body>
 </html>
