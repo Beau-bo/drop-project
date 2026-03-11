@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>废项局 Drop Project - 让搁浅的项目重新找到价值</title>
+    <title>废项局 Drop Project</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -27,9 +27,12 @@
                 <a href="market.html" class="hover:text-slate-900">残骸市场</a>
                 <a href="publish.html" class="hover:text-slate-900">登记残骸</a>
             </div>
-            <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">
-                登录 / 注册
-            </button>
+            <!-- 这里改成动态显示 -->
+            <div id="user-section">
+                <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">
+                    登录 / 注册
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -104,80 +107,53 @@
         </div>
     </section>
 
-    <!-- 本周精选 -->
-    <section class="py-16 max-w-6xl mx-auto px-4">
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900">本周诊断</h2>
-                <p class="text-slate-500 text-sm mt-1">认证诊断师的专业评估</p>
-            </div>
-            <a href="market.html" class="text-sky-600 hover:text-sky-700 font-medium text-sm">查看全部 →</a>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6" id="featured-projects">
-            <!-- 项目卡片会通过JavaScript动态插入 -->
-        </div>
-    </section>
-
-    <!-- 分类 -->
-    <section class="py-16 bg-slate-50 border-y border-slate-200">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center">残骸分类</h2>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <a href="market.html?type=code" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-rose-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💀</div>
-                    <div class="font-semibold text-slate-900">代码尸骸</div>
-                    <div class="text-xs text-slate-500 mt-1">未完成的程序</div>
-                </a>
-                <a href="market.html?type=prototype" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">👻</div>
-                    <div class="font-semibold text-slate-900">原型幽灵</div>
-                    <div class="text-xs text-slate-500 mt-1">产品原型</div>
-                </a>
-                <a href="market.html?type=design" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-cyan-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🎨</div>
-                    <div class="font-semibold text-slate-900">设计遗稿</div>
-                    <div class="text-xs text-slate-500 mt-1">设计稿/UI</div>
-                </a>
-                <a href="market.html?type=operation" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-amber-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🏚️</div>
-                    <div class="font-semibold text-slate-900">运营废墟</div>
-                    <div class="text-xs text-slate-500 mt-1">停运项目</div>
-                </a>
-                <a href="market.html?type=concept" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-pink-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🫧</div>
-                    <div class="font-semibold text-slate-900">概念泡沫</div>
-                    <div class="text-xs text-slate-500 mt-1">未落地创意</div>
-                </a>
-            </div>
-        </div>
-    </section>
-
     <script>
-        // API 地址
         const API_BASE = "https://drop-project.onrender.com/api";
 
-        // 显示登录弹窗
+        // 页面加载时检查登录状态
+        window.onload = function() {
+            checkLoginStatus();
+        };
+
+        function checkLoginStatus() {
+            const user = localStorage.getItem('user');
+            const token = localStorage.getItem('token');
+            
+            if (user && token) {
+                const userData = JSON.parse(user);
+                // 显示用户名和退出按钮
+                document.getElementById('user-section').innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-slate-700 font-medium">${userData.username}</span>
+                        <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
+                    </div>
+                `;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            location.reload();
+        }
+
         function showLoginModal() {
             document.getElementById('login-modal').classList.remove('hidden');
             document.getElementById('login-modal').classList.add('flex');
             document.getElementById('error-msg').classList.add('hidden');
         }
 
-        // 关闭登录弹窗
         function closeLoginModal() {
             document.getElementById('login-modal').classList.add('hidden');
             document.getElementById('login-modal').classList.remove('flex');
         }
 
-        // 显示错误信息
         function showError(msg) {
             const errorEl = document.getElementById('error-msg');
             errorEl.textContent = msg;
             errorEl.classList.remove('hidden');
         }
 
-        // 注册
         async function handleRegister() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -207,7 +183,6 @@
             }
         }
 
-        // 登录
         async function handleLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -230,116 +205,22 @@
                     throw new Error(data.error || '登录失败');
                 }
 
-                // 保存登录状态
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
                 alert('登录成功！');
                 closeLoginModal();
+                
+                // 刷新页面显示登录状态
                 location.reload();
             } catch (error) {
                 showError(error.message);
             }
         }
 
-        // 点击遮罩关闭
         document.getElementById('login-modal').addEventListener('click', function(e) {
             if (e.target === this) closeLoginModal();
         });
-
-        // 模拟项目数据
-        const projects = [
-            {
-                id: 1,
-                title: "AI 客服 SaaS 半成品",
-                hook: "基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...",
-                type: "CODE_CORPSE",
-                typeLabel: "代码尸骸",
-                typeColor: "rose",
-                difficulty: "技术债",
-                diagnosis: { tech: 8.5, market: 7.2, cost: 6.0, doctor: "技术老炮" },
-                views: 234,
-                intentions: 12,
-                author: "匿名"
-            },
-            {
-                id: 2,
-                title: "跨境电商数据仪表盘",
-                hook: "Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...",
-                type: "PROTOTYPE_GHOST",
-                typeLabel: "原型幽灵",
-                typeColor: "violet",
-                difficulty: "热启动",
-                diagnosis: { tech: 9.0, market: 8.5, cost: 4.5, doctor: "产品猎人" },
-                views: 189,
-                intentions: 8,
-                author: "李明"
-            },
-            {
-                id: 3,
-                title: "垂类社区 App 完整数据",
-                hook: "摄影爱好者社区，运营2年积累 5W+ 用户，日活 800+，因团队解散停止维护...",
-                type: "OPERATION_RUINS",
-                typeLabel: "运营废墟",
-                typeColor: "amber",
-                difficulty: "仅供解剖",
-                diagnosis: { tech: 6.0, market: 8.0, cost: 8.5, doctor: "增长黑客" },
-                views: 567,
-                intentions: 23,
-                author: "匿名"
-            }
-        ];
-
-        // 渲染项目卡片
-        function renderProjects() {
-            const container = document.getElementById('featured-projects');
-            container.innerHTML = projects.map(p => `
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer" onclick="location.href='detail.html?id=${p.id}'">
-                    <div class="p-5">
-                        <div class="flex gap-2 mb-3">
-                            <span class="px-2.5 py-1 rounded-md bg-${p.typeColor}-50 text-${p.typeColor}-600 text-xs font-semibold border border-${p.typeColor}-100">${p.typeLabel}</span>
-                            <span class="px-2.5 py-1 rounded-md bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">${p.difficulty}</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2 line-clamp-1 hover:text-sky-600 transition-colors">${p.title}</h3>
-                        <p class="text-slate-600 text-sm mb-4 line-clamp-2 leading-relaxed">${p.hook}</p>
-                        
-                        <div class="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                <span class="text-xs font-medium text-slate-700">诊断师 ${p.diagnosis.doctor} 评估</span>
-                            </div>
-                            <div class="grid grid-cols-3 gap-2 text-center">
-                                <div>
-                                    <div class="text-lg font-bold text-slate-900">${p.diagnosis.tech}</div>
-                                    <div class="text-[10px] text-slate-500 uppercase">技术</div>
-                                </div>
-                                <div>
-                                    <div class="text-lg font-bold text-slate-900">${p.diagnosis.market}</div>
-                                    <div class="text-[10px] text-slate-500 uppercase">市场</div>
-                                </div>
-                                <div>
-                                    <div class="text-lg font-bold text-slate-900">${p.diagnosis.cost}</div>
-                                    <div class="text-[10px] text-slate-500 uppercase">成本</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs text-slate-600">${p.author[0]}</div>
-                                <span class="text-xs text-slate-500">${p.author}</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-xs text-slate-400">
-                                <span>👁 ${p.views}</span>
-                                <span>✉️ ${p.intentions}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        renderProjects();
     </script>
 
 </body>
