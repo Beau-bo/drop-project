@@ -36,23 +36,27 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen">
 
+    <!-- 导航栏 → 电脑端永远显示用户区域 -->
     <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
                 <span class="font-bold text-lg">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
             </div>
+
+            <!-- 导航菜单（电脑端可见） -->
             <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
                 <a href="index.html" class="hover:text-slate-900">首页</a>
                 <a href="market.html" class="hover:text-slate-900">残骸市场</a>
                 <a href="publish.html" class="text-slate-900">登记残骸</a>
             </div>
-            <div id="user-section">
-                <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">登录 / 注册</button>
-            </div>
+
+            <!-- 用户区域 → 电脑 + 手机 都正常显示 -->
+            <div id="user-section" class="flex items-center"></div>
         </div>
     </nav>
 
+    <!-- 登录弹窗 -->
     <div id="login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
             <h3 class="text-xl font-bold text-slate-900 mb-4">登录 / 注册</h3>
@@ -74,6 +78,7 @@
         </div>
     </div>
 
+    <!-- 成功提示 -->
     <div id="successToast" class="success-toast">✅ 提交成功，等待审核中</div>
 
     <main class="pt-24 pb-12 px-4 max-w-2xl mx-auto">
@@ -215,7 +220,7 @@
             initPriceType();
         };
 
-        // 刷新用户状态（登录/退出后调用）
+        // ========== 核心修复：统一刷新用户 UI（电脑+手机都显示） ==========
         function refreshUserUI() {
             const userSection = document.getElementById('user-section');
             const userStr = localStorage.getItem('user');
@@ -233,7 +238,6 @@
             }
         }
 
-        // 检查登录
         function checkLoginStatus() {
             refreshUserUI();
             const token = localStorage.getItem('token');
@@ -243,7 +247,6 @@
             }
         }
 
-        // 退出登录
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
@@ -251,7 +254,6 @@
             window.location.href = 'index.html';
         }
 
-        // 显示成功提示
         function showSuccessToast() {
             const toast = document.getElementById('successToast');
             toast.classList.add('show');
@@ -301,7 +303,6 @@
         function showStep(step) {
             document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('step' + step).classList.remove('hidden');
-
             const s1 = document.getElementById('step1-indicator');
             const s2 = document.getElementById('step2-indicator');
             const line = document.getElementById('line1');
@@ -350,11 +351,9 @@
         function updatePreview() {
             document.getElementById('preview-title').textContent = document.getElementById('project-title').value;
             document.getElementById('preview-hook').textContent = document.getElementById('project-hook').value;
-
             const typeMap = {code:'💀代码',prototype:'👻原型',design:'🎨设计',operation:'🚧运营',concept:'🫧概念'};
             const diffMap = {easy:'🟢极易',medium:'🟡中等',hard:'🔴困难',expert:'⚫专家'};
             const priceMap = {free:'免费',negotiable:'面议',fixed:'¥'+document.getElementById('price-value').value};
-
             document.getElementById('preview-type').textContent = typeMap[document.getElementById('project-type').value] || '--';
             document.getElementById('preview-difficulty').textContent = diffMap[document.getElementById('project-difficulty').value] || '--';
             document.getElementById('preview-price').textContent = priceMap[document.getElementById('price-type').value] || '--';
@@ -365,7 +364,6 @@
                 alert('请同意平台审核规则');
                 return;
             }
-
             const projectData = {
                 title: document.getElementById('project-title').value,
                 hook: document.getElementById('project-hook').value,
@@ -378,7 +376,6 @@
                 anonymous: document.getElementById('anonymous').checked,
                 status: 'pending'
             };
-
             try {
                 const token = localStorage.getItem('token');
                 await fetch(API_BASE + '/projects', {
@@ -387,7 +384,7 @@
                     body: JSON.stringify(projectData)
                 });
             } catch (e) {
-                console.log('演示模式提交', projectData);
+                console.log('演示模式');
             } finally {
                 showSuccessToast();
                 setTimeout(() => window.location.href = 'profile.html', 1500);
@@ -408,7 +405,6 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             if (!username || !password) return alert('请填写完整');
-
             try {
                 const res = await fetch(API_BASE + '/auth/login', {
                     method: 'POST',
@@ -416,12 +412,11 @@
                     body: JSON.stringify({username, password})
                 });
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error || '登录失败');
-
+                if (!res.ok) throw new Error(data.error);
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 closeLoginModal();
-                refreshUserUI(); // 登录后立即刷新
+                refreshUserUI();
                 location.reload();
             } catch (e) {
                 alert(e.message);
@@ -432,7 +427,6 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             if (!username || !password) return alert('请填写完整');
-
             try {
                 const res = await fetch(API_BASE + '/auth/register', {
                     method: 'POST',
@@ -440,7 +434,7 @@
                     body: JSON.stringify({username, password})
                 });
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error || '注册失败');
+                if (!res.ok) throw new Error(data.error);
                 alert('注册成功，请登录');
                 document.getElementById('password').value = '';
             } catch (e) {
