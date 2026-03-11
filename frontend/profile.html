@@ -16,14 +16,11 @@
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <!-- 顶部导航 -->
+    <!-- 顶部导航（移除叉号，保留Logo+用户名+退出） -->
     <div class="bg-white p-4 flex items-center justify-between shadow-sm sticky top-0 z-10">
+        <a href="index.html" class="text-xl font-bold cursor-pointer">废项局</a>
         <div class="flex items-center gap-2">
-            <button class="text-gray-500" onclick="history.back()">×</button>
-            <a href="index.html" class="text-xl font-bold cursor-pointer">废项局</a>
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="text-gray-700">👤 游客</span>
+            <span class="text-gray-700" id="show-username">加载中...</span>
             <button class="text-gray-500" onclick="logout()">退出</button>
         </div>
     </div>
@@ -31,9 +28,9 @@
     <!-- 用户信息卡片 -->
     <div class="bg-white m-4 p-4 rounded-lg shadow-sm">
         <div class="flex items-center gap-4 mb-4">
-            <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-white text-2xl font-bold">U</div>
+            <div class="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center text-white text-2xl font-bold" id="user-avatar">U</div>
             <div>
-                <h2 class="text-2xl font-bold" id="username">用户名</h2>
+                <h2 class="text-2xl font-bold" id="user-name">用户名</h2>
                 <p class="text-gray-500">加入时间：2026/03/11</p>
             </div>
         </div>
@@ -111,19 +108,46 @@
 
 <script>
 let currentFilter = "all";
+let currentUser = null; // 存储当前登录用户
+
 window.onload = function () {
+    // 先检查登录状态，未登录直接跳首页
+    if (!checkLogin()) return;
+    // 加载当前用户信息
     loadUserInfo();
+    // 渲染当前用户的项目（仅显示自己的）
     renderProjects();
+    // 绑定标签/筛选事件
     bindEvents();
+    // 更新统计数字
     refreshCount();
 };
 
-function loadUserInfo() {
-    const user = JSON.parse(localStorage.getItem('user') || '{"username":"游客"}');
-    document.getElementById('username').innerText = user.username;
-    document.getElementById('set-username').value = user.username;
+// 检查登录状态，返回当前用户
+function checkLogin() {
+    const userStr = localStorage.getItem('user');
+    if (!userStr) {
+        alert('请先登录！');
+        location.href = 'index.html';
+        return false;
+    }
+    currentUser = JSON.parse(userStr);
+    return true;
 }
 
+// 加载当前登录用户的信息
+function loadUserInfo() {
+    if (!currentUser) return;
+    // 显示用户名
+    document.getElementById('show-username').innerText = currentUser.username;
+    document.getElementById('user-name').innerText = currentUser.username;
+    // 设置头像（取用户名第一个字）
+    document.getElementById('user-avatar').innerText = currentUser.username.substring(0, 1).toUpperCase();
+    // 账号设置里的用户名
+    document.getElementById('set-username').value = currentUser.username;
+}
+
+// 绑定标签和筛选事件
 function bindEvents() {
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
@@ -144,23 +168,30 @@ function bindEvents() {
     });
 }
 
+// 渲染当前用户的项目（仅显示自己发布的）
 function renderProjects() {
     const list = document.getElementById('project-list');
     const empty = document.getElementById('empty-hint');
     list.innerHTML = '';
-    let projects = JSON.parse(localStorage.getItem('myProjects') || '[]');
     
+    // 读取所有项目，仅筛选当前用户的
+    let allProjects = JSON.parse(localStorage.getItem('allProjects') || '[]');
+    let userProjects = allProjects.filter(p => p.username === currentUser.username);
+
+    // 按筛选条件过滤
     if (currentFilter !== 'all') {
-        projects = projects.filter(p => p.status === currentFilter);
+        userProjects = userProjects.filter(p => p.status === currentFilter);
     }
 
-    if (projects.length === 0) {
+    // 无项目显示空提示
+    if (userProjects.length === 0) {
         empty.classList.remove('hidden');
         return;
     }
     empty.classList.add('hidden');
 
-    projects.forEach((p, idx) => {
+    // 渲染项目卡片
+    userProjects.forEach((p, idx) => {
         const item = document.createElement('div');
         item.className = 'border rounded-lg p-3';
         const statusCls = {
@@ -177,13 +208,22 @@ function renderProjects() {
             rejected: '已拒绝'
         }[p.status] || '草稿';
 
+        // 类型名称转换（prototype → 原型幽灵）
+        const typeText = {
+            code: '代码尸体',
+            prototype: '原型幽灵',
+            design: '设计草稿',
+            operation: '运营废墟',
+            concept: '概念泡沫'
+        }[p.type] || '未知类型';
+
         item.innerHTML = `
         <div class="flex justify-between items-center mb-2">
             <div class="flex gap-2">
-                <span class="text-sm bg-gray-100 px-2 py-0.5 rounded">${p.type || '未知'}</span>
+                <span class="text-sm bg-gray-100 px-2 py-0.5 rounded">${typeText}</span>
                 <span class="status-tag ${statusCls}">${statusText}</span>
             </div>
-            <span class="text-gray-500 text-xs">${p.createTime || ''}</span>
+            <span class="text-gray-500 text-xs">${p.createTime || new Date().toLocaleDateString()}</span>
         </div>
         <h3 class="text-lg font-bold mb-1">${p.title}</h3>
         <p class="text-gray-500 text-sm mb-2 line-clamp-2">${p.hook || p.detail || ''}</p>
@@ -198,31 +238,53 @@ function renderProjects() {
     });
 }
 
+// 更新当前用户的项目统计
 function refreshCount() {
-    const projects = JSON.parse(localStorage.getItem('myProjects') || '[]');
-    document.getElementById('count-publish').innerText = projects.length;
+    const allProjects = JSON.parse(localStorage.getItem('allProjects') || '[]');
+    const userProjects = allProjects.filter(p => p.username === currentUser.username);
+    document.getElementById('count-publish').innerText = userProjects.length;
 }
 
+// 编辑项目
 function editProject(idx) {
+    const allProjects = JSON.parse(localStorage.getItem('allProjects') || '[]');
+    const userProjects = allProjects.filter(p => p.username === currentUser.username);
+    localStorage.setItem('editProject', JSON.stringify(userProjects[idx]));
     localStorage.setItem('editIndex', idx);
     location.href = 'publish.html';
 }
 
+// 删除项目
 function deleteProject(idx) {
-    if (!confirm('确定删除？')) return;
-    const list = JSON.parse(localStorage.getItem('myProjects') || '[]');
-    list.splice(idx, 1);
-    localStorage.setItem('myProjects', JSON.stringify(list));
+    if (!confirm('确定删除该项目吗？删除后无法恢复！')) return;
+    let allProjects = JSON.parse(localStorage.getItem('allProjects') || '[]');
+    const userProjects = allProjects.filter(p => p.username === currentUser.username);
+    // 找到要删除的项目在总列表里的索引
+    const deleteId = userProjects[idx].id;
+    allProjects = allProjects.filter(p => p.id !== deleteId);
+    // 保存回本地存储
+    localStorage.setItem('allProjects', JSON.stringify(allProjects));
+    // 重新渲染
     renderProjects();
     refreshCount();
 }
 
+// 保存账号设置
 function saveProfile() {
-    alert('保存成功');
+    const pwd1 = document.getElementById('set-pwd1').value;
+    const pwd2 = document.getElementById('set-pwd2').value;
+    if (pwd1 && pwd1 !== pwd2) {
+        alert('两次密码不一致！');
+        return;
+    }
+    alert('账号信息保存成功！');
 }
 
+// 退出登录（清空当前用户，保留所有项目）
 function logout() {
-    localStorage.clear();
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    alert('退出成功！');
     location.href = 'index.html';
 }
 </script>
