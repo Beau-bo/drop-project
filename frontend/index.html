@@ -27,8 +27,8 @@
                 <a href="market.html" class="hover:text-slate-900">残骸市场</a>
                 <a href="publish.html" class="hover:text-slate-900">登记残骸</a>
             </div>
-            <!-- 这里改成动态显示 -->
-            <div id="user-section">
+            <!-- 用户区域 - 登录后显示用户名 -->
+            <div id="user-section" class="flex items-center gap-3">
                 <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">
                     登录 / 注册
                 </button>
@@ -108,21 +108,24 @@
     </section>
 
     <script>
+        // API 地址
         const API_BASE = "https://drop-project.onrender.com/api";
 
-        // 页面加载时检查登录状态
-        window.onload = function() {
+        // 页面加载时立即检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
             checkLoginStatus();
-        };
+        });
 
+        // 检查登录状态并更新UI
         function checkLoginStatus() {
             const user = localStorage.getItem('user');
             const token = localStorage.getItem('token');
+            const userSection = document.getElementById('user-section');
             
-            if (user && token) {
+            if (user && token && userSection) {
                 const userData = JSON.parse(user);
                 // 显示用户名和退出按钮
-                document.getElementById('user-section').innerHTML = `
+                userSection.innerHTML = `
                     <div class="flex items-center gap-3">
                         <span class="text-slate-700 font-medium">${userData.username}</span>
                         <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
@@ -205,19 +208,21 @@
                     throw new Error(data.error || '登录失败');
                 }
 
+                // 保存登录状态
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
                 alert('登录成功！');
                 closeLoginModal();
                 
-                // 刷新页面显示登录状态
-                location.reload();
+                // 立即更新UI，不刷新页面
+                checkLoginStatus();
             } catch (error) {
                 showError(error.message);
             }
         }
 
+        // 点击遮罩关闭弹窗
         document.getElementById('login-modal').addEventListener('click', function(e) {
             if (e.target === this) closeLoginModal();
         });
