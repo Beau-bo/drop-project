@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登记残骸 - 废项局</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+    <!-- 简单导航 -->
+    <nav class="bg-white border-b border-slate-200 px-4 py-4">
+        <div class="max-w-3xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold text-sm">废</div>
+                <span class="font-bold">登记残骸</span>
+            </a>
+            <a href="index.html" class="text-sm text-slate-500 hover:text-slate-700">退出</a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        
+        <!-- 进度条 -->
+        <div class="flex items-center justify-center mb-8">
+            <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-sky-600 text-white flex items-center justify-center text-sm font-bold border-2 border-sky-600">1</div>
+                    <span class="text-sm font-medium text-sky-600">基础信息</span>
+                </div>
+                <div class="w-8 h-0.5 bg-slate-200"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-white text-slate-400 flex items-center justify-center text-sm font-bold border-2 border-slate-300">2</div>
+                    <span class="text-sm font-medium text-slate-400">详细描述</span>
+                </div>
+                <div class="w-8 h-0.5 bg-slate-200"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-white text-slate-400 flex items-center justify-center text-sm font-bold border-2 border-slate-300">3</div>
+                    <span class="text-sm font-medium text-slate-400">提交审核</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                <h1 class="text-lg font-bold text-slate-900">基础信息</h1>
+                <p class="text-sm text-slate-500 mt-1">让拾荒者快速了解你的残骸</p>
+            </div>
+
+            <form class="p-6 space-y-6" onsubmit="handleSubmit(event)">
+                
+                <!-- 标题 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        残骸标题 <span class="text-rose-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="title"
+                        required
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all"
+                        placeholder="给你的残骸起个名字，如：AI 客服 SaaS 半成品"
+                    >
+                </div>
+
+                <!-- 钩子 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        一句话钩子 <span class="text-rose-500">*</span>
+                        <span class="text-xs text-slate-400 font-normal ml-2">项目卡片展示的核心文案</span>
+                    </label>
+                    <textarea 
+                        id="hook"
+                        required
+                        maxlength="140"
+                        rows="3"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all resize-none"
+                        placeholder="用140字内吸引拾荒者的注意，说明项目亮点和放弃原因..."
+                    ></textarea>
+                    <div class="flex justify-between text-xs text-slate-400 mt-1">
+                        <span>好的钩子能提升 3 倍浏览量</span>
+                        <span id="hook-count">0/140</span>
+                    </div>
+                </div>
+
+                <!-- 类型和难度 -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                            残骸类型 <span class="text-rose-500">*</span>
+                        </label>
+                        <select id="type" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none bg-white">
+                            <option value="">选择类型</option>
+                            <option value="CODE_CORPSE">💀 代码尸骸 - 未完成的程序</option>
+                            <option value="PROTOTYPE_GHOST">👻 原型幽灵 - 产品原型</option>
+                            <option value="DESIGN_DRAFT">🎨 设计遗稿 - 设计稿/UI</option>
+                            <option value="OPERATION_RUINS">🏚️ 运营废墟 - 停运项目</option>
+                            <option value="CONCEPT_BUBBLE">🫧 概念泡沫 - 未落地创意</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                            复活难度 <span class="text-rose-500">*</span>
+                        </label>
+                        <select id="difficulty" required class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none bg-white">
+                            <option value="">评估难度</option>
+                            <option value="HOT_RESTART">🔥 热启动 - 有用户基础，快速复活</option>
+                            <option value="TECH_DEBT">⚙️ 技术债清理 - 需要重构</option>
+                            <option value="ARCH_REBUILD">🏗️ 架构重建 - 大量改造</option>
+                            <option value="ANATOMY_ONLY">💀 仅供解剖 - 学习价值</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 详细描述 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">
+                        详细描述 <span class="text-rose-500">*</span>
+                    </label>
+                    <textarea 
+                        id="description"
+                        required
+                        minlength="50"
+                        rows="6"
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all resize-none"
+                        placeholder="详细描述项目背景、已完成部分、技术栈、放弃原因等（至少50字）..."
+                    ></textarea>
+                    <div class="text-xs text-slate-400 mt-1">建议包含：技术栈、完成度、放弃原因、期望转让方式</div>
+                </div>
+
+                <!-- 文件上传 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">相关文件</label>
+                    <div 
+                        class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-sky-500 hover:bg-sky-50 transition-all cursor-pointer"
+                        onclick="document.getElementById('file-input').click()"
+                    >
+                        <div class="text-4xl mb-3">📁</div>
+                        <p class="text-sm font-medium text-slate-700 mb-1">点击或拖拽文件到此处上传</p>
+                        <p class="text-xs text-slate-500">支持源码包、原型文件、设计稿等，单个不超过 500MB</p>
+                        <input type="file" id="file-input" multiple class="hidden" onchange="handleFileSelect(this)">
+                    </div>
+                    <div id="file-list" class="mt-3 space-y-2"></div>
+                </div>
+
+                <!-- 匿名选项 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" id="anonymous" checked class="mt-1 w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                        <div>
+                            <div class="font-medium text-slate-900">匿名发布</div>
+                            <p class="text-sm text-slate-500 mt-1">隐藏你的真实身份，保护隐私。联系方式仅对表达意向的拾荒者可见。</p>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- 协议 -->
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                    <label for="terms" class="text-sm text-slate-600 cursor-pointer">
+                        我确认这是未完成/已放弃的项目，不侵犯第三方权益，同意平台审核规则
+                    </label>
+                </div>
+
+                <!-- 提交按钮 -->
+                <div class="flex gap-4 pt-4 border-t border-slate-200">
+                    <button type="button" onclick="saveDraft()" class="flex-1 px-6 py-3 border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors">
+                        保存草稿
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors">
+                        提交审核
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- 提示 -->
+        <div class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
+            <div class="text-amber-500 text-xl">💡</div>
+            <div class="text-sm text-amber-800">
+                <p class="font-medium mb-1">发布小贴士</p>
+                <p class="text-amber-700/80">详细的技术栈说明和放弃原因能提高 60% 的对接成功率。建议上传架构图或核心代码片段。</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // 正确的 API 地址
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api' 
+            : 'https://your-render-api.onrender.com/api';
+
+        // 字符计数
+        document.getElementById('hook').addEventListener('input', function() {
+            document.getElementById('hook-count').textContent = `${this.value.length}/140`;
+        });
+
+        // 文件选择
+        let selectedFiles = [];
+        
+        function handleFileSelect(input) {
+            selectedFiles = Array.from(input.files);
+            renderFileList();
+        }
+
+        function renderFileList() {
+            const container = document.getElementById('file-list');
+            if (selectedFiles.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = selectedFiles.map((file, index) => `
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">📄</span>
+                        <div>
+                            <div class="font-medium text-slate-900 text-sm">${file.name}</div>
+                            <div class="text-xs text-slate-500">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeFile(${index})" class="text-slate-400 hover:text-rose-500">
+                        ✕
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            renderFileList();
+        }
+
+        // 保存草稿
+        function saveDraft() {
+            const data = {
+                title: document.getElementById('title').value,
+                hook: document.getElementById('hook').value,
+                type: document.getElementById('type').value,
+                difficulty: document.getElementById('difficulty').value,
+                description: document.getElementById('description').value,
+                anonymous: document.getElementById('anonymous').checked
+            };
+            localStorage.setItem('project_draft', JSON.stringify(data));
+            alert('草稿已保存到本地！');
+        }
+
+        // 恢复草稿
+        window.addEventListener('load', function() {
+            const draft = localStorage.getItem('project_draft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                document.getElementById('title').value = data.title || '';
+                document.getElementById('hook').value = data.hook || '';
+                document.getElementById('type').value = data.type || '';
+                document.getElementById('difficulty').value = data.difficulty || '';
+                document.getElementById('description').value = data.description || '';
+                document.getElementById('anonymous').checked = data.anonymous !== false;
+                document.getElementById('hook-count').textContent = `${(data.hook || '').length}/140`;
+            }
+        });
+
+        // 提交表单
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('description').value;
+            if (description.length < 50) {
+                alert('详细描述至少需要50字');
+                return;
+            }
+
+            // 模拟提交
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+            btn.textContent = '提交中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('提交成功！项目已进入审核队列，1-2个工作日内完成审核。');
+                localStorage.removeItem('project_draft');
+                location.href = 'market.html';
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html>
