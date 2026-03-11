@@ -27,8 +27,8 @@
                 <a href="market.html" class="hover:text-slate-900">残骸市场</a>
                 <a href="publish.html" class="hover:text-slate-900">登记残骸</a>
             </div>
-            <!-- 用户区域 - 登录后显示用户名 -->
-            <div id="user-section" class="flex items-center gap-3">
+            <!-- 用户区域 -->
+            <div id="user-section">
                 <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">
                     登录 / 注册
                 </button>
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <!-- 首页大标题 -->
+    <!-- 首页内容 -->
     <section class="hero-bg pt-32 pb-20 px-4 text-white">
         <div class="max-w-4xl mx-auto text-center">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm mb-6">
@@ -87,50 +87,40 @@
         </div>
     </section>
 
-    <!-- 统计数据 -->
-    <section class="py-12 bg-white border-b border-slate-200">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-3 gap-8 text-center">
-                <div>
-                    <div class="text-4xl font-bold text-sky-600">128</div>
-                    <div class="text-slate-600 mt-1">已拯救项目</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-bold text-sky-600">43</div>
-                    <div class="text-slate-600 mt-1">成功对接</div>
-                </div>
-                <div>
-                    <div class="text-4xl font-bold text-sky-600">15</div>
-                    <div class="text-slate-600 mt-1">认证诊断师</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <script>
-        // API 地址
         const API_BASE = "https://drop-project.onrender.com/api";
 
-        // 页面加载时立即检查登录状态
-        document.addEventListener('DOMContentLoaded', function() {
-            checkLoginStatus();
-        });
+        // 页面加载完成后检查登录状态
+        window.onload = function() {
+            console.log("页面加载完成，检查登录状态...");
+            updateUserUI();
+        };
 
-        // 检查登录状态并更新UI
-        function checkLoginStatus() {
-            const user = localStorage.getItem('user');
+        // 更新用户UI
+        function updateUserUI() {
+            const userStr = localStorage.getItem('user');
             const token = localStorage.getItem('token');
             const userSection = document.getElementById('user-section');
             
-            if (user && token && userSection) {
-                const userData = JSON.parse(user);
-                // 显示用户名和退出按钮
-                userSection.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="text-slate-700 font-medium">${userData.username}</span>
-                        <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
-                    </div>
-                `;
+            console.log("user:", userStr);
+            console.log("token:", token ? "存在" : "不存在");
+            
+            if (userStr && token && userSection) {
+                try {
+                    const userData = JSON.parse(userStr);
+                    console.log("登录状态：已登录，用户名:", userData.username);
+                    
+                    userSection.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-700 font-medium">👤 ${userData.username}</span>
+                            <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
+                        </div>
+                    `;
+                } catch(e) {
+                    console.error("解析用户信息失败:", e);
+                }
+            } else {
+                console.log("登录状态：未登录");
             }
         }
 
@@ -196,6 +186,7 @@
             }
 
             try {
+                console.log("正在登录...");
                 const response = await fetch(API_BASE + '/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -208,21 +199,26 @@
                     throw new Error(data.error || '登录失败');
                 }
 
-                // 保存登录状态
+                console.log("登录成功，保存用户信息:", data);
+                
+                // 保存到 localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
                 alert('登录成功！');
                 closeLoginModal();
                 
-                // 立即更新UI，不刷新页面
-                checkLoginStatus();
+                // 立即更新UI
+                console.log("更新UI...");
+                updateUserUI();
+                
             } catch (error) {
+                console.error("登录失败:", error);
                 showError(error.message);
             }
         }
 
-        // 点击遮罩关闭弹窗
+        // 点击遮罩关闭
         document.getElementById('login-modal').addEventListener('click', function(e) {
             if (e.target === this) closeLoginModal();
         });
