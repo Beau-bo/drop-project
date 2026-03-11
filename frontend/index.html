@@ -3,379 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>废项局 Drop Project - 让夭折的项目重新找到价值</title>
+    <title>废项局 - 发现被遗忘的好项目</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .hero-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        .filter-active { background-color: #1e293b; color: white; }
+        .status-tag { padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .status-pending { background-color: #fef3c7; color: #d97706; }
+        .status-draft { background: #f3f4f6; color: #6b7280; }
+        .status-approved { background: #dcfce7; color: #16a34a; }
+        .status-rejected { background: #fee2e2; color: #dc2626; }
+        /* 顶部头像下拉菜单 */
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 120px;
+            padding: 8px 0;
+            display: none;
+            z-index: 100;
+        }
+        .user-menu-dropdown.show {
+            display: block;
+        }
+        .user-menu-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .user-menu-item:hover {
+            background: #f1f5f9;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
-
-    <!-- 导航栏 -->
-    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
-                <span class="font-bold text-lg">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
-            </div>
-            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-                <a href="index.html" class="text-slate-900">首页</a>
-                <a href="market.html" class="hover:text-slate-900">残骸市场</a>
-                <a href="#" onclick="checkLoginBeforePublish()" class="hover:text-slate-900">登记残骸</a>
-            </div>
-            <div id="user-section">
-                <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">
-                    登录 / 注册
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- 登录弹窗 -->
-    <div id="login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-            <h3 class="text-xl font-bold text-slate-900 mb-4">登录 / 注册</h3>
-            <div id="error-msg" class="hidden mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm"></div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">用户名</label>
-                    <input type="text" id="username" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="输入用户名">
+<body class="bg-gray-100 min-h-screen">
+    <!-- 顶部导航：左上角仅Logo，右上角头像+昵称 -->
+    <div class="bg-white p-4 flex items-center justify-between shadow-sm sticky top-0 z-10">
+        <div class="text-xl font-bold cursor-pointer">废项局</div>
+        <div class="flex items-center gap-4">
+            <button class="bg-gray-900 text-white px-4 py-2 rounded" onclick="location.href='publish.html'">发布废项</button>
+            <div class="user-menu" id="userMenu" onclick="toggleUserMenu()">
+                <div class="flex items-center gap-2 cursor-pointer" id="userInfo">
+                    <!-- 右上角小头像 -->
+                    <div class="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm font-bold" id="top-avatar">U</div>
+                    <!-- 昵称 -->
+                    <span class="text-gray-700" id="top-username">请登录</span>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">密码</label>
-                    <input type="password" id="password" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="输入密码">
+                <!-- 下拉菜单 -->
+                <div class="user-menu-dropdown" id="userMenuDropdown">
+                    <div class="user-menu-item" onclick="location.href='profile.html'">个人中心</div>
+                    <div class="user-menu-item" onclick="logout()">退出登录</div>
                 </div>
-            </div>
-            <div class="flex gap-3 mt-6">
-                <button onclick="closeLoginModal()" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50">取消</button>
-                <button onclick="handleLogin()" class="flex-1 px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700">登录</button>
-                <button onclick="handleRegister()" class="flex-1 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800">注册</button>
             </div>
         </div>
     </div>
 
-    <!-- 首页大标题 -->
-    <section class="hero-bg pt-32 pb-20 px-4 text-white">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm mb-6">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                已拯救 128 个夭折项目
-            </div>
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-                废料有价<br>
-                <span class="text-slate-400">残骸新生</span>
-            </h1>
-            <p class="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
-                让夭折的项目，重新找到价值。我们专注展示交易未完成的产品、创业失败的代码、放弃运营的平台。
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="checkLoginBeforePublish()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-semibold hover:bg-slate-100 transition-all flex items-center justify-center gap-2">
-                    登记你的残骸
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                </button>
-                <a href="market.html" class="bg-white/10 text-white border border-white/20 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition-all">
-                    浏览残骸市场
-                </a>
-            </div>
-        </div>
-    </section>
+    <!-- 筛选栏 -->
+    <div class="bg-white p-4 mx-4 mt-4 rounded-lg flex flex-wrap gap-2">
+        <div class="filter px-3 py-1 rounded-full text-sm filter-active" data-filter="all">全部废项</div>
+        <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="code">代码尸体</div>
+        <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="prototype">原型幽灵</div>
+        <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="design">设计草稿</div>
+        <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="operation">运营废墟</div>
+        <div class="filter px-3 py-1 rounded-full text-sm bg-gray-100" data-filter="concept">概念泡沫</div>
+    </div>
 
-    <!-- 统计数据 -->
-    <section class="py-12 bg-white border-b border-slate-200">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-3 gap-8 text-center">
+    <!-- 项目列表 -->
+    <div id="project-list" class="mx-4 mt-4 space-y-4"></div>
+
+    <!-- 登录弹窗 -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg w-96">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">登录/注册</h2>
+                <span class="text-gray-500 cursor-pointer text-xl" onclick="closeLogin()">×</span>
+            </div>
+            <div class="space-y-4">
                 <div>
-                    <div class="text-4xl font-bold text-sky-600">128</div>
-                    <div class="text-slate-600 mt-1">已拯救项目</div>
+                    <label class="block text-gray-700 mb-1">用户名</label>
+                    <input type="text" id="login-username" class="w-full p-2 border rounded" placeholder="请输入用户名">
                 </div>
                 <div>
-                    <div class="text-4xl font-bold text-sky-600">43</div>
-                    <div class="text-slate-600 mt-1">成功对接</div>
+                    <label class="block text-gray-700 mb-1">密码</label>
+                    <input type="password" id="login-pwd" class="w-full p-2 border rounded" placeholder="请输入密码">
                 </div>
-                <div>
-                    <div class="text-4xl font-bold text-sky-600">15</div>
-                    <div class="text-slate-600 mt-1">认证诊断师</div>
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gray-900 text-white py-2 rounded" onclick="login()">登录</button>
+                    <button class="flex-1 bg-gray-200 text-gray-800 py-2 rounded" onclick="register()">注册</button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- 本周精选 -->
-    <section class="py-16 max-w-6xl mx-auto px-4">
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900">本周诊断</h2>
-                <p class="text-slate-500 text-sm mt-1">认证诊断师的专业评估</p>
-            </div>
-            <a href="market.html" class="text-sky-600 hover:text-sky-700 font-medium text-sm">查看全部 →</a>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6" id="featured-projects"></div>
-    </section>
+<script>
+let currentFilter = "all";
+let currentUser = null;
 
-    <!-- 分类 -->
-    <section class="py-16 bg-slate-50 border-y border-slate-200">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center">残骸分类</h2>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <a href="market.html?type=code" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-rose-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💀</div>
-                    <div class="font-semibold text-slate-900">代码尸骸</div>
-                    <div class="text-xs text-slate-500 mt-1">未完成的程序</div>
-                </a>
-                <a href="market.html?type=prototype" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">👻</div>
-                    <div class="font-semibold text-slate-900">原型幽灵</div>
-                    <div class="text-xs text-slate-500 mt-1">产品原型</div>
-                </a>
-                <a href="market.html?type=design" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-cyan-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🎨</div>
-                    <div class="font-semibold text-slate-900">设计遗稿</div>
-                    <div class="text-xs text-slate-500 mt-1">设计稿/UI</div>
-                </a>
-                <a href="market.html?type=operation" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-amber-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🚧</div>
-                    <div class="font-semibold text-slate-900">运营废墟</div>
-                    <div class="text-xs text-slate-500 mt-1">停运项目</div>
-                </a>
-                <a href="market.html?type=concept" class="bg-white rounded-2xl p-6 text-center border border-slate-200 hover:border-pink-300 hover:shadow-lg transition-all group">
-                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🫧</div>
-                    <div class="font-semibold text-slate-900">概念泡沫</div>
-                    <div class="text-xs text-slate-500 mt-1">未落地创意</div>
-                </a>
-            </div>
-        </div>
-    </section>
+// 页面加载时检查登录状态
+window.onload = function() {
+    checkLoginStatus();
+    renderProjects();
+    bindFilterEvents();
+    
+    // 点击页面其他区域关闭下拉菜单
+    document.addEventListener('click', function(e) {
+        const userMenu = document.getElementById('userMenu');
+        if (!userMenu.contains(e.target)) {
+            document.getElementById('userMenuDropdown').classList.remove('show');
+        }
+    });
+};
 
-    <script>
-        const API_BASE = "https://drop-project.onrender.com/api";
+// 检查登录状态
+function checkLoginStatus() {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+        currentUser = JSON.parse(userStr);
+        // 更新顶部头像和昵称
+        updateTopUserInfo();
+    } else {
+        // 未登录显示登录提示
+        document.getElementById('top-username').innerText = '请登录';
+        document.getElementById('top-avatar').innerText = 'U';
+        document.getElementById('top-avatar').className = 'w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm font-bold';
+        // 显示登录弹窗
+        openLogin();
+    }
+}
 
-        // 页面加载时检查登录状态
-        window.onload = function() {
-            updateUserUI();
+// 更新顶部头像和昵称
+function updateTopUserInfo() {
+    if (!currentUser) return;
+    
+    // 更新昵称
+    document.getElementById('top-username').innerText = currentUser.username;
+    
+    // 读取保存的头像
+    const savedAvatar = localStorage.getItem(`avatar_${currentUser.username}`);
+    const avatarEl = document.getElementById('top-avatar');
+    
+    // 头像样式映射（复用profile里的配置）
+    const avatarMap = {
+        "💻": { bg: "bg-slate-800", text: "text-white" },
+        "🔧": { bg: "bg-indigo-600", text: "text-white" },
+        "🐍": { bg: "bg-emerald-600", text: "text-white" },
+        "⚛️": { bg: "bg-red-600", text: "text-white" },
+        "🎯": { bg: "bg-blue-600", text: "text-white" },
+        "📱": { bg: "bg-purple-600", text: "text-white" },
+        "📈": { bg: "bg-amber-600", text: "text-white" },
+        "🧩": { bg: "bg-teal-600", text: "text-white" },
+        "🚀": { bg: "bg-rose-600", text: "text-white" },
+        "💡": { bg: "bg-cyan-600", text: "text-white" },
+        "💰": { bg: "bg-orange-600", text: "text-white" },
+        "🌱": { bg: "bg-lime-600", text: "text-white" },
+        "🎨": { bg: "bg-pink-600", text: "text-white" },
+        "✏️": { bg: "bg-fuchsia-600", text: "text-white" },
+        "🖌️": { bg: "bg-violet-600", text: "text-white" },
+        "✨": { bg: "bg-cyan-500", text: "text-white" },
+        "📊": { bg: "bg-sky-600", text: "text-white" },
+        "🔍": { bg: "bg-amber-500", text: "text-white" },
+        "📣": { bg: "bg-red-500", text: "text-white" },
+        "🔢": { bg: "bg-gray-700", text: "text-white" },
+        "🧮": { bg: "bg-teal-500", text: "text-white" },
+        "🛡️": { bg: "bg-emerald-500", text: "text-white" },
+        "✅": { bg: "bg-green-500", text: "text-white" },
+        "🐞": { bg: "bg-yellow-500", text: "text-white" },
+        "💬": { bg: "bg-purple-500", text: "text-white" },
+        "🔥": { bg: "bg-rose-500", text: "text-white" }
+    };
+
+    if (savedAvatar && avatarMap[savedAvatar]) {
+        avatarEl.innerText = savedAvatar;
+        avatarEl.className = `w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold ${avatarMap[savedAvatar].bg}`;
+    } else {
+        // 默认头像（用户名首字母）
+        const firstChar = currentUser.username.substring(0, 1).toUpperCase();
+        avatarEl.innerText = firstChar;
+        avatarEl.className = 'w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm font-bold';
+    }
+}
+
+// 切换用户下拉菜单
+function toggleUserMenu() {
+    if (!currentUser) {
+        openLogin();
+        return;
+    }
+    document.getElementById('userMenuDropdown').classList.toggle('show');
+}
+
+// 绑定筛选事件
+function bindFilterEvents() {
+    document.querySelectorAll('.filter').forEach(filter => {
+        filter.addEventListener('click', function() {
+            document.querySelectorAll('.filter').forEach(f => {
+                f.classList.remove('filter-active');
+                f.classList.add('bg-gray-100');
+            });
+            this.classList.add('filter-active');
+            this.classList.remove('bg-gray-100');
+            currentFilter = this.dataset.filter;
             renderProjects();
-        };
-
-        // 检查登录后再跳转发布页面
-        function checkLoginBeforePublish() {
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
-            
-            if (!token || !user) {
-                // 未登录，显示登录弹窗
-                showLoginModal();
-                // 提示用户
-                setTimeout(() => {
-                    showError('请先登录后再发布项目');
-                }, 100);
-            } else {
-                // 已登录，跳转到发布页面
-                window.location.href = 'publish.html';
-            }
-        }
-
-        // 更新用户UI
-        function updateUserUI() {
-            const userStr = localStorage.getItem('user');
-            const token = localStorage.getItem('token');
-            const userSection = document.getElementById('user-section');
-            
-            if (userStr && token && userSection) {
-                const userData = JSON.parse(userStr);
-                userSection.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600">👤 ${userData.username}</a>
-                        <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
-                    </div>
-                `;
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            location.reload();
-        }
-
-        function showLoginModal() {
-            document.getElementById('login-modal').classList.remove('hidden');
-            document.getElementById('login-modal').classList.add('flex');
-            document.getElementById('error-msg').classList.add('hidden');
-        }
-
-        function closeLoginModal() {
-            document.getElementById('login-modal').classList.add('hidden');
-            document.getElementById('login-modal').classList.remove('flex');
-        }
-
-        function showError(msg) {
-            const errorEl = document.getElementById('error-msg');
-            errorEl.textContent = msg;
-            errorEl.classList.remove('hidden');
-        }
-
-        async function handleRegister() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (!username || !password) {
-                showError('请填写用户名和密码');
-                return;
-            }
-
-            try {
-                const response = await fetch(API_BASE + '/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || '注册失败');
-                }
-
-                alert('注册成功，请登录');
-                document.getElementById('password').value = '';
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-
-        async function handleLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (!username || !password) {
-                showError('请填写用户名和密码');
-                return;
-            }
-
-            try {
-                const response = await fetch(API_BASE + '/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || '登录失败');
-                }
-
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                
-                alert('登录成功！');
-                closeLoginModal();
-                updateUserUI();
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-
-        document.getElementById('login-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeLoginModal();
         });
+    });
+}
 
-        // 模拟项目数据
-        const projects = [
-            {
-                id: 1,
-                title: "AI 客服 SaaS 半成品",
-                hook: "基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...",
-                type: "CODE_CORPSE",
-                typeLabel: "代码尸骸",
-                typeColor: "rose",
-                difficulty: "技术债",
-                diagnosis: { tech: 8.5, market: 7.2, cost: 6.0, doctor: "技术老炮" },
-                views: 234,
-                intentions: 12,
-                author: "匿名"
-            },
-            {
-                id: 2,
-                title: "跨境电商数据仪表盘",
-                hook: "Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...",
-                type: "PROTOTYPE_GHOST",
-                typeLabel: "原型幽灵",
-                typeColor: "violet",
-                difficulty: "热启动",
-                diagnosis: { tech: 9.0, market: 8.5, cost: 4.5, doctor: "产品猎人" },
-                views: 189,
-                intentions: 8,
-                author: "李雷"
-            },
-            {
-                id: 3,
-                title: "垂类社区 App 完整数据",
-                hook: "摄影爱好者社区，运营2年积累 5W+ 用户，日活 800+，因团队解散停止维护...",
-                type: "OPERATION_RUINS",
-                typeLabel: "运营废墟",
-                typeColor: "amber",
-                difficulty: "仅供解剖",
-                diagnosis: { tech: 6.0, market: 8.0, cost: 8.5, doctor: "增长黑客" },
-                views: 567,
-                intentions: 23,
-                author: "匿名"
-            }
-        ];
-
-        function renderProjects() {
-            const container = document.getElementById('featured-projects');
-            container.innerHTML = projects.map(p => `
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all cursor-pointer" onclick="location.href='detail.html?id=${p.id}'">
-                    <div class="p-5">
-                        <div class="flex gap-2 mb-3">
-                            <span class="px-2.5 py-1 rounded-md bg-${p.typeColor}-50 text-${p.typeColor}-600 text-xs font-semibold border border-${p.typeColor}-100">${p.typeLabel}</span>
-                            <span class="px-2.5 py-1 rounded-md bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">${p.difficulty}</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2 line-clamp-1 hover:text-sky-600 transition-colors">${p.title}</h3>
-                        <p class="text-slate-600 text-sm mb-4 line-clamp-2 leading-relaxed">${p.hook}</p>
-                        
-                        <div class="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                <span class="text-xs font-medium text-slate-700">诊断师 ${p.diagnosis.doctor} 评估</span>
-                            </div>
-                            <div class="grid grid-cols-3 gap-2 text-center">
-                                <div>
-                                    <div class="text-lg font-bold text-slate-900">${p.diagnosis.tech}</div>
-                                    <div class="text-[10px] text-slate-500 uppercase">技术</div>
-                                </div>
-                                <div>
-                                    <div class="text-lg font-bold text-slate-900">${p.diagnosis.market}</div>
-                                    <div class="text-[10px] text-slate-500 uppercase">市场</div>
-                                </div>
-                                <div>
-                                    <div class="text-lg font-bold text-slate-900">${p.diagnosis.cost}</div>
-                                    <div class="text-[10px] text-slate-500 uppercase">成本</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs text-slate-600">${p.author[0]}</div>
-                                <span class="text-xs text-slate-500">${p.author}</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-xs text-slate-400">
-                                <span>👁 ${p.views}</span>
-                                <span>✉️ ${p.intentions}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+// 渲染项目列表
+function renderProjects() {
+    const listEl = document.getElementById('project-list');
+    listEl.innerHTML = '';
+    
+    const allProjects = JSON.parse(localStorage.getItem('allProjects') || '[]');
+    let filteredProjects = allProjects;
+    
+    // 只显示审核通过的项目
+    filteredProjects = filteredProjects.filter(p => p.status === 'approved');
+    
+    // 按类型筛选
+    if (currentFilter !== 'all') {
+        filteredProjects = filteredProjects.filter(p => p.type === currentFilter);
+    }
+    
+    if (filteredProjects.length === 0) {
+        listEl.innerHTML = '<div class="text-center text-gray-500 py-10">暂无相关废项</div>';
+        return;
+    }
+    
+    // 渲染每个项目
+    filteredProjects.forEach(project => {
+        // 增加浏览量
+        project.viewCount = (project.viewCount || 0) + 1;
+        
+        // 保存更新后的浏览量
+        const allProjects = JSON.parse(localStorage.getItem('allProjects') || '[]');
+        const index = allProjects.findIndex(p => p.id === project.id);
+        if (index !== -1) {
+            allProjects[index].viewCount = project.viewCount;
+            localStorage.setItem('allProjects', JSON.stringify(allProjects));
         }
-    </script>
 
+        // 类型名称转换
+        const typeText = {
+            code: '代码尸体',
+            prototype: '原型幽灵',
+            design: '设计草稿',
+            operation: '运营废墟',
+            concept: '概念泡沫'
+        }[project.type] || '未知类型';
+
+        const projectEl = document.createElement('div');
+        projectEl.className = 'bg-white rounded-lg p-4 shadow-sm';
+        projectEl.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm bg-gray-100 px-2 py-0.5 rounded">${typeText}</span>
+                <span class="text-gray-500 text-xs">发布者：${project.username || '匿名'}</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2">${project.title}</h3>
+            <p class="text-gray-600 mb-3 line-clamp-2">${project.hook || project.detail || ''}</p>
+            <div class="flex justify-between items-center text-sm text-gray-500">
+                <div>👁️ ${project.viewCount || 0}</div>
+                <button class="text-blue-600" onclick="showInterest('${project.id}')">表达意向</button>
+            </div>
+        `;
+        listEl.appendChild(projectEl);
+    });
+}
+
+// 打开登录弹窗
+function openLogin() {
+    document.getElementById('login-modal').classList.remove('hidden');
+}
+
+// 关闭登录弹窗
+function closeLogin() {
+    document.getElementById('login-modal').classList.add('hidden');
+}
+
+// 登录
+function login() {
+    const username = document.getElementById('login-username').value.trim();
+    const pwd = document.getElementById('login-pwd').value.trim();
+    
+    if (!username || !pwd) {
+        alert('请输入用户名和密码');
+        return;
+    }
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.username === username && u.pwd === pwd);
+    
+    if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', 'token_' + Date.now());
+        currentUser = user;
+        updateTopUserInfo();
+        closeLogin();
+        alert('登录成功');
+    } else {
+        alert('用户名或密码错误');
+    }
+}
+
+// 注册
+function register() {
+    const username = document.getElementById('login-username').value.trim();
+    const pwd = document.getElementById('login-pwd').value.trim();
+    
+    if (!username || !pwd) {
+        alert('请输入用户名和密码');
+        return;
+    }
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    if (users.some(u => u.username === username)) {
+        alert('用户名已存在');
+        return;
+    }
+    
+    const newUser = { username, pwd };
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    alert('注册成功，请登录');
+}
+
+// 退出登录
+function logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    currentUser = null;
+    document.getElementById('top-username').innerText = '请登录';
+    document.getElementById('top-avatar').innerText = 'U';
+    document.getElementById('top-avatar').className = 'w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm font-bold';
+    document.getElementById('userMenuDropdown').classList.remove('show');
+    alert('退出成功');
+}
+
+// 表达意向
+function showInterest(projectId) {
+    if (!currentUser) {
+        openLogin();
+        return;
+    }
+    
+    if (confirm('确定要对这个项目表达意向吗？')) {
+        alert('意向已发送！发布者将收到你的联系信息');
+    }
+}
+</script>
 </body>
 </html>
