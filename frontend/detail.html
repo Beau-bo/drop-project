@@ -21,7 +21,7 @@
             </a>
             <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
                 <a href="index.html" class="hover:text-slate-900">首页</a>
-                <a href="market.html" class="hover:text-slate-900">残骸市场</a>
+                
                 <a href="publish.html" class="hover:text-slate-900">登记残骸</a>
             </div>
             <div id="user-section">
@@ -419,5 +419,22 @@
         });
     </script>
 
+<script>function checkLoginStatus() {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+        currentUser = JSON.parse(userStr);
+        // 登录后隐藏登录按钮
+        document.getElementById('loginBtn').classList.add('hidden');
+        updateTopUserInfo();
+    } else {
+        // 未登录显示登录按钮
+        document.getElementById('loginBtn').classList.remove('hidden');
+        document.getElementById('top-avatar').innerText = 'U';
+        document.getElementById('top-avatar').className = 'w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm font-bold cursor-pointer';
+    }
+}
+
+// 更新顶部头像信息
+    checkLoginStatus();</script>
 </body>
 </html>
