@@ -541,7 +541,7 @@
             
             // 生成HTML
             container.innerHTML = filtered.map(p => `
-                <div class="card-shadow rounded-lg overflow-hidden bg-white project-card" data-type="${p.type}" data-difficulty="${p.difficulty}">
+                <div class="card-shadow rounded-lg overflow-hidden bg-white project-card cursor-pointer hover:shadow-lg transition-shadow" data-type="${p.type}" data-difficulty="${p.difficulty}" onclick="window.location.href='detail.html?id=${p.id}'">
                     <div class="p-5">
                         <div class="flex gap-2 mb-3">
                             <span class="tag ${p.typeColor}">${p.type}</span>
