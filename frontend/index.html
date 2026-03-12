@@ -590,7 +590,7 @@
             document.querySelectorAll('.filter-tag').forEach(btn => {
                 if (btn.dataset.category === category) {
                     if (value === 'all' && btn.dataset.value === 'all') {
-                        btn.className = 'text-sm text-gray-900 font-medium filter-tag';
+                        btn.className = 'text-sm text-gray-900 font-medium bg-gray-100 px-3 py-1 rounded filter-tag';
                     } else if (btn.dataset.value === value) {
                         btn.className = 'text-sm text-gray-900 font-medium bg-gray-100 px-3 py-1 rounded filter-tag';
                     } else {
@@ -601,7 +601,13 @@
         }
 
         // 初始化
-        document.addEventListener('DOMContentLoaded', renderProjects);
+        document.addEventListener('DOMContentLoaded', function() {
+            currentType = 'all';
+            currentDifficulty = 'all';
+            renderProjects();
+            updateFilterUI('type', 'all');
+            updateFilterUI('difficulty', 'all');
+        });
     </script>
     
     <!-- 市场卡片列表 -->
@@ -949,35 +955,7 @@ function submitPublish(e) {
             });
         });
         
-        function filterProjects() {
-            const cards = document.querySelectorAll('.project-card');
-            let visibleCount = 0;
-            
-            cards.forEach(card => {
-                const cardType = card.dataset.type;
-                const cardDifficulty = card.dataset.difficulty;
-                
-                const typeMatch = activeFilters.type === 'all' || activeFilters.type === cardType;
-                const difficultyMatch = activeFilters.difficulty === 'all' || activeFilters.difficulty === cardDifficulty;
-                
-                if (typeMatch && difficultyMatch) {
-                    card.classList.remove('hidden');
-                    card.classList.remove('filtered-out');
-                    visibleCount++;
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-            
-            // 更新计数
-            const countEl = document.querySelector('.text-sm.text-gray-500.mb-6');
-            if (countEl) {
-                countEl.textContent = `共找到 ${visibleCount} 个残骸`;
-            }
-        }
         
-        // 初始化
-        document.addEventListener('DOMContentLoaded', filterProjects);
     </script>
 
 </body>
