@@ -58,7 +58,7 @@
             border-radius: 3px;
         }
         /* 分页样式 */
-        .page-btn {
+        .page-btn {\n            white-space: nowrap;
             width: 32px;
             height: 32px;
             display: flex;
@@ -565,13 +565,13 @@
 
         <!-- 分页 -->
         <div class="flex justify-center items-center gap-2">
-            <button class="page-btn text-gray-500">上一页</button>
+            <button class="page-btn text-gray-500" style="width: auto; min-width: 70px; padding: 0 12px;">上一页</button>
             <button class="page-btn active">1</button>
             <button class="page-btn">2</button>
             <button class="page-btn">3</button>
             <span class="text-gray-500">...</span>
             <button class="page-btn">12</button>
-            <button class="page-btn">下一页</button>
+            <button class="page-btn" style="width: auto; min-width: 70px; padding: 0 12px;">下一页</button>
         </div>
     </div>
 
