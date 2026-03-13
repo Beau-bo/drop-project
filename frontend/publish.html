@@ -77,20 +77,7 @@
 <body class="bg-slate-50 text-slate-800 min-h-screen">
 
 <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition">
-            <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
-            <span class="font-bold text-lg">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
-        </a>
-        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-            <a href="index.html" class="hover:text-slate-900">首页</a>
-            <a href="market.html" class="hover:text-slate-900">残骸市场</a>
-            <a href="publish.html" class="text-slate-900 font-bold">登记残骸</a>
-        </div>
-        <div class="flex items-center gap-4">
-            <button id="loginBtn" class="text-slate-600 hover:text-slate-900 text-sm" onclick="openLogin()">登录</button>
-            <div class="user-menu relative" id="userMenu" onclick="toggleUserMenu()" style="display:none;">
-                <div class="w-8 h-8 bg-slate-900 rounded-full flex items-center justify-center text-white text-sm font-bold cursor-pointer" id="top-avatar">U</div>
+    
                 <div class="user-menu-dropdown absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg border border-slate-200 w-32 py-2 hidden" id="userMenuDropdown">
                     <a href="profile.html" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">个人中心</a>
                     <div class="px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer" onclick="logout()">退出登录</div>
