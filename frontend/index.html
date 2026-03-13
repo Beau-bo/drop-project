@@ -619,43 +619,42 @@ window.openPublishModal = function() {
         
         
         function handleLogin() {
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-pwd').value;
-            
-            if (!username || !password) {
-                alert('请输入用户名和密码');
-                return;
-            }
-            
-            // 统一登录状态：兼容 profile/publish/admin
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('username', username);
-            localStorage.setItem('user', JSON.stringify({username: username}));
-            localStorage.setItem('token', 'demo-token-123456');
-            initUserState();
-            closeLoginModal();
-            alert('登录成功！');
-        }
-        
-        function handleRegister() {
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-pwd').value;
-            
-            if (!username || !password) {
-                alert('请输入用户名和密码');
-                return;
-            }
-            
-            // 统一登录状态：兼容 profile/publish/admin
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('username', username);
-            localStorage.setItem('user', JSON.stringify({username: username}));
-            localStorage.setItem('token', 'demo-token-123456');
-            initUserState();
-            closeLoginModal();
-            alert('注册成功！已自动登录');
-        }
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-pwd').value;
+    
+    if (!username || !password) {
+        alert('请输入用户名和密码');
+        return;
+    }
+    
+    // 全平台统一登录状态
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('username', username);
+    localStorage.setItem('user', JSON.stringify({username: username}));
+    localStorage.setItem('token', 'demo-token');
+    initUserState();
+    closeLoginModal();
+    alert('登录成功！');
+}
 
+function handleRegister() {
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-pwd').value;
+    
+    if (!username || !password) {
+        alert('请输入用户名和密码');
+        return;
+    }
+    
+    // 全平台统一登录状态
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('username', username);
+    localStorage.setItem('user', JSON.stringify({username: username}));
+    localStorage.setItem('token', 'demo-token');
+    initUserState();
+    closeLoginModal();
+    alert('注册成功！已自动登录');
+}
         function initUserState() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const loginBtn = document.getElementById('loginBtn');
