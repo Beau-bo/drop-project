@@ -678,6 +678,20 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 强制同步登录状态
+    const isLogin = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLogin) {
+        alert('请先登录！');
+        window.location.href = 'index.html';
+    } else {
+        console.log('已登录，进入个人中心');
+    }
+});
+</script>
 </body>
+
 
 </html>
