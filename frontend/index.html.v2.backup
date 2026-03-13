@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>废项局 | Drop Project - 让搁浅的项目重新找到价值</title>
+    <script src="https://cdn.tailwindcss.com">
+// 发布残骸：直接跳转页面，不弹窗
+window.openPublishModal = function() {
+    window.location.href = 'publish.html';
+};
+window.openPublishModal = function() {
+    window.location.href = 'publish.html';
+};
+</script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #111827;
+        }
+        /* 导航栏样式 */
+        .nav-container {
+            border-bottom: 1px solid #e5e7eb;
+            background-color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        /* 英雄区渐变背景 */
+        .hero-bg {
+            background: linear-gradient(to bottom, #1e293b 0%, #334155 50%, #ffffff 100%);
+            color: white;
+        }
+        /* 卡片阴影 */
+        .card-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.2s ease;
+        }
+        .card-shadow:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        /* 标签样式 */
+        .tag {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        /* 评分条样式 */
+        .score-bar {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #f3f4f6;
+            overflow: hidden;
+        }
+        .score-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        /* 分页样式 */
+        .page-btn {\n            white-space: nowrap;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            margin: 0 2px;
+            cursor: pointer;
+        }
+        .page-btn.active {
+            background-color: #1e293b;
+            color: white;
+            border-color: #1e293b;
+        }
+        /* 头像下拉菜单 */
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 120px;
+            padding: 8px 0;
+            display: none;
+            z-index: 100;
+        }
+        .user-menu-dropdown.show {
+            display: block;
+        }
+        .user-menu-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .user-menu-item:hover {
+            background: #f1f5f9;
+        }
+        /* 登录弹窗 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+/* 隐藏元素 */
+        .hidden {
+            display: none !important;
+        }
+    
+        /* 筛选按钮样式 */
+        .filter-btn.active {
+            color: #1e293b !important;
+            font-weight: 600;
+            background-color: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+        
+        /* 卡片隐藏/显示动画 */
+        .project-card {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .project-card.hidden {
+            display: none;
+        }
+        
+        .project-card.filtered-out {
+            opacity: 0.3;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="nav-container px-4 md:px-8 py-3 flex items-center justify-between">
+        <!-- Logo区域 -->
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-black rounded-md flex items-center justify-center text-white font-bold">废</div>
+            <span class="text-lg font-semibold">废项局</span>
+            <span class="text-gray-400 text-sm">| Drop Project</span>
+        </div>
+        
+        <!-- 导航菜单：移除「关于」选项 -->
+        <div class="hidden md:flex items-center gap-6">
+            <a href="#" class="text-gray-900 font-medium">首页</a>
+            <a href="#market" class="text-gray-900 font-medium">残骸市场</a>
+            <a href="publish.html" class="text-gray-500">登记残骸</a>
+        </div>
+        
+        <!-- 登录/注册 + 头像：修复登录状态逻辑 -->
+        <div class="flex items-center gap-4">
+            <!-- 未登录时显示登录按钮，登录后隐藏 -->
+            <button id="loginBtn" class="text-gray-500 hover:text-gray-900 text-sm" onclick="openLogin()">登录</button>
+            <button class="bg-black text-white px-4 py-1.5 rounded-md text-sm font-medium" onclick="window.location.href='publish.html'">开始登记</button>
+            
+            <!-- 用户头像（保留之前的头像功能） -->
+            <div class="user-menu" id="userMenu" onclick="toggleUserMenu()">
+                <div class="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-white text-sm font-bold cursor-pointer" id="top-avatar">U</div>
+                <!-- 下拉菜单 -->
+                <div class="user-menu-dropdown" id="userMenuDropdown">
+                    <div class="user-menu-item" onclick="location.href='profile.html'">个人中心</div>
+                    <div class="user-menu-item" onclick="logout()">退出登录</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 英雄区 -->
+    <div class="hero-bg px-4 md:px-16 py-16 md:py-24 text-center">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6">残骸新生</h1>
+        <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10">
+            让搁浅的项目，重新找到价值。我们专注展示与交易未开发完成的产品、创业失败的项目、放弃运营的平台等。
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button class="bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition" onclick="window.location.href='publish.html'">
+                登记你的残骸 →
+            </button>
+            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white/10 transition" onclick="location.href='#market'">
+                浏览残骸市场
+            </button>
+        </div>
+    </div>
+
+    <!-- 本周诊断 -->
+    <div class="px-4 md:px-16 py-12">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold mb-1">本周诊断</h2>
+                <p class="text-gray-500 text-sm">认证诊断师的专业评估</p>
+            </div>
+            <a href="#" class="text-blue-600 text-sm flex items-center gap-1">
+                查看全部 <i class="fa fa-angle-right"></i>
+            </a>
+        </div>
+
+        <!-- 诊断卡片列表 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- 卡片1：AI客服SaaS半成品 -->
+            <div class="card-shadow rounded-lg p-6 bg-white cursor-pointer hover:shadow-lg transition-shadow" onclick="window.location.href='detail.html?id=1'">
+                <div class="flex gap-2 mb-4">
+                    <span class="tag bg-red-100 text-red-800">代码尸骸</span>
+                    <span class="tag bg-yellow-100 text-yellow-800">局部修复</span>
+                </div>
+                <h3 class="text-lg font-bold mb-2">AI客服 SaaS 半成品</h3>
+                <p class="text-gray-600 text-sm mb-6 line-clamp-2">
+                    基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...
+                </p>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-2 mb-2 text-sm">
+                        <i class="fa fa-user-circle-o text-gray-400"></i>
+                        <span class="text-gray-700">诊断师 技术老炮</span>
+                        <span class="text-green-600 text-xs px-1.5 py-0.5 bg-green-50 rounded">认证</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">8.5</div>
+                            <div class="text-xs text-gray-500">技术</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-blue-500" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">7.2</div>
+                            <div class="text-xs text-gray-500">市场</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-green-500" style="width: 72%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">6.0</div>
+                            <div class="text-xs text-gray-500">成本</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-orange-500" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center text-xs text-gray-500">
+                    <div class="flex items-center gap-1">
+                        <i class="fa fa-eye-slash"></i> 匿名发布
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="flex items-center gap-1"><i class="fa fa-eye"></i> 234</span>
+                        <span class="flex items-center gap-1"><i class="fa fa-comment-o"></i> 12</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片2：跨境电商数据仪表盘 -->
+            <div class="card-shadow rounded-lg p-6 bg-white cursor-pointer hover:shadow-lg transition-shadow" onclick="window.location.href='detail.html?id=2'">
+                <div class="flex gap-2 mb-4">
+                    <span class="tag bg-purple-100 text-purple-800">原型幽灵</span>
+                    <span class="tag bg-green-100 text-green-800">快速激活</span>
+                </div>
+                <h3 class="text-lg font-bold mb-2">跨境电商数据仪表盘</h3>
+                <p class="text-gray-600 text-sm mb-6 line-clamp-2">
+                    Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...
+                </p>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-2 mb-2 text-sm">
+                        <i class="fa fa-user-circle-o text-gray-400"></i>
+                        <span class="text-gray-700">诊断师 产品猎人</span>
+                        <span class="text-green-600 text-xs px-1.5 py-0.5 bg-green-50 rounded">认证</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">9.0</div>
+                            <div class="text-xs text-gray-500">技术</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-blue-500" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">8.5</div>
+                            <div class="text-xs text-gray-500">市场</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-green-500" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">4.5</div>
+                            <div class="text-xs text-gray-500">成本</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-orange-500" style="width: 45%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center text-xs text-gray-500">
+                    <div class="flex items-center gap-1">
+                        <i class="fa fa-user-o"></i> 李明 · 3个残骸
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="flex items-center gap-1"><i class="fa fa-eye"></i> 189</span>
+                        <span class="flex items-center gap-1"><i class="fa fa-comment-o"></i> 8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片3：垂类社区App完整数据 -->
+            <div class="card-shadow rounded-lg p-6 bg-white cursor-pointer hover:shadow-lg transition-shadow" onclick="window.location.href='detail.html?id=3'">
+                <div class="flex gap-2 mb-4">
+                    <span class="tag bg-blue-100 text-blue-800">运营废墟</span>
+                    <span class="tag bg-gray-100 text-gray-800">仅供参考</span>
+                </div>
+                <h3 class="text-lg font-bold mb-2">垂类社区 App 完整数据</h3>
+                <p class="text-gray-600 text-sm mb-6 line-clamp-2">
+                    摄影爱好者社区，运营2年积累 5W+ 用户，日活800+，因团队解散停止维护...
+                </p>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-2 mb-2 text-sm">
+                        <i class="fa fa-user-circle-o text-gray-400"></i>
+                        <span class="text-gray-700">诊断师 增长黑客</span>
+                        <span class="text-green-600 text-xs px-1.5 py-0.5 bg-green-50 rounded">认证</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">6.0</div>
+                            <div class="text-xs text-gray-500">技术</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-blue-500" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">8.0</div>
+                            <div class="text-xs text-gray-500">市场</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-green-500" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900">8.5</div>
+                            <div class="text-xs text-gray-500">成本</div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-orange-500" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center text-xs text-gray-500">
+                    <div class="flex items-center gap-1">
+                        <i class="fa fa-eye-slash"></i> 匿名发布
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="flex items-center gap-1"><i class="fa fa-eye"></i> 567</span>
+                        <span class="flex items-center gap-1"><i class="fa fa-comment-o"></i> 23</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 残骸市场（对应第二张截图） -->
+    <div id="market" class="px-4 md:px-16 py-12">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">残骸市场</h2>
+            <p class="text-gray-500 text-sm">发现值得拯救的搁浅项目</p>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-lg p-4 card-shadow mb-8">
+            <!-- 残骸类型筛选 -->
+            <div class="flex flex-wrap gap-4 mb-4 pb-4 border-b">
+                <span class="text-sm text-gray-500">残骸类型：</span>
+                <button class="text-sm text-gray-500 filter-tag" data-category="type" data-value="all" onclick="filterByType('all')">全部</button>
+                <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="type" data-value="代码尸骸" onclick="filterByType('代码尸骸')">
+                    <i class="fa fa-code text-red-500"></i> 代码尸骸
+                </button>
+                <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="type" data-value="原型幽灵" onclick="filterByType('原型幽灵')">
+                    <i class="fa fa-mobile text-purple-500"></i> 原型幽灵
+                </button>
+                <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="type" data-value="设计遗稿" onclick="filterByType('设计遗稿')">
+                    <i class="fa fa-paint-brush text-yellow-500"></i> 设计遗稿
+                </button>
+                <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="type" data-value="运营废墟" onclick="filterByType('运营废墟')">
+                    <i class="fa fa-home text-blue-500"></i> 运营废墟
+                </button>
+                <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="type" data-value="概念泡沫" onclick="filterByType('概念泡沫')">
+                    <i class="fa fa-lightbulb-o text-green-500"></i> 概念泡沫
+                </button>
+            </div>
+
+            <!-- 复活难度筛选 -->
+            <div class="flex flex-wrap gap-4 justify-between">
+                <div class="flex gap-4">
+                    <span class="text-sm text-gray-500">复活难度：</span>
+                    <button class="text-sm text-gray-900 font-medium bg-gray-100 px-3 py-1 rounded filter-tag" data-category="difficulty" data-value="all" onclick="filterByDifficulty('all')">全部</button>
+                    <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="difficulty" data-value="快速激活" onclick="filterByDifficulty('快速激活')">
+                        <i class="fa fa-fire text-orange-500"></i> 快速激活
+                    </button>
+                    <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="difficulty" data-value="局部修复" onclick="filterByDifficulty('局部修复')">
+                        <i class="fa fa-wrench text-blue-500"></i> 局部修复
+                    </button>
+                    <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="difficulty" data-value="推倒重来" onclick="filterByDifficulty('推倒重来')">
+                        <i class="fa fa-hammer text-red-500"></i> 推倒重来
+                    </button>
+                    <button class="text-sm text-gray-500 flex items-center gap-1 filter-tag" data-category="difficulty" data-value="仅供参考" onclick="filterByDifficulty('仅供参考')">
+                        <i class="fa fa-scissors text-gray-500"></i> 仅供参考
+                    </button>
+                </div>
+                <div class="relative">
+                    <select class="appearance-none bg-gray-50 border border-gray-200 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-gray-300" style="z-index: 9999; position: relative;">
+                        <option>最新发布</option>
+                        <option>浏览最多</option>
+                        <option>评分最高</option>
+                    </select>
+                    <i class="fa fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 市场统计 -->
+        <div id="project-count" class="text-sm text-gray-500 mb-6">共找到 4 个残骸</div>
+
+        
+    <!-- 项目数据与筛选功能 -->
+    <script>
+        // 项目数据（示例4个，可扩展至128个）
+        const projectsData = [
+            {
+                id: 1,
+                type: '代码尸骸',
+                difficulty: '局部修复',
+                title: 'AI 客服 SaaS 半成品',
+                desc: '基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...',
+                score: 7.2,
+                scoreText: '已评估·综合 7.2 分',
+                author: '匿名',
+                views: 234,
+                comments: 12,
+                typeColor: 'bg-red-100 text-red-800',
+                diffColor: 'bg-yellow-100 text-yellow-800'
+            },
+            {
+                id: 2,
+                type: '原型幽灵',
+                difficulty: '快速激活',
+                title: '跨境电商数据仪表盘',
+                desc: 'Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...',
+                score: 8.0,
+                scoreText: '已评估·综合 8.0 分',
+                author: '李明',
+                views: 189,
+                comments: 8,
+                typeColor: 'bg-purple-100 text-purple-800',
+                diffColor: 'bg-green-100 text-green-800'
+            },
+            {
+                id: 3,
+                type: '运营废墟',
+                difficulty: '仅供参考',
+                title: '垂类社区 App 完整数据',
+                desc: '摄影爱好者社区，运营2年积累 5W+ 用户，日活800+，因团队解散停止维护...',
+                score: 0,
+                scoreText: '待诊断·申请中',
+                author: '匿名',
+                views: 567,
+                comments: 23,
+                typeColor: 'bg-blue-100 text-blue-800',
+                diffColor: 'bg-gray-100 text-gray-800'
+            },
+            {
+                id: 4,
+                type: '概念泡沫',
+                difficulty: '推倒重来',
+                title: 'Web3 去中心化笔记工具概念',
+                desc: '完整的白皮书和代币经济模型设计，未开始开发，寻找技术合伙人...',
+                score: 0,
+                scoreText: '暂无诊断',
+                author: '匿名',
+                views: 108,
+                comments: 5,
+                typeColor: 'bg-green-100 text-green-800',
+                diffColor: 'bg-red-100 text-red-800'
+            }
+        ];
+
+        let currentType = 'all';
+        let currentDifficulty = 'all';
+
+        // 渲染项目卡片
+        function renderProjects() {
+            const container = document.getElementById('projects-container');
+            if (!container) return;
+            
+            const filtered = projectsData.filter(p => {
+                const typeMatch = currentType === 'all' || p.type === currentType;
+                const diffMatch = currentDifficulty === 'all' || p.difficulty === currentDifficulty;
+                return typeMatch && diffMatch;
+            });
+            
+            // 更新计数
+            const countEl = document.getElementById('project-count');
+            if (countEl) countEl.textContent = '共找到 ' + filtered.length + ' 个残骸';
+            
+            // 生成HTML
+            container.innerHTML = filtered.map(p => `
+                <div class="card-shadow rounded-lg overflow-hidden bg-white project-card cursor-pointer hover:shadow-lg transition-shadow" data-type="${p.type}" data-difficulty="${p.difficulty}" onclick="window.location.href='detail.html?id=${p.id}'">
+                    <div class="p-5">
+                        <div class="flex gap-2 mb-3">
+                            <span class="tag ${p.typeColor}">${p.type}</span>
+                            <span class="tag ${p.diffColor}">${p.difficulty}</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">${p.title}</h3>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${p.desc}</p>
+                        <div class="bg-green-50 rounded-md px-3 py-2 mb-4">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-green-800">${p.scoreText}</span>
+                                <span class="text-green-600 font-medium">${p.score > 0 ? p.score : '-'}</span>
+                            </div>
+                            <div class="score-bar mt-1">
+                                <div class="score-fill bg-green-500" style="width: ${p.score > 0 ? p.score * 10 : 0}%"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <div class="flex items-center gap-1">
+                                <i class="fa ${p.author === '匿名' ? 'fa-eye-slash' : 'fa-user-o'}"></i> ${p.author}
+                            </div>
+                            <div class="flex gap-4">
+                                <span class="flex items-center gap-1"><i class="fa fa-eye"></i> ${p.views}</span>
+                                <span class="flex items-center gap-1"><i class="fa fa-comment-o"></i> ${p.comments}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 筛选函数
+        function filterByType(type) {
+            currentType = type;
+            renderProjects();
+            updateFilterUI('type', type);
+        }
+
+        function filterByDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            renderProjects();
+            updateFilterUI('difficulty', difficulty);
+        }
+
+        // 更新筛选按钮样式
+        function updateFilterUI(category, value) {
+            document.querySelectorAll('.filter-tag').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    if (value === 'all' && btn.dataset.value === 'all') {
+                        btn.className = 'text-sm text-gray-900 font-medium bg-gray-100 px-3 py-1 rounded filter-tag';
+                    } else if (btn.dataset.value === value) {
+                        btn.className = 'text-sm text-gray-900 font-medium bg-gray-100 px-3 py-1 rounded filter-tag';
+                    } else {
+                        btn.className = 'text-sm text-gray-500 filter-tag';
+                    }
+                }
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            currentType = 'all';
+            currentDifficulty = 'all';
+            renderProjects();
+            updateFilterUI('type', 'all');
+            updateFilterUI('difficulty', 'all');
+        });
+    </script>
+    
+    <!-- 市场卡片列表 -->
+    <div id="projects-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- 卡片由JS动态生成 -->
+    </div>
+
+        <!-- 分页 -->
+        <div class="flex justify-center items-center gap-2">
+            <button class="page-btn text-gray-500" style="width: auto; min-width: 70px; padding: 0 12px;">上一页</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <span class="text-gray-500">...</span>
+            <button class="page-btn">12</button>
+            <button class="page-btn" style="width: auto; min-width: 70px; padding: 0 12px;">下一页</button>
+        </div>
+    </div>
+
+    <!-- 登录弹窗（保留原有功能） -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">登录/注册</h2>
+                <span class="text-gray-500 cursor-pointer text-xl" onclick="closeLogin()">×</span>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-1">用户名</label>
+                    <input type="text" id="login-username" class="w-full p-2 border rounded" placeholder="请输入用户名">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-1">密码</label>
+                    <input type="password" id="login-pwd" class="w-full p-2 border rounded" placeholder="请输入密码">
+                </div>
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gray-900 text-white py-2 rounded" onclick="login()">登录</button>
+                    <button class="flex-1 bg-gray-200 text-gray-800 py-2 rounded" onclick="register()">注册</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
