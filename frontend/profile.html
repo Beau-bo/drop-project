@@ -353,7 +353,19 @@ window.onload = function() {
   }, 200);
 }
 </script>
+
+<script>
+window.onload = function() {
+    setTimeout(() => {
+        const isLogin = localStorage.getItem('isLoggedIn') === 'true';
+        if (!isLogin) {
+            window.location.href = 'index.html';
+        }
+    }, 150);
+};
+</script>
 </body>
+
 
 
 
