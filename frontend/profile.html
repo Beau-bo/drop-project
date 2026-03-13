@@ -652,7 +652,7 @@ function logout() {
 document.addEventListener('DOMContentLoaded', function() {
     if (!localStorage.getItem('isLoggedIn')) {
         alert('请先登录！');
-        window.location.href = 'index.html';
+        ;
     }
 });
 </script>
@@ -663,10 +663,21 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     if (!localStorage.getItem('isLoggedIn')) {
         alert('请先登录！');
-        window.location.href = 'index.html';
+        ;
     }
 });
 </script>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const isLogin = localStorage.getItem('isLoggedIn') === 'true';
+  if (!isLogin) {
+    alert('请先登录');
+    window.location.replace('index.html');
+  }
+});
+</script>
 </body>
+
 </html>
