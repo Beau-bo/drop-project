@@ -623,15 +623,25 @@ window.openPublishModal = function() {
     const password = document.getElementById('login-pwd').value;
     
     if (!username || !password) {
-        alert('请输入用户名和密码');
+        alert('请输入用户名和密码！');
         return;
     }
+
+    // 模拟简单用户验证（修复问题1：必须注册才能登录）
+    const registered = localStorage.getItem('registered_user');
+    const reg_pwd = localStorage.getItem('registered_pwd');
     
-    // 全平台统一登录状态
+    if (!registered || registered !== username || reg_pwd !== password) {
+        alert('账号未注册或密码错误！');
+        return;
+    }
+
+    // 统一写入全站登录状态（修复问题2）
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('username', username);
     localStorage.setItem('user', JSON.stringify({username: username}));
     localStorage.setItem('token', 'demo-token');
+    
     initUserState();
     closeLoginModal();
     alert('登录成功！');
@@ -642,18 +652,23 @@ function handleRegister() {
     const password = document.getElementById('login-pwd').value;
     
     if (!username || !password) {
-        alert('请输入用户名和密码');
+        alert('请输入用户名和密码！');
         return;
     }
-    
-    // 全平台统一登录状态
+
+    // 保存注册信息
+    localStorage.setItem('registered_user', username);
+    localStorage.setItem('registered_pwd', password);
+
+    // 统一写入全站登录状态
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('username', username);
     localStorage.setItem('user', JSON.stringify({username: username}));
     localStorage.setItem('token', 'demo-token');
+    
     initUserState();
     closeLoginModal();
-    alert('注册成功！已自动登录');
+    alert('注册并登录成功！');
 }
         function initUserState() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';

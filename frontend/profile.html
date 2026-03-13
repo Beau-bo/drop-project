@@ -2,33 +2,25 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人中心 | 废项局</title>
+    <title>个人中心</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-50">
     <div class="max-w-4xl mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-6">个人中心</h1>
+        <h1 class="text-2xl font-bold mb-4">个人中心</h1>
         <div class="bg-white p-6 rounded-lg shadow">
-            <p>登录状态：已登录</p>
-            <br>
-            <a href="index.html" class="text-blue-600">返回首页</a>
+            <p class="text-green-600">✅ 已登录成功</p>
+            <a href="index.html" class="inline-block mt-4 text-blue-600">返回首页</a>
         </div>
     </div>
-
 <script>
-// 正确的登录校验
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        const logined = localStorage.getItem('isLoggedIn');
-        console.log('登录状态：', logined);
-        
-        if (logined !== 'true') {
-            alert('请先登录');
-            window.location.replace('index.html');
-        }
-    }, 200);
-});
+// 最稳定的登录校验
+setTimeout(() => {
+    const logined = localStorage.getItem('isLoggedIn');
+    if (logined !== 'true') {
+        window.location.href = 'index.html';
+    }
+}, 300);
 </script>
 </body>
 </html>
