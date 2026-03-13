@@ -184,7 +184,7 @@ window.openPublishModal = function() {
         <div class="flex items-center gap-4">
             <!-- 未登录时显示登录按钮，登录后隐藏 -->
             <button id="loginBtn" class="text-gray-500 hover:text-gray-900 text-sm" onclick="openLogin()">登录</button>
-            <button class="bg-black text-white px-4 py-1.5 rounded-md text-sm font-medium" onclick="openPublishModal()">开始登记</button>
+            <button class="bg-black text-white px-4 py-1.5 rounded-md text-sm font-medium" onclick="window.location.href='publish.html'">开始登记</button>
             
             <!-- 用户头像（保留之前的头像功能） -->
             <div class="user-menu" id="userMenu" onclick="toggleUserMenu()">
@@ -205,7 +205,7 @@ window.openPublishModal = function() {
             让搁浅的项目，重新找到价值。我们专注展示与交易未开发完成的产品、创业失败的项目、放弃运营的平台等。
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition" onclick="openPublishModal()">
+            <button class="bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition" onclick="window.location.href='publish.html'">
                 登记你的残骸 →
             </button>
             <button class="bg-transparent border border-white text-white px-6 py-3 rounded-md font-medium hover:bg-white/10 transition" onclick="location.href='#market'">
