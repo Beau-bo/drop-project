@@ -22,7 +22,13 @@ window.openPublishModal = function() {
             return handleRegister();
         }
 
-    </script>
+    
+// 强制可用的头像菜单函数
+function toggleUserMenu() {
+  let menu = document.getElementById('userMenuDropdown');
+  menu.style.display = menu.style.display == 'block' ? 'none' : 'block';
+}
+</script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         /* 基础样式重置 */
@@ -670,7 +676,29 @@ function handleRegister() {
     closeLoginModal();
     alert('注册并登录成功！');
 }
-        function initUserState() {
+        
+        // 头像下拉菜单（缺失的核心函数）
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userMenuDropdown');
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        }
+
+
+        // 头像下拉菜单（缺失的核心函数）
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userMenuDropdown');
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        }
+
+function initUserState() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const loginBtn = document.getElementById('loginBtn');
             const userMenu = document.getElementById('userMenu');
@@ -698,7 +726,13 @@ function handleRegister() {
             updateFilterUI('difficulty', 'all');
             initUserState();
         });
-    </script>
+    
+// 强制可用的头像菜单函数
+function toggleUserMenu() {
+  let menu = document.getElementById('userMenuDropdown');
+  menu.style.display = menu.style.display == 'block' ? 'none' : 'block';
+}
+</script>
     
     <!-- 市场卡片列表 -->
     <div id="projects-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
