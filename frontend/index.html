@@ -12,7 +12,17 @@ window.openPublishModal = function() {
 window.openPublishModal = function() {
     window.location.href = 'publish.html';
 };
-</script>
+
+        // 函数别名（兼容弹窗里的按钮）
+        function login() {
+            return handleLogin();
+        }
+        
+        function register() {
+            return handleRegister();
+        }
+
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         /* 基础样式重置 */
@@ -183,7 +193,7 @@ window.openPublishModal = function() {
         <!-- 登录/注册 + 头像：修复登录状态逻辑 -->
         <div class="flex items-center gap-4">
             <!-- 未登录时显示登录按钮，登录后隐藏 -->
-            <button id="loginBtn" class="text-gray-500 hover:text-gray-900 text-sm" onclick="openLogin()">登录</button>
+            <button id="loginBtn" class="text-gray-500 hover:text-gray-900 text-sm" onclick="openLogin()">登录/注册</button>
             <button class="bg-black text-white px-4 py-1.5 rounded-md text-sm font-medium" onclick="window.location.href='publish.html'">开始登记</button>
             
             <!-- 用户头像（保留之前的头像功能） -->
@@ -587,6 +597,86 @@ window.openPublishModal = function() {
             });
         }
 
+
+        // 用户登录状态管理
+        function openLogin() {
+            const modal = document.getElementById('login-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+        
+        function closeLoginModal() {
+        function closeLogin() { closeLoginModal(); }
+
+            const modal = document.getElementById('login-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+        
+        function handleLogin() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-pwd').value;
+            
+            if (!username || !password) {
+                alert('请输入用户名和密码');
+                return;
+            }
+            
+            // 模拟登录成功
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', username);
+            initUserState();
+            closeLoginModal();
+            alert('登录成功！');
+        }
+        
+        function handleRegister() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-pwd').value;
+            
+            if (!username || !password) {
+                alert('请输入用户名和密码');
+                return;
+            }
+            
+            // 模拟注册成功
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', username);
+            initUserState();
+            closeLoginModal();
+            alert('注册成功！已自动登录');
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userMenuDropdown');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+
+        function initUserState() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const loginBtn = document.getElementById('loginBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (loginBtn) {
+                loginBtn.style.display = isLoggedIn ? 'none' : 'block';
+            }
+            if (userMenu) {
+                userMenu.style.display = isLoggedIn ? 'block' : 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            initUserState();
+            alert('已退出登录');
+        }
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             currentType = 'all';
@@ -594,6 +684,7 @@ window.openPublishModal = function() {
             renderProjects();
             updateFilterUI('type', 'all');
             updateFilterUI('difficulty', 'all');
+            initUserState();
         });
     </script>
     
@@ -631,12 +722,34 @@ window.openPublishModal = function() {
                     <input type="password" id="login-pwd" class="w-full p-2 border rounded" placeholder="请输入密码">
                 </div>
                 <div class="flex gap-2">
-                    <button class="flex-1 bg-gray-900 text-white py-2 rounded" onclick="login()">登录</button>
-                    <button class="flex-1 bg-gray-200 text-gray-800 py-2 rounded" onclick="register()">注册</button>
+                    <button class="flex-1 bg-gray-900 text-white py-2 rounded" onclick="handleLogin()">登录</button>
+                    <button class="flex-1 bg-gray-200 text-gray-800 py-2 rounded" onclick="handleRegister()">注册</button>
                 </div>
             </div>
         </div>
     </div>
+
+<!-- 登录弹窗 -->
+<div id="login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">登录 / 注册</h3>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">用户名</label>
+                <input type="text" id="username" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="输入用户名">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">密码</label>
+                <input type="password" id="password" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="输入密码">
+            </div>
+        </div>
+        <div class="flex gap-3 mt-6">
+            <button onclick="closeLoginModal()" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50">取消</button>
+            <button onclick="handleLogin()" class="flex-1 px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700">登录</button>
+            <button onclick="handleRegister()" class="flex-1 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800">注册</button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
