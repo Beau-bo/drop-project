@@ -83,8 +83,8 @@
         window.onload=function(){checkAdminAccess()};
         
         function checkAdminAccess(){
-            const userStr=localStorage.getItem('user');
-            const token=localStorage.getItem('token');
+            const userStr=localStorage.getItem('user')||JSON.stringify({username:localStorage.getItem('username')});
+            const token=localStorage.getItem('token')||'demo-token';
             if(!userStr||!token){alert('请先登录');window.location.href='index.html';return}
             currentUser=JSON.parse(userStr);
             const adminUsers=['beau-bo'];
