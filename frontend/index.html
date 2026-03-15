@@ -162,6 +162,12 @@
     </main>
 
     <script>
+        // 全局变量声明
+        let allCards, typeFilterBtns, diffFilterBtns, sortBtns, prevBtn, nextBtn, pageNumberBtns;
+        let activeTypeFilter = "全部";
+        let activeDiffFilter = "全部";
+        let searchQuery = "";
+        let currentPage = 1;
         // 核心配置 - 每页9个（3x3）
         const cardsPerPage = 9;
         let currentPage = 1;
@@ -173,6 +179,7 @@
         document.getElementById('searchInput').addEventListener('input', function(e) {
             searchQuery = e.target.value.toLowerCase();
             currentPage = 1;
+            bindCardClickEvents();
             renderPage();
         });        
         // DOM 元素
@@ -181,8 +188,8 @@
         const pageNumberBtns = document.querySelectorAll('.page-number-btn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const typeFilterBtns = document.querySelectorAll('.type-btn');
-        const diffFilterBtns = document.querySelectorAll('.diff-btn');
+        typeFilterBtns = document.querySelectorAll('.type-btn');
+        diffFilterBtns = document.querySelectorAll('.diff-btn');
 
         // 初始化
         initPage();
@@ -234,6 +241,7 @@ document.addEventListener('DOMContentLoaded', enhanceCards);
                     window.location.href = 'detail.html?id=' + id + 'window.location.href = 'detail.html?id=' + id;type=' + encodeURIComponent(card.dataset.type) + 'window.location.href = 'detail.html?id=' + id;tech=' + encodeURIComponent(card.dataset.tech || '');
                 }
             });
+            bindCardClickEvents();
             renderPage();
         }
 
@@ -250,7 +258,8 @@ document.addEventListener('DOMContentLoaded', enhanceCards);
                     btn.classList.remove('bg-transparent', 'text-slate-400');
                     activeTypeFilter = btn.textContent.trim().replace(/<\/?>|👻|🎨|🏠|💡|\s+/g, '');
                     currentPage = 1;
-                    renderPage();
+                    bindCardClickEvents();
+            renderPage();
                 });
             });
 
@@ -265,7 +274,8 @@ document.addEventListener('DOMContentLoaded', enhanceCards);
                     btn.classList.remove('bg-transparent', 'text-slate-400');
                     activeDiffFilter = btn.textContent.trim().replace(/🔥|🔧|🏗️|✂️|\s+/g, '');
                     currentPage = 1;
-                    renderPage();
+                    bindCardClickEvents();
+            renderPage();
                 });
             });
         }
@@ -281,7 +291,8 @@ document.addEventListener('DOMContentLoaded', enhanceCards);
                     
                     if (targetPage >= 1 && targetPage <= totalPages) {
                         currentPage = targetPage;
-                        renderPage();
+                        bindCardClickEvents();
+            renderPage();
                     }
                 });
             });
@@ -290,7 +301,8 @@ document.addEventListener('DOMContentLoaded', enhanceCards);
             prevBtn.addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
-                    renderPage();
+                    bindCardClickEvents();
+            renderPage();
                 }
             });
 
@@ -300,7 +312,8 @@ document.addEventListener('DOMContentLoaded', enhanceCards);
                 const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
                 if (currentPage < totalPages) {
                     currentPage++;
-                    renderPage();
+                    bindCardClickEvents();
+            renderPage();
                 }
             });
         }
