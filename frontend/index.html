@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>废项局 - </title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+// 排序功能
+let currentSort = "最新发布";
+const sortButtons = document.querySelectorAll(".sort-btn");
+
+sortButtons.forEach(btn => {
+    btn.addEventListener("click", function(e) {
+        const clicked = e.currentTarget;
+        const sortValue = clicked.textContent.trim();
+        
+        // 视觉反馈：切换active状态（白底黑字）
+        sortButtons.forEach(b => {
+            b.classList.remove("active", "bg-slate-100", "text-slate-900");
+            b.classList.add("bg-transparent", "text-slate-400");
+        });
+        clicked.classList.remove("bg-transparent", "text-slate-400");
+        clicked.classList.add("active", "bg-slate-100", "text-slate-900");
+        
+        currentSort = sortValue;
+        console.log("排序方式:", currentSort, "| 筛选:", activeType, "+", activeDifficulty);
+        // 实际排序逻辑可以在这里添加（比如重新排列卡片顺序）
+    });
+});
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -461,5 +484,28 @@ filterButtons.forEach(button => {
     });
 });
 </script>
+
+// 排序功能
+let currentSort = "最新发布";
+const sortButtons = document.querySelectorAll(".sort-btn");
+
+sortButtons.forEach(btn => {
+    btn.addEventListener("click", function(e) {
+        const clicked = e.currentTarget;
+        const sortValue = clicked.textContent.trim();
+        
+        // 视觉反馈：切换active状态（白底黑字）
+        sortButtons.forEach(b => {
+            b.classList.remove("active", "bg-slate-100", "text-slate-900");
+            b.classList.add("bg-transparent", "text-slate-400");
+        });
+        clicked.classList.remove("bg-transparent", "text-slate-400");
+        clicked.classList.add("active", "bg-slate-100", "text-slate-900");
+        
+        currentSort = sortValue;
+        console.log("排序方式:", currentSort, "| 筛选:", activeType, "+", activeDifficulty);
+        // 实际排序逻辑可以在这里添加（比如重新排列卡片顺序）
+    });
+});
 </body>
 </html>
