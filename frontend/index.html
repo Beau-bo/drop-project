@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', enhanceCards);
                 if (card) {
                     const id = card.dataset.id;
                     console.log('点击了项目：', id); // 调试用，可查看控制台
-                    window.location.href = 'detail.html?id=' + id;
+                    window.location.href = 'detail.html?id=' + id + 'window.location.href = 'detail.html?id=' + id;type=' + encodeURIComponent(card.dataset.type) + 'window.location.href = 'detail.html?id=' + id;tech=' + encodeURIComponent(card.dataset.tech || '');
                 }
             });
             renderPage();

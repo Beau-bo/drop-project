@@ -3,421 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目详情 - 废项局</title>
+    <title>项目详情 | 废项局</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
-
-    <!-- 导航栏 -->
-    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
-                <span class="font-bold text-lg">废项局</span>
-            </a>
-            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-                <a href="index.html" class="hover:text-slate-900">首页</a>
-                <a href="market.html" class="hover:text-slate-900">残骸市场</a>
-                <a href="publish.html" class="hover:text-slate-900">登记残骸</a>
-            </div>
-            <div id="user-section">
-                <button onclick="showLoginModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">登录 / 注册</button>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="border-b border-slate-800 sticky top-0 bg-slate-900/95 backdrop-blur z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-white rounded flex items-center justify-center text-slate-900 font-bold">废</div>
+                    <span class="font-bold text-xl text-slate-100">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="px-4 py-2 bg-white text-slate-900 hover:bg-slate-200 rounded-lg text-sm font-medium">返回列表</a>
+                    <a href="profile.html" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
+                        <img id="nav-avatar" src="" alt="" class="w-full h-full object-cover hidden">
+                        <span id="nav-avatar-text" class="text-slate-300 font-medium text-sm">U</span>
+                    </a>
+                </div>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- 登录弹窗 -->
-    <div id="login-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-            <h3 class="text-xl font-bold text-slate-900 mb-4">登录 / 注册</h3>
-            <div id="error-msg" class="hidden mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm"></div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">用户名</label>
-                    <input type="text" id="username" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="输入用户名">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="border border-slate-600 rounded-xl p-8 bg-slate-800/50">
+            <div id="projectDetail" class="space-y-6">
+                <div class="flex flex-wrap gap-4 mb-4">
+                    <span id="typeTag" class="px-3 py-1 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span>
+                    <span id="diffTag" class="px-3 py-1 bg-slate-700 text-xs rounded text-slate-300">局部修复</span>
+                    <span id="projectIdTag" class="px-3 py-1 bg-slate-900 text-xs rounded text-slate-400">项目ID: 1</span>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">密码</label>
-                    <input type="password" id="password" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="输入密码">
+                <h1 id="projectTitle" class="text-3xl font-bold mb-6">AI 客服 SaaS 半成品</h1>
+                <div class="prose prose-invert max-w-none">
+                    <p id="projectDesc" class="text-slate-300 text-lg">
+                        基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发。
+                        包含完整的对话流程设计、用户意图识别、多轮对话管理功能，支持微信、网页、APP 多端接入，
+                        后端使用 Node.js + MongoDB，前端使用 React + TypeScript，代码结构清晰，注释完整。
+                    </p>
                 </div>
-            </div>
-            <div class="flex gap-3 mt-6">
-                <button onclick="closeLoginModal()" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50">取消</button>
-                <button onclick="handleLogin()" class="flex-1 px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700">登录</button>
-                <button onclick="handleRegister()" class="flex-1 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800">注册</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 意向弹窗 -->
-    <div id="intention-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-md">
-            <h3 class="text-xl font-bold text-slate-900 mb-4">表达意向</h3>
-            <div class="mb-4 p-4 bg-slate-50 rounded-lg">
-                <p class="text-sm text-slate-600">项目：<span id="intention-project-title" class="font-bold text-slate-900"></span></p>
-                <p class="text-sm text-slate-600">发布者：<span id="intention-project-author" class="font-bold text-slate-900"></span></p>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 mb-2">留言（可选）</label>
-                <textarea id="intention-message" rows="3" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="简单介绍一下你的需求或想法..."></textarea>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="closeIntentionModal()" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50">取消</button>
-                <button onclick="submitIntention()" class="flex-1 px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700">发送意向</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 主内容 -->
-    <main class="pt-24 pb-12 px-4 max-w-4xl mx-auto">
-        
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-            <!-- 项目头部 -->
-            <div class="p-6 border-b border-slate-100">
-                <div class="flex gap-2 mb-3">
-                    <span id="project-type" class="px-2.5 py-1 rounded-md bg-rose-50 text-rose-600 text-xs font-semibold border border-rose-100">代码尸骸</span>
-                    <span class="px-2.5 py-1 rounded-md bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">技术债</span>
-                </div>
-                <h1 id="project-title" class="text-2xl font-bold text-slate-900 mb-2">AI 客服 SaaS 半成品</h1>
-                <div class="flex items-center gap-4 text-sm text-slate-500">
-                    <span>👤 <span id="project-author">匿名</span></span>
-                    <span>👁 <span id="project-views">234</span></span>
-                    <span>📅 <span id="project-date">2024-03-11</span></span>
-                </div>
-            </div>
-
-            <!-- 项目内容 -->
-            <div class="p-6 border-b border-slate-100">
-                <h2 class="text-lg font-bold text-slate-900 mb-3">项目描述</h2>
-                <p id="project-description" class="text-slate-600 leading-relaxed mb-6">
-                    基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发。代码质量高，架构清晰，适合有资源团队接手。
-                </p>
-
-                <h2 class="text-lg font-bold text-slate-900 mb-3">技术栈</h2>
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm rounded-full">React</span>
-                    <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm rounded-full">Node.js</span>
-                    <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm rounded-full">PostgreSQL</span>
-                    <span class="px-3 py-1 bg-slate-100 text-slate-700 text-sm rounded-full">OpenAI API</span>
-                </div>
-
-                <h2 class="text-lg font-bold text-slate-900 mb-3">诊断评估</h2>
-                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                        <span class="text-sm font-medium text-slate-700">诊断师 技术老炮 评估</span>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                            <div class="text-2xl font-bold text-slate-900">8.5</div>
-                            <div class="text-xs text-slate-500 uppercase">技术</div>
+                <div class="mt-8 pt-6 border-t border-slate-700">
+                    <h3 class="text-xl font-semibold mb-4">项目详情信息</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-900/50 p-4 rounded-lg">
+                            <span class="text-slate-400 text-sm">开发状态</span>
+                            <p class="text-slate-200 mt-1">80% 完成度</p>
                         </div>
-                        <div>
-                            <div class="text-2xl font-bold text-slate-900">7.2</div>
-                            <div class="text-xs text-slate-500 uppercase">市场</div>
+                        <div class="bg-slate-900/50 p-4 rounded-lg">
+                            <span class="text-slate-400 text-sm">技术栈</span>
+                            <p class="text-slate-200 mt-1">Node.js、MongoDB、React、TypeScript</p>
                         </div>
-                        <div>
-                            <div class="text-2xl font-bold text-slate-900">6.0</div>
-                            <div class="text-xs text-slate-500 uppercase">成本</div>
+                        <div class="bg-slate-900/50 p-4 rounded-lg">
+                            <span class="text-slate-400 text-sm">废弃原因</span>
+                            <p class="text-slate-200 mt-1">资金链断裂</p>
+                        </div>
+                        <div class="bg-slate-900/50 p-4 rounded-lg">
+                            <span class="text-slate-400 text-sm">复活建议</span>
+                            <p class="text-slate-200 mt-1">补充资金，完善支付和权限模块</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- 底部操作 -->
-            <div class="p-6 bg-slate-50">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-sm text-slate-500 mb-1">期望价格</p>
-                        <p class="text-2xl font-bold text-slate-900">¥<span id="project-price">面议</span></p>
-                    </div>
-                    <div id="action-buttons">
-                        <!-- 按钮会根据登录状态和项目归属动态显示 -->
-                    </div>
-                </div>
-            </div>
         </div>
-
-        <!-- 返回按钮 -->
-        <div class="mt-6 text-center">
-            <a href="market.html" class="text-sky-600 hover:text-sky-700 font-medium">← 返回市场</a>
-        </div>
-
     </main>
 
     <script>
-        const API_BASE = "https://drop-project.onrender.com/api";
-        let currentUser = null;
-        let currentProject = null;
+        // 获取URL中的项目ID参数
+        function getProjectIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id') || '1';
+        }
 
-        // 页面加载
-        window.onload = function() {
-            checkLoginStatus();
-            loadProjectDetail();
+        // 模拟项目详情数据（实际项目中可从API获取）
+        const projectData = {
+            1: {
+                title: "AI 客服 SaaS 半成品",
+                type: "代码尸骸",
+                diff: "局部修复",
+                desc: "基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发。包含完整的对话流程设计、用户意图识别、多轮对话管理功能，支持微信、网页、APP 多端接入，后端使用 Node.js + MongoDB，前端使用 React + TypeScript，代码结构清晰，注释完整。"
+            },
+            2: {
+                title: "企业官网开发项目",
+                type: "代码尸骸",
+                diff: "局部修复",
+                desc: "响应式企业官网，含产品展示、后台管理，因合作终止废弃。使用 Vue3 + Vite 开发，包含首页、产品列表、产品详情、关于我们、联系我们等页面，后台使用 Express + MySQL 实现基础的内容管理功能，代码模块化程度高，易于扩展。"
+            },
+            3: {
+                title: "在线教育学习系统",
+                type: "代码尸骸",
+                diff: "局部修复",
+                desc: "课程、考试、题库一体化学习平台，技术迭代废弃。基于 Spring Boot + Vue3 开发，支持课程视频播放、章节练习、在线考试、成绩统计等功能，用户体系包含学生、教师、管理员三种角色，权限控制完善。"
+            },
+            50: {
+                title: "AI 客服机器人",
+                type: "概念泡沫",
+                diff: "局部修复",
+                desc: "智能客服概念，因效果不佳调整。基于大语言模型的智能客服机器人原型设计，包含意图识别、知识库问答、多轮对话等核心功能设计文档，未进入开发阶段，可基于现有设计文档进行技术落地。"
+            }
         };
 
-        function checkLoginStatus() {
-            const userStr = localStorage.getItem('user');
-            const token = localStorage.getItem('token');
+        // 初始化详情页
+        function initDetailPage() {
+            const projectId = getProjectIdFromUrl();
+            const project = projectData[projectId] || projectData[1];
             
-            if (userStr && token) {
-                currentUser = JSON.parse(userStr);
-                updateUserUI();
+            // 更新页面内容
+            document.getElementById('projectTitle').textContent = project.title;
+            document.getElementById('projectDesc').textContent = project.desc;
+            document.getElementById('typeTag').textContent = project.type;
+            document.getElementById('diffTag').textContent = project.diff;
+            document.getElementById('projectIdTag').textContent = `项目ID: ${projectId}`;
+            
+            // 根据类型设置标签样式
+            const typeTag = document.getElementById('typeTag');
+            switch(project.type) {
+                case "代码尸骸":
+                    typeTag.className = "px-3 py-1 bg-blue-900/30 text-xs rounded text-blue-400";
+                    break;
+                case "原型幽灵":
+                    typeTag.className = "px-3 py-1 bg-purple-900/30 text-xs rounded text-purple-400";
+                    break;
+                case "运营废墟":
+                    typeTag.className = "px-3 py-1 bg-indigo-900/30 text-xs rounded text-indigo-400";
+                    break;
+                case "设计遗稿":
+                    typeTag.className = "px-3 py-1 bg-pink-900/30 text-xs rounded text-pink-400";
+                    break;
+                case "概念泡沫":
+                    typeTag.className = "px-3 py-1 bg-yellow-900/30 text-xs rounded text-yellow-400";
+                    break;
+            }
+
+            // 根据难度设置标签样式
+            const diffTag = document.getElementById('diffTag');
+            switch(project.diff) {
+                case "快速激活":
+                    diffTag.className = "px-3 py-1 bg-orange-900/30 text-xs rounded text-orange-400";
+                    break;
+                case "局部修复":
+                    diffTag.className = "px-3 py-1 bg-slate-700 text-xs rounded text-slate-300";
+                    break;
+                case "推倒重来":
+                    diffTag.className = "px-3 py-1 bg-red-900/30 text-xs rounded text-red-400";
+                    break;
+                case "仅供参考":
+                    diffTag.className = "px-3 py-1 bg-slate-700 text-xs rounded text-slate-300";
+                    break;
             }
         }
 
-        function updateUserUI() {
-            const userSection = document.getElementById('user-section');
-            if (currentUser && userSection) {
-                userSection.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <a href="profile.html" class="text-slate-700 font-medium hover:text-sky-600">👤 ${currentUser.username}</a>
-                        <button onclick="logout()" class="text-sm text-slate-500 hover:text-red-600">退出</button>
-                    </div>
-                `;
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            location.reload();
-        }
-
-        // 加载项目详情
-        function loadProjectDetail() {
-            // 从 URL 获取项目ID
-            const urlParams = new URLSearchParams(window.location.search);
-            const projectId = urlParams.get('id');
-            
-            // 模拟项目数据
-            const projects = [
-                {
-                    id: 1,
-                    title: "AI 客服 SaaS 半成品",
-                    type: "代码尸骸",
-                    author: "匿名",
-                    date: "2024-03-11",
-                    views: 234,
-                    price: "面议",
-                    description: "基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入...",
-                    techStack: ["React", "Node.js", "PostgreSQL", "OpenAI API"]
-                },
-                {
-                    id: 2,
-                    title: "跨境电商数据仪表盘",
-                    type: "原型幽灵",
-                    author: "张三",
-                    date: "2024-03-10",
-                    views: 189,
-                    price: "5000",
-                    description: "Figma 高保真原型，包含 40+ 页面...",
-                    techStack: ["Figma", "UI/UX"]
-                },
-                {
-                    id: 3,
-                    title: "垂类社区 App 完整数据",
-                    type: "运营废墟",
-                    author: "李四",
-                    date: "2024-03-09",
-                    views: 567,
-                    price: "20000",
-                    description: "摄影爱好者社区，运营2年积累 5W+ 用户...",
-                    techStack: ["Flutter", "Firebase"]
-                }
-            ];
-            
-            currentProject = projects.find(p => p.id == projectId) || projects[0];
-            
-            // 填充页面数据
-            document.getElementById('project-title').textContent = currentProject.title;
-            document.getElementById('project-type').textContent = currentProject.type;
-            document.getElementById('project-author').textContent = currentProject.author;
-            document.getElementById('project-views').textContent = currentProject.views;
-            document.getElementById('project-date').textContent = currentProject.date;
-            document.getElementById('project-price').textContent = currentProject.price;
-            document.getElementById('project-description').textContent = currentProject.description;
-            
-            // 更新按钮显示
-            updateActionButtons();
-        }
-
-        // 更新操作按钮（关键：判断是否是作者自己）
-        function updateActionButtons() {
-            const container = document.getElementById('action-buttons');
-            
-            // 未登录
-            if (!currentUser) {
-                container.innerHTML = `
-                    <button onclick="showLoginModal()" class="px-6 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800">
-                        登录后表达意向
-                    </button>
-                `;
-                return;
-            }
-            
-            // 判断是否是作者自己
-            const isAuthor = currentProject.author === currentUser.username || 
-                            currentProject.author === '匿名' && currentUser.username === 'beau-bo'; // 特殊处理匿名
-            
-            if (isAuthor) {
-                // 是自己的项目，显示编辑按钮
-                container.innerHTML = `
-                    <button onclick="editMyProject()" class="px-6 py-3 bg-slate-600 text-white rounded-lg font-medium hover:bg-slate-700">
-                        编辑我的项目
-                    </button>
-                `;
-            } else {
-                // 不是自己的项目，显示意向按钮
-                container.innerHTML = `
-                    <button onclick="showIntentionModal()" class="px-6 py-3 bg-sky-600 text-white rounded-lg font-medium hover:bg-sky-700">
-                        表达意向
-                    </button>
-                `;
-            }
-        }
-
-        function editMyProject() {
-            // 跳转到编辑页面或提示
-            alert('跳转到编辑页面（功能开发中）');
-        }
-
-        // 登录相关
-        function showLoginModal() {
-            document.getElementById('login-modal').classList.remove('hidden');
-            document.getElementById('login-modal').classList.add('flex');
-        }
-
-        function closeLoginModal() {
-            document.getElementById('login-modal').classList.add('hidden');
-            document.getElementById('login-modal').classList.remove('flex');
-        }
-
-        function showError(msg) {
-            const errorEl = document.getElementById('error-msg');
-            errorEl.textContent = msg;
-            errorEl.classList.remove('hidden');
-        }
-
-        async function handleLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (!username || !password) {
-                showError('请填写用户名和密码');
-                return;
-            }
-            
-            try {
-                const response = await fetch(API_BASE + '/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || '登录失败');
-                }
-                
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                
-                currentUser = data.user;
-                closeLoginModal();
-                updateUserUI();
-                updateActionButtons(); // 更新按钮状态
-                alert('登录成功！');
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-
-        async function handleRegister() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (!username || !password) {
-                showError('请填写用户名和密码');
-                return;
-            }
-            
-            try {
-                const response = await fetch(API_BASE + '/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || '注册失败');
-                }
-                
-                alert('注册成功，请登录');
-                document.getElementById('password').value = '';
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-
-        // 意向相关
-        function showIntentionModal() {
-            if (!currentUser) {
-                showLoginModal();
-                return;
-            }
-            
-            // 再次检查不能对自己表达意向
-            if (currentProject.author === currentUser.username) {
-                alert('不能对自己的项目表达意向');
-                return;
-            }
-            
-            document.getElementById('intention-project-title').textContent = currentProject.title;
-            document.getElementById('intention-project-author').textContent = currentProject.author;
-            document.getElementById('intention-modal').classList.remove('hidden');
-            document.getElementById('intention-modal').classList.add('flex');
-        }
-
-        function closeIntentionModal() {
-            document.getElementById('intention-modal').classList.add('hidden');
-            document.getElementById('intention-modal').classList.remove('flex');
-        }
-
-        function submitIntention() {
-            const message = document.getElementById('intention-message').value;
-            
-            // 保存意向到 localStorage（实际应该调用API）
-            let intentions = JSON.parse(localStorage.getItem('myIntentions') || '[]');
-            intentions.push({
-                id: Date.now(),
-                projectTitle: currentProject.title,
-                targetUser: currentProject.author,
-                date: new Date().toLocaleDateString('zh-CN'),
-                status: 'pending',
-                message: message || '对该项目感兴趣'
-            });
-            localStorage.setItem('myIntentions', JSON.stringify(intentions));
-            
-            alert('意向已发送！');
-            closeIntentionModal();
-        }
-
-        document.getElementById('login-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeLoginModal();
-        });
-        
-        document.getElementById('intention-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeIntentionModal();
-        });
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initDetailPage);
     </script>
-
 </body>
 </html>

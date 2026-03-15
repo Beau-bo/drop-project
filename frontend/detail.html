@@ -3,107 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目详情 - 废项局</title>
+    <title>项目详情 | 废项局</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen">
-
-<nav class="fixed top-0 w-full bg-slate-800/90 backdrop-blur-md border-b border-slate-700 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <a href="index.html" class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-900 font-bold">废</div>
-            <span class="font-bold text-lg text-slate-100">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
-        </a>
-        <div class="flex items-center gap-4">
-            <a href="publish.html" class="bg-slate-100 text-slate-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-200">发布残骸</a>
-            <a href="profile.html" class="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-slate-500 transition-all">
-                <img id="nav-avatar" src="" alt="" class="w-full h-full object-cover hidden">
-                <span id="nav-avatar-text" class="text-slate-300 font-medium text-sm">U</span>
-            </a>
+    <header class="border-b border-slate-800 sticky top-0 bg-slate-900/95 backdrop-blur z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-white rounded flex items-center justify-center text-slate-900 font-bold">废</div>
+                    <span class="font-bold text-xl text-slate-100">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="px-4 py-2 bg-white text-slate-900 hover:bg-slate-200 rounded-lg text-sm font-medium">返回列表</a>
+                    <a href="profile.html" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
+                        <img id="nav-avatar" src="" alt="" class="w-full h-full object-cover hidden">
+                        <span id="nav-avatar-text" class="text-slate-300 font-medium text-sm">U</span>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
-</nav>
+    </header>
 
-<main class="pt-24 pb-12 px-4 max-w-4xl mx-auto">
-    <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
-        <div class="h-64 bg-gradient-to-br from-slate-700 to-slate-600 flex items-center justify-center">
-            <span class="text-6xl">💻</span>
+    
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 头部信息区 -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex gap-2">
+                    <span id="detail-type" class="px-3 py-1 bg-blue-900/30 text-blue-400 rounded-full text-sm font-medium">代码尸骸</span>
+                    <span id="detail-diff" class="px-3 py-1 bg-slate-700 text-slate-300 rounded-full text-sm">局部修复</span>
+                </div>
+                <div id="detail-price" class="text-3xl font-bold text-emerald-400">¥5,000</div>
+            </div>
+            
+            <h1 id="detail-title" class="text-3xl font-bold text-slate-100 mb-3">项目标题</h1>
+            <p id="detail-hook" class="text-lg text-emerald-400/80 font-medium mb-6 border-l-4 border-emerald-500 pl-4">
+                项目一句话亮点描述...
+            </p>
+            
+            <!-- 技术栈 -->
+            <div class="mb-6">
+                <h3 class="text-sm font-bold text-slate-400 mb-3 uppercase tracking-wider">技术栈</h3>
+                <div id="detail-tech" class="flex flex-wrap gap-2">
+                    <!-- JS 动态填充 -->
+                </div>
+            </div>
+            
+            <!-- 完成度进度条 -->
+            <div class="mb-6">
+                <div class="flex justify-between text-sm mb-2">
+                    <span class="text-slate-400">完成度</span>
+                    <span id="completion-text" class="text-emerald-400">75%</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-2">
+                    <div id="completion-bar" class="bg-emerald-500 h-2 rounded-full" style="width: 75%"></div>
+                </div>
+            </div>
         </div>
         
-        <div class="p-6">
-            <div class="flex gap-2 mb-4">
-                <span class="px-3 py-1 bg-slate-700 text-slate-300 text-sm rounded-full">&lt;/&gt; 代码尸骸</span>
-                <span class="px-3 py-1 bg-emerald-900/50 text-emerald-400 text-sm rounded-full">🔥 快速激活</span>
-            </div>
-            
-            <h1 class="text-2xl font-bold text-slate-100 mb-2">AI客服SaaS半成品</h1>
-            <p class="text-slate-400 mb-6">已完成核心对话功能，因资金问题搁置，代码结构清晰，接手即可上线</p>
-            
-            <div class="grid grid-cols-3 gap-4 py-6 border-y border-slate-700 mb-6">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-slate-100">¥500</div>
-                    <div class="text-sm text-slate-500">期望价格</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-slate-100">128</div>
-                    <div class="text-sm text-slate-500">浏览次数</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-slate-100">3</div>
-                    <div class="text-sm text-slate-500">意向人数</div>
-                </div>
-            </div>
-            
-            <div class="space-y-4 mb-6">
-                <h3 class="font-bold text-slate-100">项目详情</h3>
-                <div class="text-slate-400 text-sm leading-relaxed space-y-2">
-                    <p>1. 项目背景：为中小企业打造的AI客服解决方案，已完成核心对话功能</p>
-                    <p>2. 技术栈：React + Node.js + Python NLTK</p>
-                    <p>3. 放弃原因：资金链断裂，团队解散</p>
-                    <p>4. 对接手者建议：需要继续训练NLP模型，UI已完善</p>
-                </div>
-            </div>
-            
-            <div class="space-y-4 mb-6">
-                <h3 class="font-bold text-slate-100">技术栈</h3>
-                <div class="flex gap-2 flex-wrap">
-                    <span class="px-3 py-1 bg-slate-700 text-slate-300 text-sm rounded">React</span>
-                    <span class="px-3 py-1 bg-slate-700 text-slate-300 text-sm rounded">Node.js</span>
-                    <span class="px-3 py-1 bg-slate-700 text-slate-300 text-sm rounded">Python</span>
-                    <span class="px-3 py-1 bg-slate-700 text-slate-300 text-sm rounded">MongoDB</span>
-                </div>
-            </div>
-            
-            <div class="flex gap-3 pt-4">
-                <button class="flex-1 bg-slate-100 text-slate-900 py-3 rounded-lg font-medium hover:bg-slate-200">联系发布者</button>
-                <button class="flex-1 bg-slate-700 text-slate-200 py-3 rounded-lg font-medium hover:bg-slate-600">收藏项目</button>
+        <!-- 详细描述区 -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+            <h3 class="text-lg font-bold text-slate-100 mb-4">项目详情</h3>
+            <div id="detail-content" class="prose prose-invert max-w-none text-slate-300 whitespace-pre-line leading-relaxed">
+                详细描述内容...
             </div>
         </div>
-    </div>
-</main>
+        
+        <!-- 联系/交易区 -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 p-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-100 mb-1">对项目感兴趣？</h3>
+                    <p id="seller-info" class="text-sm text-slate-400">发布者：匿名用户</p>
+                </div>
+                <button class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors">
+                    发起交易
+                </button>
+            </div>
+        </div>
+    </main>
 
-<script>
-function syncUserAvatar() {
-    const profile = localStorage.getItem('userProfile');
-    if (profile) {
-        const data = JSON.parse(profile);
-        if (data.avatar) {
-            const navAvatar = document.getElementById('nav-avatar');
-            const navAvatarText = document.getElementById('nav-avatar-text');
-            if (navAvatar && navAvatarText) {
-                navAvatar.src = data.avatar;
-                navAvatar.classList.remove('hidden');
-                navAvatarText.classList.add('hidden');
+
+    <script>
+        // 获取URL中的项目ID参数
+        function getProjectIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id') || '1';
+        }
+
+        // 模拟项目详情数据（实际项目中可从API获取）
+        const projectData = {
+            1: {
+                title: "AI 客服 SaaS 半成品",
+                type: "代码尸骸",
+                diff: "局部修复",
+                desc: "基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发。包含完整的对话流程设计、用户意图识别、多轮对话管理功能，支持微信、网页、APP 多端接入，后端使用 Node.js + MongoDB，前端使用 React + TypeScript，代码结构清晰，注释完整。"
+            },
+            2: {
+                title: "企业官网开发项目",
+                type: "代码尸骸",
+                diff: "局部修复",
+                desc: "响应式企业官网，含产品展示、后台管理，因合作终止废弃。使用 Vue3 + Vite 开发，包含首页、产品列表、产品详情、关于我们、联系我们等页面，后台使用 Express + MySQL 实现基础的内容管理功能，代码模块化程度高，易于扩展。"
+            },
+            3: {
+                title: "在线教育学习系统",
+                type: "代码尸骸",
+                diff: "局部修复",
+                desc: "课程、考试、题库一体化学习平台，技术迭代废弃。基于 Spring Boot + Vue3 开发，支持课程视频播放、章节练习、在线考试、成绩统计等功能，用户体系包含学生、教师、管理员三种角色，权限控制完善。"
+            },
+            50: {
+                title: "AI 客服机器人",
+                type: "概念泡沫",
+                diff: "局部修复",
+                desc: "智能客服概念，因效果不佳调整。基于大语言模型的智能客服机器人原型设计，包含意图识别、知识库问答、多轮对话等核心功能设计文档，未进入开发阶段，可基于现有设计文档进行技术落地。"
+            }
+        };
+
+        // 初始化详情页
+        function initDetailPage() {
+            const projectId = getProjectIdFromUrl();
+            const project = projectData[projectId] || projectData[1];
+            
+            // 更新页面内容
+            document.getElementById('projectTitle').textContent = project.title;
+            document.getElementById('projectDesc').textContent = project.desc;
+            document.getElementById('typeTag').textContent = project.type;
+            document.getElementById('diffTag').textContent = project.diff;
+            document.getElementById('projectIdTag').textContent = `项目ID: ${projectId}`;
+            
+            // 根据类型设置标签样式
+            const typeTag = document.getElementById('typeTag');
+            switch(project.type) {
+                case "代码尸骸":
+                    typeTag.className = "px-3 py-1 bg-blue-900/30 text-xs rounded text-blue-400";
+                    break;
+                case "原型幽灵":
+                    typeTag.className = "px-3 py-1 bg-purple-900/30 text-xs rounded text-purple-400";
+                    break;
+                case "运营废墟":
+                    typeTag.className = "px-3 py-1 bg-indigo-900/30 text-xs rounded text-indigo-400";
+                    break;
+                case "设计遗稿":
+                    typeTag.className = "px-3 py-1 bg-pink-900/30 text-xs rounded text-pink-400";
+                    break;
+                case "概念泡沫":
+                    typeTag.className = "px-3 py-1 bg-yellow-900/30 text-xs rounded text-yellow-400";
+                    break;
+            }
+
+            // 根据难度设置标签样式
+            const diffTag = document.getElementById('diffTag');
+            switch(project.diff) {
+                case "快速激活":
+                    diffTag.className = "px-3 py-1 bg-orange-900/30 text-xs rounded text-orange-400";
+                    break;
+                case "局部修复":
+                    diffTag.className = "px-3 py-1 bg-slate-700 text-xs rounded text-slate-300";
+                    break;
+                case "推倒重来":
+                    diffTag.className = "px-3 py-1 bg-red-900/30 text-xs rounded text-red-400";
+                    break;
+                case "仅供参考":
+                    diffTag.className = "px-3 py-1 bg-slate-700 text-xs rounded text-slate-300";
+                    break;
             }
         }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initDetailPage);
+    </script>
+</body>
+<script>
+// 从 URL 获取 ID，从 index 数据中找到对应项目
+const params = new URLSearchParams(window.location.search);
+const projectId = params.get('id');
+
+// 模拟数据（实际应从后端或本地存储获取）
+const projectData = {
+    title: document.getElementById('detail-title')?.textContent || '未知项目',
+    hook: '项目亮点描述...',
+    type: '代码尸骸',
+    difficulty: '局部修复',
+    tech: 'React,Node.js,Python',
+    price: '5000',
+    detail: '1. 项目背景\n2. 已完成功能\n3. 放弃原因\n4. 对接手者建议',
+    completion: '75',
+    anonymous: false
+};
+
+// 填充数据
+function fillDetailData() {
+    // 从 index.html 的卡片数据中读取（实际项目中应通过 API 获取）
+    // 这里演示从 DOM 读取（如果用户从 index 跳转过来）
+    
+    document.getElementById('detail-title').textContent = projectData.title;
+    document.getElementById('detail-hook').textContent = projectData.hook;
+    document.getElementById('detail-type').textContent = projectData.type;
+    document.getElementById('detail-diff').textContent = projectData.difficulty;
+    document.getElementById('detail-price').textContent = '¥' + parseInt(projectData.price).toLocaleString();
+    
+    // 填充技术栈标签
+    const techContainer = document.getElementById('detail-tech');
+    if (techContainer && projectData.tech) {
+        const techs = projectData.tech.split(',').filter(t => t.trim());
+        techContainer.innerHTML = techs.map(tech => 
+            `<span class="px-3 py-1 bg-slate-700 text-slate-300 rounded-lg text-sm border border-slate-600">${tech.trim()}</span>`
+        ).join('');
+    }
+    
+    // 填充详细描述
+    document.getElementById('detail-content').textContent = projectData.detail;
+    
+    // 完成度
+    document.getElementById('completion-text').textContent = projectData.completion + '%';
+    document.getElementById('completion-bar').style.width = projectData.completion + '%';
+    
+    // 卖家信息
+    if (projectData.anonymous) {
+        document.getElementById('seller-info').textContent = '发布者：匿名用户';
     }
 }
-window.onload = syncUserAvatar;
-</script>
 
-</body>
+// 页面加载时执行
+document.addEventListener('DOMContentLoaded', fillDetailData);
+</script>
 </html>
