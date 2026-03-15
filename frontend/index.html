@@ -423,16 +423,42 @@ window.onload = function() {
 });
 </script>
 <script>
-document.querySelectorAll(".filter-btn").forEach(btn => {
+        clicked.classList.remove("bg-transparent","text-slate-400");
+        clicked.classList.add("bg-slate-100","text-slate-900","active");
+    });
+});
+</script>
+</body>
+</html>
+<script>
+// 筛选按钮交互
+const filterButtons = document.querySelectorAll(".filter-btn");
+const projectCards = document.querySelectorAll(".project-card");
+
+filterButtons.forEach(btn => {
     btn.addEventListener("click", function(e) {
         const clicked = e.target.closest(".filter-btn");
         const parent = clicked.parentElement;
+        const filterText = clicked.textContent.trim();
+        
+        // 同组内视觉切换
         parent.querySelectorAll(".filter-btn").forEach(b => {
-            b.classList.remove("active","bg-slate-100","text-slate-900");
-            b.classList.add("bg-transparent","text-slate-400");
+            b.classList.remove("active", "bg-slate-100", "text-slate-900");
+            b.classList.add("bg-transparent", "text-slate-400");
         });
-        clicked.classList.remove("bg-transparent","text-slate-400");
-        clicked.classList.add("bg-slate-100","text-slate-900","active");
+        clicked.classList.remove("bg-transparent", "text-slate-400");
+        clicked.classList.add("bg-slate-100", "text-slate-900", "active");
+        
+        // 筛选逻辑：如果是"全部"则显示所有，否则匹配标签
+        projectCards.forEach(card => {
+            if (filterText === "全部") {
+                card.style.display = "block";
+            } else {
+                // 检查卡片内是否包含该标签
+                const hasTag = card.textContent.includes(filterText);
+                card.style.display = hasTag ? "block" : "none";
+            }
+        });
     });
 });
 </script>
