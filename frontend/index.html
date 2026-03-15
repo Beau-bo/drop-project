@@ -394,39 +394,25 @@
 </main>
 
 <script>
-// 筛选功能
 const filterButtons = document.querySelectorAll(".filter-btn");
 const projectCards = document.querySelectorAll(".project-card");
-
-<script>
-// 筛选功能
-const filterButtons = document.querySelectorAll(".filter-btn");
-const projectCards = document.querySelectorAll(".project-card");
-
 filterButtons.forEach(btn => {
     btn.addEventListener("click", function(e) {
         const clicked = e.target.closest(".filter-btn");
         const parent = clicked.parentElement;
-        
-        // 获取按钮文字（去掉图标，取最后一个词）
         const text = clicked.textContent.trim();
         const filterText = text.split(/\s+/).pop();
-        
-        // 视觉切换
         parent.querySelectorAll(".filter-btn").forEach(b => {
-            b.classList.remove("active", "bg-slate-100", "text-slate-900");
-            b.classList.add("bg-transparent", "text-slate-400");
+            b.classList.remove("active","bg-slate-100","text-slate-900");
+            b.classList.add("bg-transparent","text-slate-400");
         });
-        clicked.classList.remove("bg-transparent", "text-slate-400");
-        clicked.classList.add("bg-slate-100", "text-slate-900", "active");
-        
-        // 筛选卡片
+        clicked.classList.remove("bg-transparent","text-slate-400");
+        clicked.classList.add("bg-slate-100","text-slate-900","active");
         projectCards.forEach(card => {
             if (filterText === "全部") {
                 card.style.display = "block";
             } else {
-                const hasTag = card.textContent.includes(filterText);
-                card.style.display = hasTag ? "block" : "none";
+                card.style.display = card.textContent.includes(filterText) ? "block" : "none";
             }
         });
     });
