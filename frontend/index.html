@@ -16,10 +16,10 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <a href="publish.html" class="px-4 py-2 bg-white text-slate-900 hover:bg-slate-200 rounded-lg text-sm font-medium">发布残骸</a>
-                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
+                    <a href="profile.html" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
                         <img id="nav-avatar" src="" alt="" class="w-full h-full object-cover hidden">
                         <span id="nav-avatar-text" class="text-slate-300 font-medium text-sm">U</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -31,168 +31,94 @@
             <p class="text-slate-400 text-lg">我们专注展示并交易未开发完成的产品、创业失败的项目、放弃运营的平台等。</p>
         </div>
 
-        <div class="border-2 border-solid border-slate-600 rounded-xl p-6 mb-8">
-<div class="border-2 border-slate-600 rounded-xl p-6 mb-8">
-<div>
-            <div class="flex items-start gap-4 mb-5">
-                <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">残骸类型：</span>
-                <div class="flex gap-2 flex-wrap">
-                    <button class="filter-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent"><span class="text-blue-400 mr-1">&lt;/&gt;</span> 代码尸骸</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">👻 垃圾幽灵</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🎨 设计遗稿</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏠 运营废墟</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">💡 概念泡沫</button>
-                </div>
-            </div>
-
-            <div class="flex items-start gap-4 mb-5">
-                <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">复活难度：</span>
-                <div class="flex gap-2 flex-wrap flex-1">
-                    <button class="filter-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-yellow-500">🔥 快速激活</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-blue-400">🔧 局部修复</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏗️ 推倒重来</button>
-                    <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">✂️ 仅供参考</button>
-                </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-                <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">排序方式：</span>
-                <div class="flex gap-2 flex-wrap">
-                    <button class="sort-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">最新发布</button>
-                    <button class="sort-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">最多浏览</button>
-                    <button class="sort-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">价格最低</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
-                <div class="p-5">
-                    <div class="flex gap-2 mb-3">
-                        <span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span>
-                        <span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span>
+        <!-- 外层大实框 -->
+        <div class="border border-slate-600 rounded-xl p-6 mb-8">
+            <!-- 内层筛选框（带背景+边框） -->
+            <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 mb-8">
+                <div class="flex items-start gap-4 mb-5">
+                    <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">残骸类型：</span>
+                    <div class="flex gap-2 flex-wrap">
+                        <button class="filter-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent"><span class="text-blue-400 mr-1">&lt;/&gt;</span> 代码尸骸</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">👻 垃圾幽灵</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🎨 设计遗稿</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏠 运营废墟</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">💡 概念泡沫</button>
                     </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-100">AI 客服 SaaS 半成品</h3>
-                    <p class="text-slate-400 text-sm mb-4 line-clamp-2">基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...</p>
-                    <div class="mb-4">
-                        <div class="text-xs text-slate-400 mb-1">已评估·综合 7.2 分</div>
-                        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-emerald-500 w-[72%]"></div>
-                        </div>
-                        <div class="text-right text-xs text-slate-500">7.2</div>
+                </div>
+                <div class="flex items-start gap-4 mb-5">
+                    <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">复活难度：</span>
+                    <div class="flex gap-2 flex-wrap flex-1">
+                        <button class="filter-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-yellow-500">🔥 快速激活</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-blue-400">🔧 局部修复</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏗️ 推倒重来</button>
+                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">✂️ 仅供参考</button>
                     </div>
-                    <div class="flex justify-between items-center text-xs text-slate-500">
-                        <div class="flex items-center gap-4">
-                            <span class="flex items-center gap-1">👤 匿名</span>
-                            <span class="flex items-center gap-1">👁️ 234</span>
-                            <span class="flex items-center gap-1">💬 12</span>
-                        </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">排序方式：</span>
+                    <div class="flex gap-2 flex-wrap">
+                        <button class="sort-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">最新发布</button>
+                        <button class="sort-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">最多浏览</button>
+                        <button class="sort-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">价格最低</button>
                     </div>
                 </div>
             </div>
 
-            <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
-                <div class="p-5">
-                    <div class="flex gap-2 mb-3">
-                        <span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span>
-                        <span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-100">跨境电商数据仪表盘</h3>
-                    <p class="text-slate-400 text-sm mb-4 line-clamp-2">Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...</p>
-                    <div class="mb-4">
-                        <div class="text-xs text-slate-400 mb-1">已评估·综合 8.0 分</div>
-                        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-emerald-500 w-[80%]"></div>
+            <!-- 项目卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
+                    <div class="p-5">
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span>
+                            <span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span>
                         </div>
-                        <div class="text-right text-xs text-slate-500">8</div>
-                    </div>
-                    <div class="flex justify-between items-center text-xs text-slate-500">
-                        <div class="flex items-center gap-4">
-                            <span class="flex items-center gap-1">👤 李明</span>
-                            <span class="flex items-center gap-1">👁️ 189</span>
-                            <span class="flex items-center gap-1">💬 8</span>
+                        <h3 class="font-bold text-lg mb-2 text-slate-100">AI 客服 SaaS 半成品</h3>
+                        <p class="text-slate-400 text-sm mb-4 line-clamp-2">基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...</p>
+                        <div class="mb-4">
+                            <div class="text-xs text-slate-400 mb-1">已评估·综合 7.2 分</div>
+                            <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-500 w-[72%]"></div>
+                            </div>
+                            <div class="text-right text-xs text-slate-500">7.2</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
-                <div class="p-5">
-                    <div class="flex gap-2 mb-3">
-                        <span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span>
-                        <span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-100">垂类社区 App 完整数据</h3>
-                    <p class="text-slate-400 text-sm mb-4 line-clamp-2">摄影爱好者社区，运营2年积累 5W+ 用户，日活800+，因团队解散停止维护...</p>
-                    <div class="mb-4">
-                        <div class="text-xs text-slate-400 mb-1">待诊断·申请中</div>
-                        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-slate-600 w-0"></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
+                    <div class="p-5">
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span>
+                            <span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span>
                         </div>
-                        <div class="text-right text-xs text-slate-500">-</div>
-                    </div>
-                    <div class="flex justify-between items-center text-xs text-slate-500">
-                        <div class="flex items-center gap-4">
-                            <span class="flex items-center gap-1">👤 匿名</span>
-                            <span class="flex items-center gap-1">👁️ 567</span>
-                            <span class="flex items-center gap-1">💬 23</span>
+                        <h3 class="font-bold text-lg mb-2 text-slate-100">跨境电商数据仪表盘</h3>
+                        <p class="text-slate-400 text-sm mb-4 line-clamp-2">Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...</p>
+                        <div class="mb-4">
+                            <div class="text-xs text-slate-400 mb-1">已评估·综合 8.0 分</div>
+                            <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-500 w-[80%]"></div>
+                            </div>
+                            <div class="text-right text-xs text-slate-500">8</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
-                <div class="p-5">
-                    <div class="flex gap-2 mb-3">
-                        <span class="px-2 py-0.5 bg-green-900/30 text-xs rounded text-green-400">概念泡沫</span>
-                        <span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">推倒重来</span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-100">Web3 去中心化笔记工具概念</h3>
-                    <p class="text-slate-400 text-sm mb-4 line-clamp-2">完整的白皮书和代币经济模型设计，未开始开发，寻找技术合伙人...</p>
-                    <div class="mb-4">
-                        <div class="text-xs text-slate-400 mb-1">暂无诊断</div>
-                        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-slate-600 w-0"></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
+                    <div class="p-5">
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span>
+                            <span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span>
                         </div>
-                        <div class="text-right text-xs text-slate-500">-</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
-                <div class="p-5">
-                    <div class="flex gap-2 mb-3">
-                        <span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span>
-                        <span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-100">Python 爬虫框架半成品</h3>
-                    <p class="text-slate-400 text-sm mb-4 line-clamp-2">基于 Scrapy 的分布式爬虫系统，已配置好代理池和反爬策略，适合二次开发...</p>
-                    <div class="mb-4">
-                        <div class="text-xs text-slate-400 mb-1">已评估·综合 8.5 分</div>
-                        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-emerald-500 w-[85%]"></div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-100">垂类社区 App 完整数据</h3>
+                        <p class="text-slate-400 text-sm mb-4 line-clamp-2">摄影爱好者社区，运营2年积累 5W+ 用户，日活800+，因团队解散停止维护...</p>
+                        <div class="mb-4">
+                            <div class="text-xs text-slate-400 mb-1">待诊断·申请中</div>
+                            <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-slate-600 w-0"></div>
+                            </div>
+                            <div class="text-right text-xs text-slate-500">-</div>
                         </div>
-                        <div class="text-right text-xs text-slate-500">8.5</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all">
-                <div class="p-5">
-                    <div class="flex gap-2 mb-3">
-                        <span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span>
-                        <span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-100">电商小程序 UI 设计稿</h3>
-                    <p class="text-slate-400 text-sm mb-4 line-clamp-2">完整 Figma 设计稿，含 30+ 页面，配色现代，因客户跑路未完成...</p>
-                    <div class="mb-4">
-                        <div class="text-xs text-slate-400 mb-1">已评估·综合 9.0 分</div>
-                        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-emerald-500 w-[90%]"></div>
-                        </div>
-                        <div class="text-right text-xs text-slate-500">9</div>
                     </div>
                 </div>
             </div>
