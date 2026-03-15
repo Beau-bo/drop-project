@@ -394,44 +394,12 @@
 
 </main>
 
-<script>
-// 同步用户头像
-function syncUserAvatar() {
-    const profile = localStorage.getItem('userProfile');
-    if (profile) {
-        const data = JSON.parse(profile);
-        if (data.avatar) {
-            const navAvatar = document.getElementById('nav-avatar');
-            const navAvatarText = document.getElementById('nav-avatar-text');
-            if (navAvatar && navAvatarText) {
-                navAvatar.src = data.avatar;
-                navAvatar.classList.remove('hidden');
-                navAvatarText.classList.add('hidden');
-            }
-        }
-    }
-}
-
-window.onload = function() {
-    syncUserAvatar();
-
-
-<script>
-        clicked.classList.remove("bg-transparent","text-slate-400");
-        clicked.classList.add("bg-slate-100","text-slate-900","active");
-    });
-});
-</script>
-<script>
-        clicked.classList.remove("bg-transparent","text-slate-400");
-        clicked.classList.add("bg-slate-100","text-slate-900","active");
-    });
-});
-</script>
+</body>
+</html>
 </body>
 </html>
 <script>
-// 筛选按钮交互
+// 筛选功能
 const filterButtons = document.querySelectorAll(".filter-btn");
 const projectCards = document.querySelectorAll(".project-card");
 
@@ -440,8 +408,9 @@ filterButtons.forEach(btn => {
         const clicked = e.target.closest(".filter-btn");
         const parent = clicked.parentElement;
         const filterText = clicked.textContent.trim();
+        const filterType = parent.querySelector("span")?.textContent || "";
         
-        // 同组内视觉切换
+        // 视觉切换
         parent.querySelectorAll(".filter-btn").forEach(b => {
             b.classList.remove("active", "bg-slate-100", "text-slate-900");
             b.classList.add("bg-transparent", "text-slate-400");
@@ -449,13 +418,13 @@ filterButtons.forEach(btn => {
         clicked.classList.remove("bg-transparent", "text-slate-400");
         clicked.classList.add("bg-slate-100", "text-slate-900", "active");
         
-        // 筛选逻辑：如果是"全部"则显示所有，否则匹配标签
+        // 筛选逻辑
         projectCards.forEach(card => {
             if (filterText === "全部") {
                 card.style.display = "block";
             } else {
-                // 检查卡片内是否包含该标签
-                const hasTag = card.textContent.includes(filterText);
+                const cardText = card.textContent;
+                const hasTag = cardText.includes(filterText);
                 card.style.display = hasTag ? "block" : "none";
             }
         });
