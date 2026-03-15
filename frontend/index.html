@@ -392,8 +392,6 @@
 </main>
 
 <script>
-// 筛选功能
-<script>
 // 组合筛选功能
 let currentType = "全部";
 let currentDifficulty = "全部";
@@ -407,11 +405,7 @@ function filterProjects() {
         const matchType = currentType === "全部" || cardText.includes(currentType);
         const matchDifficulty = currentDifficulty === "全部" || cardText.includes(currentDifficulty);
         
-        if (matchType && matchDifficulty) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
+        card.style.display = (matchType && matchDifficulty) ? "block" : "none";
     });
 }
 
@@ -419,14 +413,14 @@ typeButtons.forEach(btn => {
     btn.addEventListener("click", function(e) {
         const clicked = e.target.closest(".filter-btn");
         const parent = clicked.parentElement;
-        const filterGroup = parent.querySelector("span")?.textContent || "";
-        const text = clicked.textContent.trim().split(/\s+/).pop();
+        const groupLabel = parent.previousElementSibling?.textContent || "";
+        const filterText = clicked.textContent.trim().split(/\s+/).pop();
         
         // 判断是哪个筛选组
-        if (filterGroup.includes("残骸类型")) {
-            currentType = text;
-        } else if (filterGroup.includes("复活难度")) {
-            currentDifficulty = text;
+        if (groupLabel.includes("残骸类型")) {
+            currentType = filterText;
+        } else if (groupLabel.includes("复活难度")) {
+            currentDifficulty = filterText;
         }
         
         // 视觉切换
@@ -437,7 +431,7 @@ typeButtons.forEach(btn => {
         clicked.classList.remove("bg-transparent", "text-slate-400");
         clicked.classList.add("bg-slate-100", "text-slate-900", "active");
         
-        // 执行组合筛选
+        // 执行筛选
         filterProjects();
     });
 });
