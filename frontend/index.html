@@ -393,17 +393,41 @@
 
 <script>
 // 筛选功能
-const filterButtons = document.querySelectorAll(".filter-btn");
+<script>
+// 组合筛选功能
+let currentType = "全部";
+let currentDifficulty = "全部";
+
+const typeButtons = document.querySelectorAll(".filter-btn");
 const projectCards = document.querySelectorAll(".project-card");
 
-filterButtons.forEach(btn => {
+function filterProjects() {
+    projectCards.forEach(card => {
+        const cardText = card.textContent;
+        const matchType = currentType === "全部" || cardText.includes(currentType);
+        const matchDifficulty = currentDifficulty === "全部" || cardText.includes(currentDifficulty);
+        
+        if (matchType && matchDifficulty) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+typeButtons.forEach(btn => {
     btn.addEventListener("click", function(e) {
         const clicked = e.target.closest(".filter-btn");
         const parent = clicked.parentElement;
+        const filterGroup = parent.querySelector("span")?.textContent || "";
+        const text = clicked.textContent.trim().split(/\s+/).pop();
         
-        // 获取按钮文字（去掉图标，取最后一个词）
-        const text = clicked.textContent.trim();
-        const filterText = text.split(/\s+/).pop();
+        // 判断是哪个筛选组
+        if (filterGroup.includes("残骸类型")) {
+            currentType = text;
+        } else if (filterGroup.includes("复活难度")) {
+            currentDifficulty = text;
+        }
         
         // 视觉切换
         parent.querySelectorAll(".filter-btn").forEach(b => {
@@ -413,15 +437,8 @@ filterButtons.forEach(btn => {
         clicked.classList.remove("bg-transparent", "text-slate-400");
         clicked.classList.add("bg-slate-100", "text-slate-900", "active");
         
-        // 筛选卡片
-        projectCards.forEach(card => {
-            if (filterText === "全部") {
-                card.style.display = "block";
-            } else {
-                const hasTag = card.textContent.includes(filterText);
-                card.style.display = hasTag ? "block" : "none";
-            }
-        });
+        // 执行组合筛选
+        filterProjects();
     });
 });
 </script>
