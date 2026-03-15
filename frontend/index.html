@@ -393,10 +393,11 @@
 
 </main>
 
-</body>
-</html>
-</body>
-</html>
+<script>
+// 筛选功能
+const filterButtons = document.querySelectorAll(".filter-btn");
+const projectCards = document.querySelectorAll(".project-card");
+
 <script>
 // 筛选功能
 const filterButtons = document.querySelectorAll(".filter-btn");
@@ -406,7 +407,10 @@ filterButtons.forEach(btn => {
     btn.addEventListener("click", function(e) {
         const clicked = e.target.closest(".filter-btn");
         const parent = clicked.parentElement;
-        const filterType = parent.querySelector("span")?.textContent || "";
+        
+        // 获取按钮文字（去掉图标，取最后一个词）
+        const text = clicked.textContent.trim();
+        const filterText = text.split(/\s+/).pop();
         
         // 视觉切换
         parent.querySelectorAll(".filter-btn").forEach(b => {
@@ -416,13 +420,12 @@ filterButtons.forEach(btn => {
         clicked.classList.remove("bg-transparent", "text-slate-400");
         clicked.classList.add("bg-slate-100", "text-slate-900", "active");
         
-        // 筛选逻辑
+        // 筛选卡片
         projectCards.forEach(card => {
             if (filterText === "全部") {
                 card.style.display = "block";
             } else {
-                const cardText = card.textContent;
-                const hasTag = cardText.includes(filterText);
+                const hasTag = card.textContent.includes(filterText);
                 card.style.display = hasTag ? "block" : "none";
             }
         });
