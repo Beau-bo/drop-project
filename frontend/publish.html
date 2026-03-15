@@ -97,7 +97,7 @@
                         <select id="project-type" class="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-slate-100 text-sm focus:ring-2 focus:ring-slate-500 outline-none" required>
                             <option value="">选择</option>
                             <option value="code">&lt;/&gt; 代码尸骸</option>
-                            <option value="prototype">👻 垃圾幽灵</option>
+                            <option value="prototype">👻 原型幽灵</option>
                             <option value="design">🎨 设计遗稿</option>
                             <option value="operation">🏗 运营废墟</option>
                             <option value="concept">💡 概念泡沫</option>
@@ -230,7 +230,7 @@ function goToStep2() {
     document.getElementById('preview-title').textContent = document.getElementById('project-title').value;
     document.getElementById('preview-hook').textContent = document.getElementById('project-hook').value;
     
-    const typeMap = {code:'</> 代码尸骸',prototype:'👻 垃圾幽灵',design:'🎨 设计遗稿',operation:'🏗 运营废墟',concept:'💡 概念泡沫'};
+    const typeMap = {code:'</> 代码尸骸',prototype:'👻 原型幽灵',design:'🎨 设计遗稿',operation:'🏗 运营废墟',concept:'💡 概念泡沫'};
     const diffMap = {easy:'🔥 快速激活',medium:'🔧 局部修复',hard:'🏗️ 推倒重来',expert:'✂️ 仅供参考'};
     const priceMap = {free:'免费赠送',negotiable:'价格面议',fixed:'¥'+document.getElementById('price-value').value};
     
