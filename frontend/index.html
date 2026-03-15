@@ -414,10 +414,14 @@ function syncUserAvatar() {
 
 window.onload = function() {
     syncUserAvatar();
-};
 
-// 筛选按钮交互
 
+<script>
+        clicked.classList.remove("bg-transparent","text-slate-400");
+        clicked.classList.add("bg-slate-100","text-slate-900","active");
+    });
+});
+</script>
 <script>
 document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", function(e) {
