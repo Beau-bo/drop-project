@@ -103,7 +103,6 @@
     <!-- 结果统计 -->
     <div class="flex justify-between items-center mb-6">
         <div class="text-lg text-slate-400">
-            共找到 <span class="text-slate-300 font-medium">12</span> 个残骸
         </div>
     </div>
 
@@ -401,7 +400,7 @@
 <script>
 // 筛选功能
 const filterButtons = document.querySelectorAll(".filter-btn");
-const projectCards = document.querySelectorAll(".project-card");
+const projectCards = document.querySelectorAll(".grid > div > div");
 
 filterButtons.forEach(btn => {
     btn.addEventListener("click", function(e) {
