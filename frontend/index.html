@@ -417,22 +417,20 @@ window.onload = function() {
 };
 
 // 筛选按钮交互
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        // 同组内清除其他选中状态
-        const siblings = this.parentElement.querySelectorAll('.filter-btn');
-        siblings.forEach(b => {
-            b.classList.remove('active');
-            b.classList.remove('bg-slate-100', 'text-slate-900');
-            b.classList.add('bg-transparent', 'text-slate-400');
+
+<script>
+document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", function(e) {
+        const clicked = e.target.closest(".filter-btn");
+        const parent = clicked.parentElement;
+        parent.querySelectorAll(".filter-btn").forEach(b => {
+            b.classList.remove("active","bg-slate-100","text-slate-900");
+            b.classList.add("bg-transparent","text-slate-400");
         });
-        // 设置当前为选中
-        this.classList.add('active');
-        this.classList.remove('bg-transparent', 'text-slate-400');
-        this.classList.add('bg-slate-100', 'text-slate-900');
+        clicked.classList.remove("bg-transparent","text-slate-400");
+        clicked.classList.add("bg-slate-100","text-slate-900","active");
     });
 });
 </script>
-
 </body>
 </html>
