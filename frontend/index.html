@@ -22,7 +22,7 @@
             <span class="font-bold text-lg text-slate-100">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
         </a>
         <div class="flex items-center gap-4">
-            <a href="market.html" class="text-slate-300 hover:text-slate-100 text-sm">残骸市场</a>
+            <a href="#market" class="text-slate-300 hover:text-slate-100 text-sm">残骸市场</a>
             <a href="publish.html" class="bg-slate-100 text-slate-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-200">发布残骸</a>
             <a href="profile.html" class="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden hover:ring-2 hover:ring-slate-500 transition-all">
                 <img id="nav-avatar" src="" alt="" class="w-full h-full object-cover hidden">
@@ -36,7 +36,6 @@
 <div class="bg-slate-800 border-b border-slate-700 pt-24 pb-12">
     <div class="max-w-6xl mx-auto px-4 text-center">
         <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-6">残骸新生</h1>
-        
         <p class="text-lg md:text-xl text-slate-300 mb-2 max-w-2xl mx-auto leading-relaxed">
             让搁浅的项目，重新找到价值。
         </p>
@@ -46,7 +45,8 @@
     </div>
 </div>
 
-<main class="pb-12 px-4 max-w-6xl mx-auto">
+<!-- 残骸市场区域 -->
+<div id="market" class="pb-12 px-4 max-w-6xl mx-auto">
     <!-- 筛选标签 -->
     <div class="flex gap-2 mb-8 overflow-x-auto pb-2 sticky top-16 bg-slate-900/95 backdrop-blur py-4 z-40 border-b border-slate-800">
         <button class="px-4 py-2 bg-slate-100 text-slate-900 rounded-full text-sm font-medium whitespace-nowrap">全部</button>
@@ -57,9 +57,9 @@
     </div>
 
     <!-- 项目列表 -->
-    <div id="market" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- 项目卡片 1 -->
-        <div class="project-card bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden cursor-pointer" onclick="location.href='detail.html'">
+        <a href="detail.html" class="project-card bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden block">
             <div class="h-48 bg-gradient-to-br from-slate-700 to-slate-600 flex items-center justify-center">
                 <span class="text-4xl">💻</span>
             </div>
@@ -78,10 +78,10 @@
                     <span class="font-bold text-slate-100">¥500</span>
                 </div>
             </div>
-        </div>
+        </a>
 
         <!-- 项目卡片 2 -->
-        <div class="project-card bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden cursor-pointer" onclick="location.href='detail.html'">
+        <a href="detail.html" class="project-card bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden block">
             <div class="h-48 bg-gradient-to-br from-indigo-900/30 to-purple-900/30 flex items-center justify-center">
                 <span class="text-4xl">🎨</span>
             </div>
@@ -100,10 +100,10 @@
                     <span class="font-bold text-emerald-400">免费</span>
                 </div>
             </div>
-        </div>
+        </a>
 
         <!-- 项目卡片 3 -->
-        <div class="project-card bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden cursor-pointer" onclick="location.href='detail.html'">
+        <a href="detail.html" class="project-card bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden block">
             <div class="h-48 bg-gradient-to-br from-slate-700 to-slate-600 flex items-center justify-center">
                 <span class="text-4xl">🐍</span>
             </div>
@@ -122,12 +122,11 @@
                     <span class="font-bold text-slate-100">¥299</span>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
-</main>
+</div>
 
 <script>
-// 同步用户头像
 function syncUserAvatar() {
     const profile = localStorage.getItem('userProfile');
     if (profile) {
@@ -143,7 +142,6 @@ function syncUserAvatar() {
         }
     }
 }
-
 window.onload = function() {
     syncUserAvatar();
 };
