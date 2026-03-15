@@ -406,7 +406,6 @@ filterButtons.forEach(btn => {
     btn.addEventListener("click", function(e) {
         const clicked = e.target.closest(".filter-btn");
         const parent = clicked.parentElement;
-        const filterText = clicked.textContent.trim().replace(/[^u4e00-u9fa5]/g, "");
         const filterType = parent.querySelector("span")?.textContent || "";
         
         // 视觉切换
