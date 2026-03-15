@@ -3,112 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>发布残骸 - 残骸新生</title>
+    <title>登记残骸 - 废项局</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .step-active { background-color: #0f172a; color: white; border-color: #0f172a; }
+        .step-inactive { color: #94a3b8; border-color: #e2e8f0; background-color: white; }
+        .step-line-active { background-color: #0f172a; }
+        .step-line-inactive { background-color: #e2e8f0; }
+        .upload-area { border: 2px dashed #cbd5e1; transition: all 0.3s; cursor: pointer; }
+        .upload-area:hover { border-color: #0f172a; background-color: #f8fafc; }
+        .hidden { display: none; }
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 24px 32px;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            z-index: 9999;
+            text-align: center;
+            min-width: 300px;
+        }
+        .toast-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div class="min-h-screen flex flex-col">
-        <!-- 顶部导航 -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <div class="text-xl font-bold text-gray-800">残骸新生</div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <a href="index.html" class="text-gray-700 hover:text-blue-600">首页</a>
-                        <a href="market.html" class="text-gray-700 hover:text-blue-600">残骸市场</a>
-                        <a href="publish.html" class="text-blue-600 font-medium">发布残骸</a>
-                        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                            <span class="text-gray-600">U</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
 
-        <!-- 主体内容 -->
-        <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="bg-white rounded-lg shadow p-8">
-                <h1 class="text-2xl font-bold text-gray-900 mb-2">完成登记，发布您的残骸信息</h1>
-                <p class="text-gray-600 mb-6">发布后您将获得价值60元的启动资金</p>
-                
-                <!-- 步骤条 -->
-                <div class="flex items-center justify-between mb-8">
-                    <div class="flex flex-col items-center">
-                        <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">1</div>
-                        <span class="text-sm mt-2">基本信息</span>
-                    </div>
-                    <div class="flex-1 h-1 mx-4 bg-gray-200">
-                        <div class="h-full bg-blue-600 w-1/2"></div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center">2</div>
-                        <span class="text-sm mt-2">完成发布</span>
-                    </div>
-                </div>
-
-                <!-- 完整表单（你截图里的所有功能） -->
-                <form class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">残骸名称 *</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入残骸项目名称">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">一句话介绍 *</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="简单描述您的项目特点">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">项目简介 *</label>
-                        <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="详细介绍您的项目功能、用途、现状"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">附件上传</label>
-                        <input type="file" multiple class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <p class="text-xs text-gray-500 mt-1">支持图片、文档、压缩包等格式</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">项目类型 *</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>请选择项目类型</option>
-                            <option>网站/网页</option>
-                            <option>APP应用</option>
-                            <option>小程序</option>
-                            <option>桌面软件</option>
-                            <option>其他</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">技术栈 *</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>请选择主要技术</option>
-                            <option>HTML/CSS/JS</option>
-                            <option>React/Vue/Angular</option>
-                            <option>Python</option>
-                            <option>Java</option>
-                            <option>PHP</option>
-                            <option>其他</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">项目需求 *</label>
-                        <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="您希望如何处理这个项目？寻找开发者接手？"></textarea>
-                    </div>
-
-                    <div class="pt-4">
-                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            提交发布
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </main>
+<nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">废</div>
+            <span class="font-bold text-lg">废项局 <span class="text-slate-400 font-normal text-sm">| Drop Project</span></span>
+        </a>
     </div>
+</nav>
+
+<main class="pt-24 pb-12 px-4 max-w-2xl mx-auto">
+    <div class="mb-6 text-center">
+        <h1 class="text-2xl font-bold text-slate-900">登记残骸</h1>
+        <p class="text-slate-500 mt-1">60秒完成发布，让有价值的残骸被看见</p>
+    </div>
+
+    <div class="flex items-center justify-center mb-8">
+        <div class="flex items-center w-full max-w-xs">
+            <div class="flex flex-col items-center flex-1">
+                <div id="step1-indicator" class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active">1</div>
+                <span class="text-xs mt-2 font-medium text-slate-900">填写信息</span>
+            </div>
+            <div id="line1" class="flex-1 h-0.5 mx-2 step-line-inactive"></div>
+            <div class="flex flex-col items-center flex-1">
+                <div id="step2-indicator" class="w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-inactive">2</div>
+                <span class="text-xs mt-2 font-medium text-slate-400">确认发布</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div id="step1" class="step-content">
+            <form class="space-y-5" onsubmit="return false;">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">残骸标题 <span class="text-red-500">*</span></label>
+                    <input type="text" id="project-title" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="如：AI客服SaaS半成品，已完成核心功能" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">一句话介绍 <span class="text-red-500">*</span></label>
+                    <textarea id="project-hook" rows="2" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none resize-none" placeholder="说明项目亮点和放弃原因，吸引拾荒者..." maxlength="100" required></textarea>
+                    <div class="flex justify-between mt-1">
+                        <span class="text-xs text-slate-500">好文案能提升3倍浏览</span>
+                        <span id="hook-count" class="text-xs text-slate-400">0/100</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">类型 <span class="text-red-500">*</span></label>
+                        <select id="project-type" class="w-full p-3 rounded-lg border border-slate-300 bg-white text-sm" required>
+                            <option value="">选择</option>
+                            <option value="code">&lt;/&gt; 代码尸骸</option>
+                            <option value="prototype">👻 原型幽灵</option>
+                            <option value="design">🎨 设计遗稿</option>
+                            <option value="operation">🏠 运营废墟</option>
+                            <option value="concept">💡 概念泡沫</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">复活难度 <span class="text-red-500">*</span></label>
+                        <select id="project-difficulty" class="w-full p-3 rounded-lg border border-slate-300 bg-white text-sm" required>
+                            <option value="">选择</option>
+                            <option value="easy">🔥 快速激活</option>
+                            <option value="medium">🔧 局部修复</option>
+                            <option value="hard">推倒重来</option>
+                            <option value="expert">✂️ 仅供参考</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">技术栈 <span class="text-red-500">*</span></label>
+                    <input type="text" id="project-tech" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="如：React, Node.js, Python..." required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">项目详情 <span class="text-red-500">*</span></label>
+                    <textarea id="project-detail" rows="4" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none resize-none" placeholder="1. 项目背景和目标&#10;2. 已完成的功能&#10;3. 放弃原因&#10;4. 对接手者的建议" required></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">相关文件（可选）</label>
+                    <div class="upload-area rounded-lg p-4 text-center" onclick="document.getElementById('file-input').click()">
+                        <p class="text-sm text-slate-600">点击上传源码包、设计稿等（最大500MB）</p>
+                    </div>
+                    <input type="file" id="file-input" class="hidden" multiple>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">期望价格</label>
+                    <div class="flex gap-2">
+                        <select id="price-type" class="p-2 rounded-lg border border-slate-300 text-sm bg-white" onchange="togglePriceInput()">
+                            <option value="free">免费赠送</option>
+                            <option value="negotiable">价格面议</option>
+                            <option value="fixed">固定价格</option>
+                        </select>
+                        <input type="number" id="price-value" class="flex-1 p-2 rounded-lg border border-slate-300 text-sm hidden" placeholder="金额（元）">
+                    </div>
+                </div>
+
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <p class="text-amber-800 text-xs">💡 提示：放弃原因写真实，技术栈写清楚，成交率提高60%</p>
+                </div>
+
+                <button type="button" onclick="goToStep2()" class="w-full bg-slate-900 text-white py-3 rounded-lg font-medium hover:bg-slate-800">下一步</button>
+            </form>
+        </div>
+
+        <div id="step2" class="step-content hidden">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">确认发布</h2>
+            
+            <div class="border border-slate-200 rounded-xl p-4 mb-4 bg-slate-50">
+                <h3 id="preview-title" class="font-bold text-slate-900 mb-2">--</h3>
+                <p id="preview-hook" class="text-sm text-slate-600 mb-3">--</p>
+                <div class="flex gap-2 text-xs text-slate-500 flex-wrap">
+                    <span id="preview-type" class="px-2 py-1 bg-white rounded border">--</span>
+                    <span id="preview-difficulty" class="px-2 py-1 bg-white rounded border">--</span>
+                    <span id="preview-price" class="px-2 py-1 bg-white rounded border">--</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <label class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg cursor-pointer">
+                    <input type="checkbox" id="anonymous" class="mt-0.5 w-4 h-4 rounded border-slate-300">
+                    <div class="text-sm">
+                        <span class="font-medium text-slate-900">匿名发布</span>
+                        <p class="text-slate-500 text-xs">隐藏真实身份，联系方式仅对意向者可见</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" id="agreement" class="mt-0.5 w-4 h-4 rounded border-slate-300" required>
+                    <span class="text-sm text-slate-600">我确认这是未完成/已放弃的项目，不侵犯第三方权益，同意平台审核规则</span>
+                </label>
+            </div>
+
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-4">
+                <p class="text-blue-800 text-xs">提交后24小时内完成审核，通过后将对外展示</p>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="goToStep1()" class="flex-1 px-4 py-2.5 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 text-sm">上一步</button>
+                <button onclick="saveDraft()" class="flex-1 px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200 text-sm">保存草稿</button>
+                <button onclick="submitForm()" class="flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 text-sm">提交审核</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="toast" class="hidden">
+    <div class="toast-overlay" onclick="closeToast()"></div>
+    <div class="toast">
+        <div class="text-4xl mb-4">✅</div>
+        <p class="text-lg font-medium text-slate-900 mb-2">提交成功，等待审核中</p>
+        <p class="text-sm text-slate-500 mb-4">正在跳转到个人中心...</p>
+    </div>
+</div>
+
+<script>
+document.getElementById('project-hook').addEventListener('input', function() {
+    document.getElementById('hook-count').textContent = this.value.length + '/100';
+});
+
+function togglePriceInput() {
+    const type = document.getElementById('price-type').value;
+    const input = document.getElementById('price-value');
+    if (type === 'fixed') {
+        input.classList.remove('hidden');
+    } else {
+        input.classList.add('hidden');
+    }
+}
+
+function goToStep2() {
+    const required = ['project-title', 'project-hook', 'project-type', 'project-difficulty', 'project-tech', 'project-detail'];
+    for (let id of required) {
+        if (!document.getElementById(id).value.trim()) {
+            alert('请填写所有必填项');
+            return;
+        }
+    }
+    
+    document.getElementById('preview-title').textContent = document.getElementById('project-title').value;
+    document.getElementById('preview-hook').textContent = document.getElementById('project-hook').value;
+    
+    const typeMap = {code:'&lt;/&gt; 代码尸骸',prototype:'👻 原型幽灵',design:'🎨 设计遗稿',operation:'🏠 运营废墟',concept:'💡 概念泡沫'};
+    const diffMap = {easy:'🔥 快速激活',medium:'🔧 局部修复',hard:'推倒重来',expert:'✂️ 仅供参考'};
+    const priceMap = {free:'免费赠送',negotiable:'价格面议',fixed:'¥'+document.getElementById('price-value').value};
+    
+    document.getElementById('preview-type').textContent = typeMap[document.getElementById('project-type').value] || '--';
+    document.getElementById('preview-difficulty').textContent = diffMap[document.getElementById('project-difficulty').value] || '--';
+    document.getElementById('preview-price').textContent = priceMap[document.getElementById('price-type').value] || '--';
+    
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+    
+    document.getElementById('step1-indicator').innerHTML = '✓';
+    document.getElementById('step1-indicator').className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
+    document.getElementById('step2-indicator').className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
+    document.getElementById('line1').className = 'flex-1 h-0.5 mx-2 step-line-active';
+    document.querySelector('#step1-indicator + span').className = 'text-xs mt-2 font-medium text-slate-900';
+    document.querySelector('#step2-indicator + span').className = 'text-xs mt-2 font-medium text-slate-900';
+}
+
+function goToStep1() {
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step1').classList.remove('hidden');
+    
+    document.getElementById('step1-indicator').innerHTML = '1';
+    document.getElementById('step1-indicator').className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-active bg-slate-900 text-white';
+    document.getElementById('step2-indicator').className = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold step-inactive';
+    document.getElementById('line1').className = 'flex-1 h-0.5 mx-2 step-line-inactive';
+}
+
+function saveDraft() {
+    const draft = {
+        title: document.getElementById('project-title').value,
+        hook: document.getElementById('project-hook').value,
+        type: document.getElementById('project-type').value,
+        difficulty: document.getElementById('project-difficulty').value,
+        tech: document.getElementById('project-tech').value,
+        detail: document.getElementById('project-detail').value,
+        priceType: document.getElementById('price-type').value,
+        priceValue: document.getElementById('price-value').value,
+        anonymous: document.getElementById('anonymous').checked,
+        savedAt: new Date().toISOString()
+    };
+    
+    localStorage.setItem('publishDraft', JSON.stringify(draft));
+    alert('✅ 草稿已保存');
+}
+
+function submitForm() {
+    if (!document.getElementById('agreement').checked) {
+        alert('请同意平台审核规则');
+        return;
+    }
+    
+    document.getElementById('toast').classList.remove('hidden');
+    
+    setTimeout(() => {
+        window.location.href = 'profile.html';
+    }, 2000);
+}
+
+function closeToast() {
+    document.getElementById('toast').classList.add('hidden');
+}
+
+window.onload = function() {
+    const draft = localStorage.getItem('publishDraft');
+    if (draft) {
+        const data = JSON.parse(draft);
+        document.getElementById('project-title').value = data.title || '';
+        document.getElementById('project-hook').value = data.hook || '';
+        document.getElementById('project-type').value = data.type || '';
+        document.getElementById('project-difficulty').value = data.difficulty || '';
+        document.getElementById('project-tech').value = data.tech || '';
+        document.getElementById('project-detail').value = data.detail || '';
+        document.getElementById('price-type').value = data.priceType || 'free';
+        document.getElementById('price-value').value = data.priceValue || '';
+        document.getElementById('anonymous').checked = data.anonymous || false;
+        
+        if (data.hook) {
+            document.getElementById('hook-count').textContent = data.hook.length + '/100';
+        }
+        
+        if (data.priceType === 'fixed') {
+            document.getElementById('price-value').classList.remove('hidden');
+        }
+    }
+};
+</script>
+
 </body>
 </html>
