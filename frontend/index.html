@@ -395,37 +395,63 @@
 
 </body></html>
 <script>
-// 组合筛选功能 - 只添加逻辑，不动样式
+// 组合筛选功能 - 完全保留原有CSS和HTML结构
 const projectCards = document.querySelectorAll(".project-card");
-let activeType = "全部";
-let activeDifficulty = "全部";
+const filterButtons = document.querySelectorAll(".filter-btn");
 
-function applyFilter() {
+let activeFilters = {
+    type: "全部",
+    difficulty: "全部"
+};
+
+function applyCombinedFilter() {
     projectCards.forEach(card => {
-        const text = card.textContent;
-        const matchType = activeType === "全部" || text.includes(activeType);
-        const matchDiff = activeDifficulty === "全部" || text.includes(activeDifficulty);
-        card.style.display = (matchType && matchDiff) ? "block" : "none";
+        const cardText = card.textContent;
+        
+        // 检查是否匹配类型筛选
+        const matchType = activeFilters.type === "全部" || 
+                         cardText.includes(activeFilters.type);
+        
+        // 检查是否匹配难度筛选  
+        const matchDifficulty = activeFilters.difficulty === "全部" || 
+                               cardText.includes(activeFilters.difficulty);
+        
+        // 只有同时满足两个条件才显示
+        card.style.display = (matchType && matchDifficulty) ? "block" : "none";
     });
 }
 
-// 给所有筛选按钮添加点击事件（保留原有视觉切换）
-document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", function(e) {
-        const clicked = e.target.closest(".filter-btn");
-        const parent = clicked.parentElement;
-        const label = parent.previousElementSibling?.textContent || "";
-        const text = clicked.textContent.trim().split(/\s+/).pop();
+// 为所有筛选按钮添加点击事件
+filterButtons.forEach(button => {
+    button.addEventListener("click", function(e) {
+        e.preventDefault();
+        const clicked = e.currentTarget;
+        const parentDiv = clicked.parentElement; // 获取按钮所在的div容器
+        const groupLabel = parentDiv.previousElementSibling?.textContent || "";
+        
+        // 获取按钮文字（去掉图标，取最后一部分）
+        const buttonText = clicked.textContent.trim();
+        const filterValue = buttonText.split(/\s+/).pop();
         
         // 判断是哪个筛选组
-        if (label.includes("残骸类型")) {
-            activeType = text;
-        } else if (label.includes("复活难度")) {
-            activeDifficulty = text;
+        if (groupLabel.includes("残骸类型")) {
+            activeFilters.type = filterValue;
+        } else if (groupLabel.includes("复活难度")) {
+            activeFilters.difficulty = filterValue;
         }
         
-        // 执行筛选（视觉切换保留原有的CSS class处理）
-        applyFilter();
+        // 视觉反馈：在同一组内切换active状态（保留原有CSS类）
+        parentDiv.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.classList.remove("active", "bg-slate-100", "text-slate-900");
+            btn.classList.add("bg-transparent", "text-slate-400");
+        });
+        
+        // 激活当前点击的按钮
+        clicked.classList.remove("bg-transparent", "text-slate-400");
+        clicked.classList.add("active", "bg-slate-100", "text-slate-900");
+        
+        // 执行筛选
+        applyCombinedFilter();
     });
 });
 </script>
