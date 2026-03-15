@@ -11,11 +11,32 @@
         .tab-active { border-bottom: 2px solid #0f172a; color: #0f172a; font-weight: 600; }
         .tab-inactive { color: #64748b; }
         .hidden { display: none; }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            z-index: 9999;
+            width: 90%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen">
 
-<!-- 导航栏 - 与publish一致 -->
+<!-- 导航栏 -->
 <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-2">
@@ -25,8 +46,9 @@
         <div class="flex items-center gap-4">
             <a href="index.html" class="text-slate-600 hover:text-slate-900 text-sm">市场</a>
             <a href="publish.html" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800">发布残骸</a>
-            <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center">
-                <span class="text-slate-600 font-medium text-sm">U</span>
+            <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center overflow-hidden">
+                <img id="nav-avatar" src="" alt="" class="w-full h-full object-cover hidden">
+                <span id="nav-avatar-text" class="text-slate-600 font-medium text-sm">U</span>
             </div>
         </div>
     </div>
@@ -36,19 +58,20 @@
     <!-- 用户信息卡片 -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
         <div class="flex items-start gap-4">
-            <div class="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
-                <span class="text-2xl text-slate-400">U</span>
+            <div class="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-slate-100">
+                <img id="profile-avatar" src="" alt="" class="w-full h-full object-cover hidden">
+                <span id="profile-avatar-text" class="text-3xl text-slate-400">U</span>
             </div>
             <div class="flex-1">
-                <h1 class="text-xl font-bold text-slate-900">用户昵称</h1>
-                <p class="text-slate-500 text-sm mt-1">暂无简介</p>
+                <h1 id="display-nickname" class="text-xl font-bold text-slate-900">用户昵称</h1>
+                <p id="display-bio" class="text-slate-500 text-sm mt-1">暂无简介</p>
                 <div class="flex gap-6 mt-4 text-sm">
                     <div><span class="font-bold text-slate-900">3</span> <span class="text-slate-500">发布</span></div>
                     <div><span class="font-bold text-slate-900">5</span> <span class="text-slate-500">拾取</span></div>
                     <div><span class="font-bold text-slate-900">12</span> <span class="text-slate-500">收藏</span></div>
                 </div>
             </div>
-            <button class="px-4 py-2 border border-slate-300 rounded-lg text-sm text-slate-700 hover:bg-slate-50">编辑资料</button>
+            <button onclick="openEditModal()" class="px-4 py-2 border border-slate-300 rounded-lg text-sm text-slate-700 hover:bg-slate-50">编辑资料</button>
         </div>
     </div>
 
@@ -122,9 +145,7 @@
 
         <!-- 草稿箱 -->
         <div id="content-drafts" class="hidden space-y-4">
-            <div id="draft-list">
-                <!-- 动态加载publish页面保存的草稿 -->
-            </div>
+            <div id="draft-list"></div>
             <div id="empty-draft" class="text-center py-12 text-slate-400 hidden">
                 <p>暂无草稿</p>
                 <a href="publish.html" class="inline-block mt-2 text-slate-900 hover:underline text-sm">去发布残骸 →</a>
@@ -159,23 +180,199 @@
     </div>
 </main>
 
+<!-- 编辑资料模态框 -->
+<div id="edit-modal" class="hidden">
+    <div class="modal-overlay" onclick="closeEditModal()"></div>
+    <div class="modal-content">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-slate-900">编辑资料</h2>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <form onsubmit="return false;" class="space-y-5">
+                <!-- 头像上传 -->
+                <div class="text-center">
+                    <div class="relative inline-block">
+                        <div class="w-24 h-24 bg-slate-200 rounded-full flex items-center justify-center overflow-hidden border-2 border-slate-200 mx-auto">
+                            <img id="edit-avatar-preview" src="" alt="" class="w-full h-full object-cover hidden">
+                            <span id="edit-avatar-text" class="text-4xl text-slate-400">U</span>
+                        </div>
+                        <button type="button" onclick="document.getElementById('avatar-input').click()" class="absolute bottom-0 right-0 w-8 h-8 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-slate-800 shadow-lg">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                        <input type="file" id="avatar-input" class="hidden" accept="image/*" onchange="previewAvatar(this)">
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">点击更换头像</p>
+                </div>
+
+                <!-- 昵称 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">昵称 <span class="text-red-500">*</span></label>
+                    <input type="text" id="edit-nickname" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="请输入昵称" maxlength="20" required>
+                    <p class="text-xs text-slate-500 mt-1">最多20个字符</p>
+                </div>
+
+                <!-- 简介 -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">个人简介</label>
+                    <textarea id="edit-bio" rows="3" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none resize-none" placeholder="介绍一下自己..." maxlength="100"></textarea>
+                    <p class="text-xs text-slate-500 mt-1 text-right"><span id="bio-count">0</span>/100</p>
+                </div>
+
+                <!-- 修改密码 -->
+                <div class="border-t border-slate-200 pt-5 mt-5">
+                    <h3 class="text-sm font-bold text-slate-900 mb-4">修改密码</h3>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">当前密码</label>
+                            <input type="password" id="current-password" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="不修改密码请留空">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">新密码</label>
+                            <input type="password" id="new-password" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="至少8位字符" minlength="8">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">确认新密码</label>
+                            <input type="password" id="confirm-password" class="w-full p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-500 outline-none" placeholder="再次输入新密码">
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">如不修改密码，请保持密码框为空</p>
+                </div>
+
+                <!-- 按钮 -->
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2.5 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50">取消</button>
+                    <button type="button" onclick="saveProfile()" class="flex-1 px-4 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800">保存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
 // 标签切换
 function switchTab(tabName) {
-    // 隐藏所有内容
     ['published', 'picked', 'drafts', 'transactions'].forEach(t => {
         document.getElementById('content-' + t).classList.add('hidden');
         document.getElementById('tab-' + t).classList.remove('tab-active');
         document.getElementById('tab-' + t).classList.add('tab-inactive');
     });
     
-    // 显示选中内容
     document.getElementById('content-' + tabName).classList.remove('hidden');
     document.getElementById('tab-' + tabName).classList.remove('tab-inactive');
-    document.getElementById('tab-' + tabName).classList('tab-active');
+    document.getElementById('tab-' + tabName).classList.add('tab-active');
 }
 
-// 加载草稿（从publish页面保存的）
+// 打开编辑模态框
+function openEditModal() {
+    // 加载当前数据到表单
+    const nickname = document.getElementById('display-nickname').textContent;
+    const bio = document.getElementById('display-bio').textContent === '暂无简介' ? '' : document.getElementById('display-bio').textContent;
+    const avatarSrc = document.getElementById('profile-avatar').src;
+    
+    document.getElementById('edit-nickname').value = nickname;
+    document.getElementById('edit-bio').value = bio;
+    document.getElementById('bio-count').textContent = bio.length;
+    
+    // 设置头像预览
+    if (avatarSrc && !avatarSrc.includes('data:')) {
+        document.getElementById('edit-avatar-preview').src = avatarSrc;
+        document.getElementById('edit-avatar-preview').classList.remove('hidden');
+        document.getElementById('edit-avatar-text').classList.add('hidden');
+    }
+    
+    // 清空密码框
+    document.getElementById('current-password').value = '';
+    document.getElementById('new-password').value = '';
+    document.getElementById('confirm-password').value = '';
+    
+    document.getElementById('edit-modal').classList.remove('hidden');
+}
+
+// 关闭编辑模态框
+function closeEditModal() {
+    document.getElementById('edit-modal').classList.add('hidden');
+}
+
+// 预览头像
+function previewAvatar(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('edit-avatar-preview').src = e.target.result;
+            document.getElementById('edit-avatar-preview').classList.remove('hidden');
+            document.getElementById('edit-avatar-text').classList.add('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// 保存资料
+function saveProfile() {
+    const nickname = document.getElementById('edit-nickname').value.trim();
+    const bio = document.getElementById('edit-bio').value.trim();
+    const currentPassword = document.getElementById('current-password').value;
+    const newPassword = document.getElementById('new-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const avatarSrc = document.getElementById('edit-avatar-preview').src;
+    
+    // 验证昵称
+    if (!nickname) {
+        alert('请输入昵称');
+        return;
+    }
+    
+    // 验证密码
+    if (newPassword || currentPassword) {
+        if (!currentPassword) {
+            alert('请输入当前密码');
+            return;
+        }
+        if (newPassword.length < 8) {
+            alert('新密码至少8位字符');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            alert('两次输入的新密码不一致');
+            return;
+        }
+    }
+    
+    // 更新页面显示
+    document.getElementById('display-nickname').textContent = nickname;
+    document.getElementById('display-bio').textContent = bio || '暂无简介';
+    
+    // 更新头像
+    if (!document.getElementById('edit-avatar-preview').classList.contains('hidden')) {
+        document.getElementById('profile-avatar').src = avatarSrc;
+        document.getElementById('profile-avatar').classList.remove('hidden');
+        document.getElementById('profile-avatar-text').classList.add('hidden');
+        
+        document.getElementById('nav-avatar').src = avatarSrc;
+        document.getElementById('nav-avatar').classList.remove('hidden');
+        document.getElementById('nav-avatar-text').classList.add('hidden');
+    }
+    
+    // 保存到 localStorage（实际项目中应发送到后端）
+    const profileData = {
+        nickname: nickname,
+        bio: bio,
+        avatar: avatarSrc,
+        hasPassword: !!newPassword
+    };
+    localStorage.setItem('userProfile', JSON.stringify(profileData));
+    
+    alert('✅ 资料已更新');
+    closeEditModal();
+}
+
+// 加载草稿
 function loadDrafts() {
     const draft = localStorage.getItem('publishDraft');
     const draftList = document.getElementById('draft-list');
@@ -219,13 +416,36 @@ function deleteDraft() {
     }
 }
 
-// 页面加载时
+// 简介字数统计
+document.getElementById('edit-bio').addEventListener('input', function() {
+    document.getElementById('bio-count').textContent = this.value.length;
+});
+
+// 页面加载
 window.onload = function() {
-    // 检查URL参数，如果有drafts标签则切换
+    // 加载保存的资料
+    const profile = localStorage.getItem('userProfile');
+    if (profile) {
+        const data = JSON.parse(profile);
+        if (data.nickname) document.getElementById('display-nickname').textContent = data.nickname;
+        if (data.bio) document.getElementById('display-bio').textContent = data.bio;
+        if (data.avatar) {
+            document.getElementById('profile-avatar').src = data.avatar;
+            document.getElementById('profile-avatar').classList.remove('hidden');
+            document.getElementById('profile-avatar-text').classList.add('hidden');
+            
+            document.getElementById('nav-avatar').src = data.avatar;
+            document.getElementById('nav-avatar').classList.remove('hidden');
+            document.getElementById('nav-avatar-text').classList.add('hidden');
+        }
+    }
+    
+    // 检查URL hash
     const hash = window.location.hash;
     if (hash === '#drafts') {
         switchTab('drafts');
     }
+    
     loadDrafts();
 };
 </script>
