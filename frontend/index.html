@@ -394,3 +394,40 @@
 </main>
 
 </body></html>
+<script>
+// 组合筛选功能 - 只添加逻辑，不动样式
+const projectCards = document.querySelectorAll(".project-card");
+let activeType = "全部";
+let activeDifficulty = "全部";
+
+function applyFilter() {
+    projectCards.forEach(card => {
+        const text = card.textContent;
+        const matchType = activeType === "全部" || text.includes(activeType);
+        const matchDiff = activeDifficulty === "全部" || text.includes(activeDifficulty);
+        card.style.display = (matchType && matchDiff) ? "block" : "none";
+    });
+}
+
+// 给所有筛选按钮添加点击事件（保留原有视觉切换）
+document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", function(e) {
+        const clicked = e.target.closest(".filter-btn");
+        const parent = clicked.parentElement;
+        const label = parent.previousElementSibling?.textContent || "";
+        const text = clicked.textContent.trim().split(/\s+/).pop();
+        
+        // 判断是哪个筛选组
+        if (label.includes("残骸类型")) {
+            activeType = text;
+        } else if (label.includes("复活难度")) {
+            activeDifficulty = text;
+        }
+        
+        // 执行筛选（视觉切换保留原有的CSS class处理）
+        applyFilter();
+    });
+});
+</script>
+</body>
+</html>
