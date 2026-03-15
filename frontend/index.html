@@ -24,32 +24,40 @@
             </div>
         </div>
     </header>
+
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="text-center mb-10">
             <h1 class="text-4xl font-bold mb-4">让搁浅的项目，重新找到价值。</h1>
             <p class="text-slate-400 text-lg">我们专注展示并交易未开发完成的产品、创业失败的项目、放弃运营的平台等。</p>
         </div>
+
         <div class="border border-slate-600 rounded-xl p-6 mb-8">
             <div class="bg-slate-800/50 p-6 rounded-xl mb-8">
-                <div class="flex items-start gap-4 mb-5">
+            <!-- 搜索框 -->
+            <div class="flex items-start gap-4 mb-5">
+                <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">关键词搜索：</span>
+                <div class="flex-1">
+                    <input type="text" id="searchInput" placeholder="输入项目名称或关键词..." class="w-96 px-3 py-1.5 bg-slate-700 text-sm border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>                <div class="flex items-start gap-4 mb-5">
                     <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">残骸类型：</span>
                     <div class="flex gap-2 flex-wrap">
-                        <button class="filter-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent"><span class="text-blue-400 mr-1">&lt;/&gt;</span> 代码尸骸</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">👻 原型幽灵</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🎨 设计遗稿</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏠 运营废墟</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">💡 概念泡沫</button>
+                        <button class="filter-btn type-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
+                        <button class="filter-btn type-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent"><span class="text-blue-400 mr-1">&lt;/&gt;</span> 代码尸骸</button>
+                        <button class="filter-btn type-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">👻 原型幽灵</button>
+                        <button class="filter-btn type-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🎨 设计遗稿</button>
+                        <button class="filter-btn type-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏠 运营废墟</button>
+                        <button class="filter-btn type-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">💡 概念泡沫</button>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 mb-5">
                     <span class="text-lg text-slate-400 whitespace-nowrap mt-1.5">复活难度：</span>
                     <div class="flex gap-2 flex-wrap flex-1">
-                        <button class="filter-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-yellow-500">🔥 快速激活</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-blue-400">🔧 局部修复</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏗️ 推倒重来</button>
-                        <button class="filter-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">✂️ 仅供参考</button>
+                        <button class="filter-btn diff-btn active px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium bg-slate-100 text-slate-900">全部</button>
+                        <button class="filter-btn diff-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-yellow-500">🔥 快速激活</button>
+                        <button class="filter-btn diff-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent text-blue-400">🔧 局部修复</button>
+                        <button class="filter-btn diff-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">🏗️ 推倒重来</button>
+                        <button class="filter-btn diff-btn px-4 py-1.5 border border-slate-600 rounded-full text-sm font-medium text-slate-400 hover:border-slate-500 bg-transparent">✂️ 仅供参考</button>
                     </div>
                 </div>
                 <div class="flex items-start gap-4">
@@ -61,39 +69,269 @@
                     </div>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 cards-wrapper">
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">AI 客服 SaaS 半成品</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">跨境电商数据仪表盘</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">垂类社区 App 完整数据</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">摄影爱好者社区，运营2年积累 5W+ 用户，日活800+，因团队解散停止维护...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">企业官网开发项目</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">响应式企业官网，含产品展示、后台管理，因合作终止废弃...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">社交小程序原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">完整社交交互原型，含聊天/动态/个人中心，未进入开发...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">本地生活服务平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">覆盖外卖/团购/配送，运营半年后关闭，全套源码...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">在线教育学习系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">课程、考试、题库一体化学习平台，技术迭代废弃...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">短视频编辑工具</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">剪辑、特效、字幕一站式工具原型，未商业化...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">二手物品交易平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">C2C 二手交易平台，因流量不足停止运营...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">区块链钱包Demo</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">多链轻钱包，基础转账功能完成，未上线...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">AR 互动游戏原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">AR 实景互动小游戏，完整交互流程，未开发...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">企业协同办公系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">审批、考勤、文档一体化，内部使用后废弃...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">数据分析可视化平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">多维度图表分析系统，因技术重构停止维护...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">智能硬件控制原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">智能家居设备控制界面，完整交互流程...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">内容付费订阅平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">文章/课程付费订阅，运营一年后关闭...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">实时聊天通讯系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">单聊/群聊/文件传输，因业务调整废弃...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">电商直播购物原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">直播带货+购物车+支付，完整流程原型...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">招聘求职信息平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">简历+职位匹配系统，关闭后全套资源...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">云存储管理系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">文件上传/分享/权限管理，停止迭代...</p></div></div>
-                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">健康管理小程序原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">健康记录/报告/建议，完整交互未开发...</p></div></div>
+
+            <!-- 50个项目卡片容器 - 固定3x3排列 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 cards-wrapper" id="cardContainer">
+                <!-- 代码尸骸 - 局部修复 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="1" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">AI 客服 SaaS 半成品</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">基于 GPT-4 的智能客服系统，已完成核心对话引擎和多渠道接入，因资金链断裂停止开发...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="2" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">企业官网开发项目</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">响应式企业官网，含产品展示、后台管理，因合作终止废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="3" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">在线教育学习系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">课程、考试、题库一体化学习平台，技术迭代废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="4" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">区块链钱包Demo</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">多链轻钱包，基础转账功能完成，未上线...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="5" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">数据分析可视化平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">多维度图表分析系统，因技术重构停止维护...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="6" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">实时聊天通讯系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">单聊/群聊/文件传输，因业务调整废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="7" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">云存储管理系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">文件上传/分享/权限管理，停止迭代...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="8" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">电商订单管理系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">订单处理/物流跟踪/售后，因平台转型废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="9" data-type="代码尸骸" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">会员积分系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">积分获取/兑换/等级，因商业模式调整废弃...</p></div></div>
+                
+                <!-- 原型幽灵 - 快速激活 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="10" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">跨境电商数据仪表盘</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">Figma 高保真原型，包含 40+ 页面，完整的交互逻辑，适配多平台数据接入方案...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="11" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">社交小程序原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">完整社交交互原型，含聊天/动态/个人中心，未进入开发...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="12" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">短视频编辑工具</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">剪辑、特效、字幕一站式工具原型，未商业化...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="13" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">AR 互动游戏原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">AR 实景互动小游戏，完整交互流程，未开发...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="14" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">智能硬件控制原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">智能家居设备控制界面，完整交互流程...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="15" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">电商直播购物原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">直播带货+购物车+支付，完整流程原型...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="16" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">健康管理小程序原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">健康记录/报告/建议，完整交互未开发...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="17" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">旅行规划App原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">行程规划/酒店预订/攻略，完整交互流程...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="18" data-type="原型幽灵" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">健身打卡工具原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">运动记录/目标设定/数据统计，未开发...</p></div></div>
+                
+                <!-- 运营废墟 - 仅供参考 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="19" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">垂类社区 App 完整数据</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">摄影爱好者社区，运营2年积累 5W+ 用户，日活800+，因团队解散停止维护...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="20" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">本地生活服务平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">覆盖外卖/团购/配送，运营半年后关闭，全套源码...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="21" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">二手物品交易平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">C2C 二手交易平台，因流量不足停止运营...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="22" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">企业协同办公系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">审批、考勤、文档一体化，内部使用后废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="23" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">内容付费订阅平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">文章/课程付费订阅，运营一年后关闭...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="24" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">招聘求职信息平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">简历+职位匹配系统，关闭后全套资源...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="25" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">生鲜配送平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">每日生鲜配送，运营1年因成本过高关闭...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="26" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">知识付费问答社区</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">付费问答/专栏，因内容变现困难停止运营...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="27" data-type="运营废墟" data-diff="仅供参考"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">仅供参考</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">宠物服务预约平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">宠物美容/寄养/医疗预约，因竞争激烈关闭...</p></div></div>
+                
+                <!-- 设计遗稿 - 推倒重来 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="28" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">品牌VI设计全套</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">科技品牌VI设计，含LOGO/字体/配色，客户弃用...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="29" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">电商详情页模板</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">30+电商详情页设计模板，因风格过时废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="30" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">App 图标设计集</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">50+App图标设计，多风格，未被采用...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="31" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">网页端UI组件库</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">完整UI组件库，因技术栈变更废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="32" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">海报设计模板包</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">节日/促销/品牌海报模板，未商业化...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="33" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">移动端H5设计稿</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">20+营销H5设计，因项目取消废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="34" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">产品包装设计稿</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">食品包装全套设计，客户更换方案...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="35" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">小程序界面设计</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">电商小程序全套界面，未开发...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="36" data-type="设计遗稿" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">数据可视化设计</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">大屏数据可视化设计，因需求变更废弃...</p></div></div>
+                
+                <!-- 概念泡沫 - 快速激活 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="37" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">元宇宙社交空间</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">3D虚拟社交空间概念，因技术不成熟放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="38" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">AI 绘画创作平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">AI生成艺术作品，因版权问题停止...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="39" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">无人零售解决方案</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">AI识别无人零售，因成本过高放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="40" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">语音控制智能家居</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">全语音控制家居，因交互体验差放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="41" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">区块链版权保护</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">数字内容版权存证，因落地困难放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="42" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">AI 个性化学习</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">自适应学习系统，因数据不足放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="43" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">共享办公管理系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">智能共享办公，因疫情影响放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="44" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">车载娱乐系统</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">智能车载娱乐，因政策限制放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="45" data-type="概念泡沫" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">同城技能交换平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">技能互换，因信任问题放弃...</p></div></div>
+                
+                <!-- 补充7个项目凑够50个 -->
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="46" data-type="代码尸骸" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">游戏服务器框架</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">多人游戏服务器框架，因团队解散废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="47" data-type="原型幽灵" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-purple-900/30 text-xs rounded text-purple-400">原型幽灵</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">金融理财App原型</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">理财/基金/股票原型，因合规问题放弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="48" data-type="运营废墟" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">在线票务平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">演出/电影票务，因合作终止关闭...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="49" data-type="设计遗稿" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-pink-900/30 text-xs rounded text-pink-400">设计遗稿</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">品牌画册设计</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">企业品牌画册，客户调整需求废弃...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="50" data-type="概念泡沫" data-diff="局部修复"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-yellow-900/30 text-xs rounded text-yellow-400">概念泡沫</span><span class="px-2 py-0.5 bg-slate-700 text-xs rounded text-slate-300">局部修复</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">AI 客服机器人</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">智能客服概念，因效果不佳调整...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="51" data-type="代码尸骸" data-diff="快速激活"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-blue-900/30 text-xs rounded text-blue-400">代码尸骸</span><span class="px-2 py-0.5 bg-orange-900/30 text-xs rounded text-orange-400">快速激活</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">图片压缩工具</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">批量图片压缩，轻量工具，未推广...</p></div></div>
+                <div class="project-card bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-emerald-500/50 transition-all cursor-pointer" data-id="52" data-type="运营废墟" data-diff="推倒重来"><div class="p-5"><div class="flex gap-2 mb-3"><span class="px-2 py-0.5 bg-indigo-900/30 text-xs rounded text-indigo-400">运营废墟</span><span class="px-2 py-0.5 bg-red-900/30 text-xs rounded text-red-400">推倒重来</span></div><h3 class="font-bold text-lg mb-2 text-slate-100">社区团购平台</h3><p class="text-slate-400 text-sm mb-4 line-clamp-2">社区团购，因竞争激烈停止运营...</p></div></div>
             </div>
+
+            <!-- 分页控件 -->
             <div class="flex justify-center mt-8 gap-2">
-                <button class="px-4 py-2 rounded bg-slate-700 text-white disabled:opacity-50" id="prev" disabled>上一页</button>
-                <button class="px-4 py-2 rounded bg-emerald-600 text-white page-btn">1</button>
-                <button class="px-4 py-2 rounded bg-slate-700 text-white page-btn">2</button>
-                <button class="px-4 py-2 rounded bg-slate-700 text-white page-btn">3</button>
-                <button class="px-4 py-2 rounded bg-slate-700 text-white" id="next">下一页</button>
+                <button class="px-4 py-2 rounded bg-slate-700 text-white disabled:opacity-50" id="prevBtn" disabled>上一页</button>
+                <button class="px-4 py-2 rounded bg-emerald-600 text-white page-number-btn" data-page="1">1</button>
+                <button class="px-4 py-2 rounded bg-slate-700 text-white page-number-btn" data-page="2">2</button>
+                <button class="px-4 py-2 rounded bg-slate-700 text-white page-number-btn" data-page="3">3</button>
+                <button class="px-4 py-2 rounded bg-slate-700 text-white page-number-btn" data-page="4">4</button>
+                <button class="px-4 py-2 rounded bg-slate-700 text-white page-number-btn" data-page="5">5</button>
+                <button class="px-4 py-2 rounded bg-slate-700 text-white page-number-btn" data-page="6">6</button>
+                <button class="px-4 py-2 rounded bg-slate-700 text-white" id="nextBtn">下一页</button>
             </div>
         </div>
     </main>
+
     <script>
-        const cards=document.querySelectorAll('.project-card');const pageBtns=document.querySelectorAll('.page-btn');const prev=document.getElementById('prev');const next=document.getElementById('next');const perPage=6;let current=1;function showPage(p){cards.forEach((c,i)=>c.style.display=i>=(p-1)*perPage&&i<p*perPage?'block':'none');pageBtns.forEach((btn,i)=>{btn.classList.toggle('bg-emerald-600',i+1===p);btn.classList.toggle('bg-slate-700',i+1!==p)});prev.disabled=p===1;next.disabled=p===pageBtns.length}pageBtns.forEach((btn,i)=>btn.addEventListener('click',()=>{current=i+1;showPage(current)}));prev.addEventListener('click',()=>{current--;showPage(current)});next.addEventListener('click',()=>{current++;showPage(current)});showPage(1);
+        // 核心配置 - 每页9个（3x3）
+        const cardsPerPage = 9;
+        let currentPage = 1;
+        let activeTypeFilter = "全部";
+        let activeDiffFilter = "全部";
+        
+        // 搜索功能
+        let searchQuery = "";
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            searchQuery = e.target.value.toLowerCase();
+            currentPage = 1;
+            renderPage();
+        });        
+        // DOM 元素
+        const cardContainer = document.getElementById('cardContainer');
+        const allCards = Array.from(document.querySelectorAll('.project-card'));
+        const pageNumberBtns = document.querySelectorAll('.page-number-btn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const typeFilterBtns = document.querySelectorAll('.type-btn');
+        const diffFilterBtns = document.querySelectorAll('.diff-btn');
+
+        // 初始化
+        initPage();
+
+        // 初始化页面
+        function initPage() {
+            bindFilterEvents();
+            bindPaginationEvents();
+            // 全局点击监听（替代原有卡片绑定，解决动态渲染无响应问题）
+            document.addEventListener('click', function (e) {
+                const card = e.target.closest('.project-card');
+                if (card) {
+                    const id = card.dataset.id;
+                    console.log('点击了项目：', id); // 调试用，可查看控制台
+                    window.location.href = 'detail.html?id=' + id;
+                }
+            });
+            renderPage();
+        }
+
+        // 绑定筛选按钮事件
+        function bindFilterEvents() {
+            // 类型筛选
+            typeFilterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    typeFilterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-slate-100', 'text-slate-900');
+                        b.classList.add('bg-transparent', 'text-slate-400');
+                    });
+                    btn.classList.add('active', 'bg-slate-100', 'text-slate-900');
+                    btn.classList.remove('bg-transparent', 'text-slate-400');
+                    activeTypeFilter = btn.textContent.trim().replace(/<\/?>|👻|🎨|🏠|💡|\s+/g, '');
+                    currentPage = 1;
+                    renderPage();
+                });
+            });
+
+            // 难度筛选
+            diffFilterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    diffFilterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-slate-100', 'text-slate-900');
+                        b.classList.add('bg-transparent', 'text-slate-400');
+                    });
+                    btn.classList.add('active', 'bg-slate-100', 'text-slate-900');
+                    btn.classList.remove('bg-transparent', 'text-slate-400');
+                    activeDiffFilter = btn.textContent.trim().replace(/🔥|🔧|🏗️|✂️|\s+/g, '');
+                    currentPage = 1;
+                    renderPage();
+                });
+            });
+        }
+
+        // 绑定分页按钮事件
+        function bindPaginationEvents() {
+            // 页码按钮
+            pageNumberBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetPage = parseInt(btn.dataset.page);
+                    const filteredCards = getFilteredCards();
+                    const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
+                    
+                    if (targetPage >= 1 && targetPage <= totalPages) {
+                        currentPage = targetPage;
+                        renderPage();
+                    }
+                });
+            });
+
+            // 上一页
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderPage();
+                }
+            });
+
+            // 下一页
+            nextBtn.addEventListener('click', () => {
+                const filteredCards = getFilteredCards();
+                const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderPage();
+                }
+            });
+        }
+
+        // 获取筛选后的卡片列表
+        function getFilteredCards() {
+        return allCards.filter(card => {
+            const cardType = card.dataset.type;
+            const cardDiff = card.dataset.diff;
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const desc = card.querySelector('p').textContent.toLowerCase();
+            
+            const typeMatch = activeTypeFilter === "全部" || cardType === activeTypeFilter;
+            const diffMatch = activeDiffFilter === "全部" || cardDiff === activeDiffFilter;
+            const searchMatch = searchQuery === "" || title.includes(searchQuery) || desc.includes(searchQuery);
+            
+            return typeMatch && diffMatch && searchMatch;
+        });
+    }
+    
+
+        // 渲染当前页
+        function renderPage() {
+            // 1. 获取筛选后的卡片
+            const filteredCards = getFilteredCards();
+            const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
+
+            // 2. 先隐藏所有卡片
+            allCards.forEach(card => {
+                card.style.display = 'none';
+            });
+
+            // 3. 计算当前页显示的卡片范围（每页9个）
+            const startIndex = (currentPage - 1) * cardsPerPage;
+            const endIndex = startIndex + cardsPerPage;
+            const currentPageCards = filteredCards.slice(startIndex, endIndex);
+
+            // 4. 显示当前页的卡片
+            currentPageCards.forEach(card => {
+                card.style.display = 'block';
+            });
+
+            // 5. 更新分页按钮状态
+            updatePaginationButtons(totalPages);
+        }
+
+        // 更新分页按钮样式和禁用状态
+        function updatePaginationButtons(totalPages) {
+            // 禁用/启用上下页
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+            // 更新页码按钮样式
+            pageNumberBtns.forEach(btn => {
+                const pageNum = parseInt(btn.dataset.page);
+                
+                // 重置所有页码样式
+                btn.classList.remove('bg-emerald-600');
+                btn.classList.add('bg-slate-700');
+                btn.disabled = false;
+                btn.style.opacity = '1';
+
+                // 激活当前页
+                if (pageNum === currentPage) {
+                    btn.classList.remove('bg-slate-700');
+                    btn.classList.add('bg-emerald-600');
+                }
+
+                // 超出总页数的页码置灰禁用
+                if (pageNum > totalPages) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                }
+            });
+        }
     </script>
 </body>
 </html>
